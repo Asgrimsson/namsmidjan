@@ -1,4 +1,4 @@
-# Námsmiðjan v1.2
+# Námsmiðjan v1.2.1
 
 Námsmiðjan er fyrsti grunnur að browser-based náms- og kennsluvefja-vistkerfi.
 
@@ -465,3 +465,11 @@ Síðan redeployarðu.
 - Leiðbeiningar fyrir nemendur
 - Stutt töfluútgáfa
 - Prentun og afritun
+
+---
+
+# v1.2.1 — Fög og flísar
+
+- Bætt við heildarfagaskrá í fellilista.
+- Samsett fög eins og „Náttúrufræði / landafræði“ síast betur.
+- Bætt við hnappi til að uppfæra Lestarþjálfun flísina.

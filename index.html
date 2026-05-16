@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Námsmiðjan v1.2.1</title>
+  <title>Námsmiðjan v1.2.1.1</title>
   <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
   <style>
     :root{
@@ -213,7 +213,7 @@
         <div class="logo">✦</div>
         <div>
           <h1>Námsmiðjan</h1>
-          <p>Leiðbeiningar og kennsluhamur · v1.2</p>
+          <p>Fög og flísar · v1.2.1</p>
         </div>
       </div>
       <nav class="nav">
@@ -276,7 +276,7 @@
           <div class="chiprow" id="dailyChips"></div>
         </div>
         <div class="notice">
-          <strong>v1.2 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
+          <strong>v1.2.1 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
         </div>
       </aside>
     </section>
@@ -313,6 +313,7 @@
           <p>22 námsvefir með lýsingum, fögum, bekkjum, táknum og verkefnakóðum.</p>
         </div>
         <button class="btn primary" id="importVefjasafnBtn">Setja inn / uppfæra vefjasafn</button>
+          <button class="btn" id="fixLestarTileBtn">Laga Lestarþjálfun flís</button>
       </div>
       <div class="panel">
         <div class="sync-status-panel"><strong>Hvernig virkar þetta?</strong> Smelltu á hnappinn til að bæta öllum vefjunum inn sem flísum og tengdum verkefnaspjöldum. Farðu svo í Gagnagrunnur og sendu local gögn í Supabase.</div>
@@ -710,7 +711,7 @@
   </main>
 
   <footer>
-    Námsmiðjan v1.2 · innskráning, öruggari réttindi og Supabase samstilling.
+    Námsmiðjan v1.2.1 · innskráning, öruggari réttindi og Supabase samstilling.
   </footer>
 
   <section class="admin" id="adminModal" aria-hidden="true">
@@ -1010,6 +1011,7 @@ const DEFAULT_MODULES = [
 
 
 
+const SUBJECT_CATALOG = ["Íslenska", "Stærðfræði", "Enska", "Danska", "Náttúrufræði", "Samfélagsfræði", "Landafræði", "Saga", "Upplýsinga- og tæknimennt", "Gervigreind", "Forritun", "Skák", "STEAM", "Tónmennt", "Myndmennt", "Hönnun og smíði", "Heimilisfræði", "Íþróttir", "Lífsleikni", "Lesskilningur", "Lestur", "Miðlun", "Þverfaglegt"];
 const VALLASKOLI_WEB_COLLECTION = [
   {
     "id": "stika-1b",
@@ -2596,6 +2598,67 @@ function printPackage(id){
   window.print();
 }
 
+
+function getSubjectCatalog(){
+  const existing = [
+    ...((typeof modules !== "undefined" && modules) ? modules.map(m => m.subject) : []),
+    ...((typeof tasks !== "undefined" && tasks) ? tasks.map(t => t.subject) : [])
+  ].filter(Boolean);
+  const expanded = [];
+  existing.forEach(v => String(v).split("/").forEach(part => expanded.push(part.trim())));
+  return ["Öll fög", ...Array.from(new Set([...(SUBJECT_CATALOG || []), ...expanded].filter(Boolean))).sort((a,b)=>a.localeCompare(b,"is"))];
+}
+function normalizeSubjectForFilter(value){
+  return String(value || "").toLowerCase().trim();
+}
+function subjectMatches(itemSubject, selectedSubject){
+  if(!selectedSubject || selectedSubject === "Öll fög") return true;
+  const selected = normalizeSubjectForFilter(selectedSubject);
+  return String(itemSubject || "").split("/").some(part => {
+    const p = normalizeSubjectForFilter(part);
+    return p === selected || p.includes(selected) || selected.includes(p);
+  });
+}
+function improveLestarThjalfunTile(){
+  let changed = false;
+  modules = (modules || []).map(m => {
+    const title = String(m.title || "").toLowerCase();
+    const id = String(m.id || "").toLowerCase();
+    if(title.includes("lestrarþjálfun") || title.includes("lestarþjálfun") || id.includes("lestrar") || id.includes("lestar")){
+      changed = true;
+      return {
+        ...m,
+        title: "Lestarþjálfun",
+        icon: "📚",
+        subject: "Íslenska",
+        grades: ["1","2","3","4","5","6"],
+        description: "Lestarverkefni, orðaforði, lesskilningur og skráning á framförum. Hentar vel í daglega lestrarþjálfun og markvissa vinnu með lestur.",
+        code: m.code || "LESTUR",
+        tags: Array.from(new Set([...(m.tags || []), "lestur", "íslenska", "lesskilningur", "orðaforði"]))
+      };
+    }
+    return m;
+  });
+  if(changed){
+    saveModules();
+    render();
+    alert("Lestarþjálfun flísin var uppfærð. Mundu að senda local gögn í Supabase.");
+  }else{
+    alert("Fann ekki Lestarþjálfun flísina í local gögnum. Sæktu gögn úr Supabase og prófaðu aftur.");
+  }
+}
+function ensureAllSubjectOptions(){
+  const options = getSubjectCatalog();
+  document.querySelectorAll("select").forEach(sel => {
+    const existing = Array.from(sel.options).map(o=>o.textContent.trim());
+    const looksLikeSubject = existing.includes("Öll fög") || existing.some(o => (SUBJECT_CATALOG || []).includes(o));
+    if(!looksLikeSubject) return;
+    const current = sel.value || "Öll fög";
+    sel.innerHTML = options.map(o=>`<option value="${o}">${o}</option>`).join("");
+    if(options.includes(current)) sel.value = current;
+  });
+}
+
 function render(){
   populateFilters();
   const list = filteredModules();
@@ -3283,7 +3346,10 @@ document.querySelectorAll("[data-copy-guide]").forEach(btn=>btn.addEventListener
 document.getElementById("openDbFromGuide")?.addEventListener("click",()=>{ els.admin.classList.add("open"); activateAdminPane("supabasePane"); });
 document.getElementById("openStudentFromGuide")?.addEventListener("click",()=>els.student.classList.add("open"));
 
+
+document.getElementById("fixLestarTileBtn")?.addEventListener("click", improveLestarThjalfunTile);
 render();
+ensureAllSubjectOptions();
 refreshAuthState();
 </script>
 </body>
