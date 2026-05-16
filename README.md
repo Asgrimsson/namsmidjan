@@ -1,4 +1,4 @@
-# Námsmiðjan v1.2.1
+# Námsmiðjan v1.3
 
 Námsmiðjan er fyrsti grunnur að browser-based náms- og kennsluvefja-vistkerfi.
 
@@ -473,3 +473,18 @@ Síðan redeployarðu.
 - Bætt við heildarfagaskrá í fellilista.
 - Samsett fög eins og „Náttúrufræði / landafræði“ síast betur.
 - Bætt við hnappi til að uppfæra Lestarþjálfun flísina.
+
+---
+
+# v1.3 — Eyða flísum og autosync
+
+## Nýtt
+
+- Hver flís fær Eyða-hnapp.
+- Þegar flís er eytt, eyðast líka tengd verkefni local.
+- Ef Supabase er tengt og kennari er innskráður, reynir kerfið líka að eyða flísinni og tengdum verkefnum úr Supabase.
+- Autosync er debounced og keyrir eftir vistun ef Samstilling = Sjálfvirk eftir vistun.
+
+## Mikilvægt
+
+Til að eyða úr Supabase þarf kennari að vera innskráður.

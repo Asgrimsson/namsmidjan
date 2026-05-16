@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Námsmiðjan v1.2.1.1</title>
+  <title>Námsmiðjan v1.3.1</title>
   <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
   <style>
     :root{
@@ -189,6 +189,10 @@
 
 
 
+
+    .module-actions .danger{border-color:rgba(248,113,113,.45);background:rgba(248,113,113,.10);color:#fecaca}
+    .autosync-note{border:1px solid rgba(134,239,172,.24);background:rgba(134,239,172,.075);border-radius:16px;padding:12px;margin:10px 0;color:rgba(255,255,255,.88);line-height:1.45}
+
     @media(max-width:980px){
       .hero,.two-col{grid-template-columns:1fr}
       .grid{grid-template-columns:repeat(2,1fr)}
@@ -213,7 +217,7 @@
         <div class="logo">✦</div>
         <div>
           <h1>Námsmiðjan</h1>
-          <p>Fög og flísar · v1.2.1</p>
+          <p>Eyða flísum og autosync · v1.3</p>
         </div>
       </div>
       <nav class="nav">
@@ -276,7 +280,7 @@
           <div class="chiprow" id="dailyChips"></div>
         </div>
         <div class="notice">
-          <strong>v1.2.1 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
+          <strong>v1.3 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
         </div>
       </aside>
     </section>
@@ -711,7 +715,7 @@
   </main>
 
   <footer>
-    Námsmiðjan v1.2.1 · innskráning, öruggari réttindi og Supabase samstilling.
+    Námsmiðjan v1.3 · innskráning, öruggari réttindi og Supabase samstilling.
   </footer>
 
   <section class="admin" id="adminModal" aria-hidden="true">
@@ -907,6 +911,7 @@
             </div>
           </div>
 
+          <div class="autosync-note"><strong>Autosync í v1.3:</strong> Veldu „Sjálfvirk eftir vistun“ í Samstilling. Þá reynir Námsmiðjan að senda breytingar í Supabase þegar þú vistar, breytir eða eyðir. Þú þarft að vera skráður inn sem kennari.</div>
           <h3>Samstillingarskrá</h3>
           <div class="logbox" id="syncLog">Engin samstilling keyrð ennþá.</div>
         </div>
@@ -2068,11 +2073,51 @@ async function requireTeacherForCloudWrite(){
   return true;
 }
 
+
+let autoSyncTimer = null;
+let autoSyncRunning = false;
+let autoSyncQueued = false;
+let autoSyncPaused = false;
+
 async function maybeAutoSync(){
-  if(supabaseConfig.autoSync === "auto" && supabaseConfig.url && supabaseConfig.key){
+  if(autoSyncPaused) return;
+  if(supabaseConfig.autoSync !== "auto") return;
+  if(!supabaseConfig.url || !supabaseConfig.key) return;
+  clearTimeout(autoSyncTimer);
+  autoSyncTimer = setTimeout(runAutoSync, 900);
+}
+
+async function runAutoSync(){
+  if(autoSyncRunning){
+    autoSyncQueued = true;
+    return;
+  }
+  autoSyncRunning = true;
+  try{
+    const client = getSupabaseClient();
+    if(!client){
+      addSyncLog("Autosync sleppt: Supabase er ekki stillt.");
+      return;
+    }
+    const { data } = await client.auth.getUser();
+    currentUser = data?.user || null;
+    if(!currentUser){
+      addSyncLog("Autosync sleppt: kennari er ekki skráður inn.");
+      return;
+    }
     await pushToSupabase(false);
+    addSyncLog("Autosync lokið.");
+  }catch(e){
+    addSyncLog("Autosync villa: " + e.message);
+  }finally{
+    autoSyncRunning = false;
+    if(autoSyncQueued){
+      autoSyncQueued = false;
+      runAutoSync();
+    }
   }
 }
+
 function unique(arr){ return [...new Set(arr)].sort((a,b)=>String(a).localeCompare(String(b),'is')); }
 function getAllGrades(){ return unique(modules.flatMap(m=>m.grades || [])); }
 
@@ -2162,11 +2207,18 @@ function renderTasks(){
   const list = filteredTasks();
   els.taskList.innerHTML = list.length ? list.map(taskHtml).join("") : `<div class="empty">Engin verkefni fundust. Smelltu á “Nýtt verkefni” til að búa til fyrsta verkefnið.</div>`;
   document.querySelectorAll("[data-delete-task]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      if(!confirm("Viltu eyða þessu verkefni úr þessum vafra?")) return;
-      tasks = tasks.filter(t=>t.id !== btn.dataset.deleteTask);
-      saveTasks();
+    btn.addEventListener("click", async()=>{
+      if(!confirm("Viltu eyða þessu verkefni?")) return;
+      const taskId = btn.dataset.deleteTask;
+      autoSyncPaused = true;
+      tasks = tasks.filter(t=>t.id !== taskId);
+      Object.keys(progress || {}).forEach(key => { if(progress[key]?.taskId === taskId) delete progress[key]; });
+      localStorage.setItem("namsmidjan_tasks_v02", JSON.stringify(tasks, null, 2));
+      localStorage.setItem("namsmidjan_progress_v03", JSON.stringify(progress, null, 2));
+      autoSyncPaused = false;
       render();
+      if(supabaseConfig.url && supabaseConfig.key) await deleteTaskFromCloud(taskId);
+      if(supabaseConfig.autoSync === "auto") await maybeAutoSync();
     });
   });
   document.querySelectorAll("[data-copy-task]").forEach(btn=>{
@@ -2659,6 +2711,102 @@ function ensureAllSubjectOptions(){
   });
 }
 
+
+
+async function deleteTaskFromCloud(taskId){
+  const client = getSupabaseClient();
+  if(!client) return false;
+  const ok = await requireTeacherForCloudWrite();
+  if(!ok) return false;
+  try{
+    await client.from("namsmidjan_progress").delete().eq("task_id", taskId);
+    const { error } = await client.from("namsmidjan_tasks").delete().eq("id", taskId);
+    if(error) throw error;
+    addSyncLog("Verkefni eytt úr Supabase.");
+    return true;
+  }catch(e){
+    addSyncLog("Villa við að eyða verkefni úr Supabase: " + e.message);
+    return false;
+  }
+}
+
+async function deleteModuleFromCloud(moduleId, linkedTaskIds){
+  const client = getSupabaseClient();
+  if(!client){
+    addSyncLog("Eyðing vistuð local. Supabase er ekki stillt.");
+    return false;
+  }
+  const ok = await requireTeacherForCloudWrite();
+  if(!ok) return false;
+
+  try{
+    if(linkedTaskIds && linkedTaskIds.length){
+      const { error: progressError } = await client
+        .from("namsmidjan_progress")
+        .delete()
+        .in("task_id", linkedTaskIds);
+      if(progressError) addSyncLog("Viðvörun: gat ekki eytt framvindu tengdri flís: " + progressError.message);
+
+      const { error: taskError } = await client
+        .from("namsmidjan_tasks")
+        .delete()
+        .in("id", linkedTaskIds);
+      if(taskError) throw taskError;
+    }
+
+    const { error: moduleError } = await client
+      .from("namsmidjan_modules")
+      .delete()
+      .eq("id", moduleId);
+
+    if(moduleError) throw moduleError;
+
+    addSyncLog("Flís og tengd verkefni voru eydd úr Supabase.");
+    return true;
+  }catch(e){
+    addSyncLog("Villa við eyðingu úr Supabase: " + e.message);
+    alert("Flísin var eydd local, en ekki tókst að eyða úr Supabase: " + e.message);
+    return false;
+  }
+}
+
+async function deleteModuleEverywhere(moduleId){
+  const module = modules.find(m => m.id === moduleId);
+  if(!module) return;
+
+  const linkedTaskIds = tasks.filter(t => t.moduleId === moduleId).map(t => t.id);
+  const msg = linkedTaskIds.length
+    ? `Viltu eyða flísinni „${module.title}“ og ${linkedTaskIds.length} tengdum verkefnum?`
+    : `Viltu eyða flísinni „${module.title}“?`;
+
+  if(!confirm(msg)) return;
+
+  autoSyncPaused = true;
+  modules = modules.filter(m => m.id !== moduleId);
+  tasks = tasks.filter(t => t.moduleId !== moduleId);
+  Object.keys(progress || {}).forEach(key => {
+    if(linkedTaskIds.includes(progress[key]?.taskId)) delete progress[key];
+  });
+
+  localStorage.setItem("namsmidjan_modules_v01", JSON.stringify(modules, null, 2));
+  localStorage.setItem("namsmidjan_tasks_v02", JSON.stringify(tasks, null, 2));
+  localStorage.setItem("namsmidjan_progress_v03", JSON.stringify(progress, null, 2));
+  autoSyncPaused = false;
+
+  render();
+  addSyncLog(`Flís eydd local: ${module.title}`);
+
+  if(supabaseConfig.url && supabaseConfig.key){
+    await deleteModuleFromCloud(moduleId, linkedTaskIds);
+  }else{
+    addSyncLog("Flís eydd local. Smelltu á Senda local gögn í Supabase eða stilltu Supabase til að eyða úr skýi.");
+  }
+
+  if(supabaseConfig.autoSync === "auto"){
+    await maybeAutoSync();
+  }
+}
+
 function render(){
   populateFilters();
   const list = filteredModules();
@@ -2684,6 +2832,13 @@ function render(){
       setTimeout(()=>btn.textContent="Afrita manifest",1200);
     });
   });
+
+  document.querySelectorAll("[data-delete-module]").forEach(btn=>{
+    btn.addEventListener("click", async()=>{
+      await deleteModuleEverywhere(btn.dataset.deleteModule);
+    });
+  });
+
   els.statModules.textContent = modules.length;
   els.statSubjects.textContent = unique(modules.map(m=>m.subject)).length;
   els.statGrades.textContent = getAllGrades().length;
@@ -2717,6 +2872,7 @@ function cardHtml(m){
       <div class="module-actions">
         <button class="btn primary small" data-open="${escapeHtml(m.id)}">Opna</button>
         <button class="btn small" data-copy="${escapeHtml(m.id)}">Afrita manifest</button>
+        <button class="btn small danger" data-delete-module="${escapeHtml(m.id)}">Eyða</button>
       </div>
     </article>
   `;
