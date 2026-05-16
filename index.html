@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Námsmiðjan v1.0</title>
+  <title>Námsmiðjan v1.1</title>
   <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
   <style>
     :root{
@@ -213,11 +213,12 @@
         <div class="logo">✦</div>
         <div>
           <h1>Námsmiðjan</h1>
-          <p>Public Beta / skólastofuútgáfa · v1.0</p>
+          <p>Vefjasafn Vallaskóla · v1.1</p>
         </div>
       </div>
       <nav class="nav">
         <a class="btn ghost" href="#modules">Námsvefir</a>
+        <a class="btn ghost" href="#vefjasafn">Vefjasafn</a>
         <a class="btn ghost" href="#classroom-home">Stjórnborð</a>
         <a class="btn ghost" href="#ai-builder">AI verkefnasmiður</a>
         <a class="btn ghost" href="#builder">Verkefnasmiður</a>
@@ -275,7 +276,7 @@
           <div class="chiprow" id="dailyChips"></div>
         </div>
         <div class="notice">
-          <strong>v1.0 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
+          <strong>v1.1 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
         </div>
       </aside>
     </section>
@@ -303,6 +304,20 @@
 
 
 
+
+
+    <section class="section" id="vefjasafn">
+      <div class="section-head">
+        <div>
+          <h2>Vefjasafn Vallaskóla</h2>
+          <p>22 námsvefir með lýsingum, fögum, bekkjum, táknum og verkefnakóðum.</p>
+        </div>
+        <button class="btn primary" id="importVefjasafnBtn">Setja inn / uppfæra vefjasafn</button>
+      </div>
+      <div class="panel">
+        <div class="sync-status-panel"><strong>Hvernig virkar þetta?</strong> Smelltu á hnappinn til að bæta öllum vefjunum inn sem flísum og tengdum verkefnaspjöldum. Farðu svo í Gagnagrunnur og sendu local gögn í Supabase.</div>
+      </div>
+    </section>
 
     <section class="section" id="classroom-home">
       <div class="section-head">
@@ -633,7 +648,7 @@
   </main>
 
   <footer>
-    Námsmiðjan v1.0 · innskráning, öruggari réttindi og Supabase samstilling.
+    Námsmiðjan v1.1 · innskráning, öruggari réttindi og Supabase samstilling.
   </footer>
 
   <section class="admin" id="adminModal" aria-hidden="true">
@@ -932,6 +947,797 @@ const DEFAULT_MODULES = [
 
 
 
+const VALLASKOLI_WEB_COLLECTION = [
+  {
+    "id": "stika-1b",
+    "title": "Stika 1B",
+    "icon": "📘",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/stika-1b",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/stika-1b",
+    "description": "Gagnvirk stærðfræðieining fyrir 5.–6. bekk þar sem nemendur vinna með verkefni úr Stiku 1B. Hentar vel sem æfing, upprifjun eða sjálfstæð vinna.",
+    "code": "5B-STIKA1B",
+    "color": "blue"
+  },
+  {
+    "id": "deiling",
+    "title": "Deiling",
+    "icon": "➗",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/deiling",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/deiling",
+    "description": "Æfingavefur þar sem nemendur þjálfa deilingu skref fyrir skref með endurtekningu, sjónrænum stuðningi og markvissri æfingu.",
+    "code": "5B-DEILING",
+    "color": "blue"
+  },
+  {
+    "id": "margfoldunar-meistari",
+    "title": "Margföldunarmeistari",
+    "icon": "✖️",
+    "subject": "Stærðfræði",
+    "grades": [
+      "3",
+      "4"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/3-og-4-bekkur/margf%C3%B6ldunar-meistari",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/3-og-4-bekkur/margf%C3%B6ldunar-meistari",
+    "description": "Skemmtilegur æfingavefur fyrir 3.–4. bekk þar sem nemendur styrkja margföldunartöflurnar í leikrænu og hvetjandi umhverfi.",
+    "code": "4B-MARGFOLDUN",
+    "color": "blue"
+  },
+  {
+    "id": "fortnite-heimur",
+    "title": "Fortnite heimur",
+    "icon": "🎮",
+    "subject": "Þverfaglegt",
+    "grades": [
+      "7",
+      "8"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/7-og-8-bekkur/fornite-heimur",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/7-og-8-bekkur/fornite-heimur",
+    "description": "Leikjavæddur námsheimur fyrir 7.–8. bekk þar sem verkefni eru sett fram í spennandi leikjaumhverfi sem eykur virkni og áhuga.",
+    "code": "7B-FORTNITE",
+    "color": "blue"
+  },
+  {
+    "id": "hljodheimar",
+    "title": "Hljóðheimar",
+    "icon": "🎧",
+    "subject": "Íslenska / tónmennt / miðlun",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "url": "https://hljod.netlify.app/",
+    "link": "https://hljod.netlify.app/",
+    "description": "Vefur fyrir hljóð, hlustun og skapandi verkefni þar sem nemendur vinna með hljóð, hlusta, skapa og miðla eigin hugmyndum.",
+    "code": "HLJOD",
+    "color": "blue"
+  },
+  {
+    "id": "stae-leikir",
+    "title": "Stæ-leikir 3.–4. bekkur",
+    "icon": "🎲",
+    "subject": "Stærðfræði",
+    "grades": [
+      "3",
+      "4"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/3-og-4-bekkur/st%C3%A6-leikir",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/3-og-4-bekkur/st%C3%A6-leikir",
+    "description": "Safn stærðfræðileikja fyrir 3.–4. bekk þar sem nemendur æfa grunnfærni á leikrænan, fjölbreyttan og aðgengilegan hátt.",
+    "code": "4B-STAELEIKIR",
+    "color": "blue"
+  },
+  {
+    "id": "apps-script-verkfaeri",
+    "title": "Forritunarverkefni",
+    "icon": "🧩",
+    "subject": "Forritun / UT",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "url": "https://script.google.com/a/macros/g.vallaskoli.is/s/AKfycbxMEp03UKcWc5DoeVK31xwWD7pj1Tjc7M5eeZ5uSWcTsMsF-zfEpHo5IzBT5xd-G4aT/exec",
+    "link": "https://script.google.com/a/macros/g.vallaskoli.is/s/AKfycbxMEp03UKcWc5DoeVK31xwWD7pj1Tjc7M5eeZ5uSWcTsMsF-zfEpHo5IzBT5xd-G4aT/exec",
+    "description": "Sérhæfður gagnvirkur vefur eða verkfæri tengt kennslu og verkefnavinnu. Hentar sem kennarastýrt verkfæri eða æfingasvæði.",
+    "code": "UT-FORRITUN",
+    "color": "blue"
+  },
+  {
+    "id": "ljodaljod",
+    "title": "Ljóðaljóð",
+    "icon": "✍️",
+    "subject": "Íslenska",
+    "grades": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "url": "https://ljodaljod.netlify.app/",
+    "link": "https://ljodaljod.netlify.app/",
+    "description": "Skapandi ljóðavefur þar sem nemendur vinna með ljóð, orð, hljóm og tjáningu. Hentar vel í ritun, upplestur og skapandi málnotkun.",
+    "code": "LJOD",
+    "color": "blue"
+  },
+  {
+    "id": "hour-of-ai",
+    "title": "Hour of AI",
+    "icon": "🤖",
+    "subject": "Gervigreind / forritun",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://code.org/en-US/hour-of-ai",
+    "link": "https://code.org/en-US/hour-of-ai",
+    "description": "Kynning á gervigreind í gegnum verkefni frá Code.org. Nemendur prófa hugmyndir tengdar AI, forritun, sköpun og stafrænu læsi.",
+    "code": "AI-HOUR",
+    "color": "blue"
+  },
+  {
+    "id": "teachable-machine",
+    "title": "Teachable Machine",
+    "icon": "🧠",
+    "subject": "Gervigreind / UT",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://teachablemachine.withgoogle.com/",
+    "link": "https://teachablemachine.withgoogle.com/",
+    "description": "Google-verkfæri þar sem nemendur þjálfa einföld gervigreindarlíkön með myndum, hljóði eða hreyfingu. Frábært í AI-kennslu.",
+    "code": "AI-TEACHABLE",
+    "color": "blue"
+  },
+  {
+    "id": "thatquiz",
+    "title": "ThatQuiz bekkjarsíða",
+    "icon": "🧮",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "url": "https://www.thatquiz.org/tq/classpage?034013458ef10715",
+    "link": "https://www.thatquiz.org/tq/classpage?034013458ef10715",
+    "description": "Æfingasvæði fyrir stærðfræði og önnur verkefni í ThatQuiz. Hentar vel fyrir stuttar æfingar, stöðumat og endurtekningu.",
+    "code": "THATQUIZ",
+    "color": "blue"
+  },
+  {
+    "id": "natturulega-1-hljodbok",
+    "title": "Náttúrulega 1 – hljóðbók",
+    "icon": "🌿",
+    "subject": "Náttúrufræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://mms.is/namsefni/natturulega-1-hljodbok",
+    "link": "https://mms.is/namsefni/natturulega-1-hljodbok",
+    "description": "Hljóðbók sem styður við náttúrufræðinám. Hentar vel fyrir hlustun, lesskilning, orðaforða og nemendur sem nýta hljóðstuðning.",
+    "code": "NATTURULEGA1",
+    "color": "blue"
+  },
+  {
+    "id": "island-hljodbok",
+    "title": "Ísland – hér búum við – hljóðbók",
+    "icon": "🇮🇸",
+    "subject": "Landafræði / samfélagsfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://mms.is/namsefni/island-her-buum-vid-hljodbok",
+    "link": "https://mms.is/namsefni/island-her-buum-vid-hljodbok",
+    "description": "Hljóðbók tengd landafræði og samfélagsfræði Íslands. Styður nám um landið, byggðir, náttúru og samfélag.",
+    "code": "ISLAND-HLJOD",
+    "color": "blue"
+  },
+  {
+    "id": "vikingaold-hljodbok",
+    "title": "Víkingaöld – hljóðbók",
+    "icon": "🛡️",
+    "subject": "Saga",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "url": "https://mms.is/namsefni/vikingaold-hljodbok",
+    "link": "https://mms.is/namsefni/vikingaold-hljodbok",
+    "description": "Hljóðbók um víkingaöld sem hentar í sögu, lesskilning og hlustunarverkefni. Nemendur geta hlustað, glósað og unnið úr efninu.",
+    "code": "VIKINGAOLD",
+    "color": "blue"
+  },
+  {
+    "id": "gradubogi-og-horn",
+    "title": "Gráðubogi og horn",
+    "icon": "📐",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/gr%C3%A1%C3%B0ubogi-og-horn",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/gr%C3%A1%C3%B0ubogi-og-horn",
+    "description": "Gagnvirk stærðfræðieining þar sem nemendur læra um horn, gráður og notkun gráðuboga með sjónrænum og verklegum verkefnum.",
+    "code": "5B-HORN",
+    "color": "blue"
+  },
+  {
+    "id": "rod-reikniadgerda",
+    "title": "Röð reikniaðgerða",
+    "icon": "🧾",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/r%C3%B6%C3%B0-reiknia%C3%B0ger%C3%B0a",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/r%C3%B6%C3%B0-reiknia%C3%B0ger%C3%B0a",
+    "description": "Æfingavefur þar sem nemendur læra að reikna í réttri röð með svigum, margföldun, deilingu, samlagningu og frádrætti.",
+    "code": "5B-ROD",
+    "color": "blue"
+  },
+  {
+    "id": "island-her-buum-vid",
+    "title": "Ísland – hér búum við",
+    "icon": "🗺️",
+    "subject": "Landafræði / samfélagsfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://island-her-buum-vid-2.onrender.com/",
+    "link": "https://island-her-buum-vid-2.onrender.com/",
+    "description": "Gagnvirkur námsvefur um Ísland, náttúru, veður, staði og samfélag. Hentar vel í landafræði og samþætt verkefni.",
+    "code": "5B-ISLAND",
+    "color": "blue"
+  },
+  {
+    "id": "verkefnasafnsja",
+    "title": "Verkefnasafnsjá",
+    "icon": "🗂️",
+    "subject": "Þverfaglegt",
+    "grades": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://verkefnasafnsja.netlify.app/",
+    "link": "https://verkefnasafnsja.netlify.app/",
+    "description": "Safn og yfirlit yfir verkefni sem kennari getur nýtt í kennslu. Hentar sem verkefnabanki, hugmyndasafn og flýtileið í námsverkefni.",
+    "code": "VERKEFNASAFN",
+    "color": "blue"
+  },
+  {
+    "id": "vedurvefur-sudurland",
+    "title": "Veðurvefur Árborg / Suðurland",
+    "icon": "🌦️",
+    "subject": "Náttúrufræði / landafræði",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "url": "https://vedurvefur-arborg-sudurlandbranchmainmainfilepathapppy-kcre9n2.streamlit.app/",
+    "link": "https://vedurvefur-arborg-sudurlandbranchmainmainfilepathapppy-kcre9n2.streamlit.app/",
+    "description": "Gagnvirkur veðurvefur sem nýtist í náttúrufræði, landafræði og daglegri umræðu um veður, spár, gögn og nærumhverfi.",
+    "code": "VEDUR",
+    "color": "blue"
+  },
+  {
+    "id": "skakakademia",
+    "title": "Skákakademía",
+    "icon": "♟️",
+    "subject": "Skák / rökhugsun",
+    "grades": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://skakakademia.onrender.com/",
+    "link": "https://skakakademia.onrender.com/",
+    "description": "Skákkennsluvefur með æfingum, verkefnum og skákþrautum. Hentar fyrir byrjendur og lengra komna sem vilja æfa rökhugsun og taktík.",
+    "code": "SKAK",
+    "color": "blue"
+  },
+  {
+    "id": "ut-kennsla-vallaskoli",
+    "title": "UT-kennsla Vallaskóli",
+    "icon": "💻",
+    "subject": "Upplýsinga- og tæknimennt",
+    "grades": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li?authuser=1",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li?authuser=1",
+    "description": "Aðalvefur fyrir upplýsinga- og tæknimennt í Vallaskóla. Hér eru verkefni, leiðir og námsefni fyrir marga árganga og ólík UT-þemu.",
+    "code": "UT-VALLASKOLI",
+    "color": "blue"
+  },
+  {
+    "id": "steam-royale",
+    "title": "Steam Royale",
+    "icon": "🏰",
+    "subject": "STEAM / þverfaglegt",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "url": "https://steam-royale.onrender.com/",
+    "link": "https://steam-royale.onrender.com/",
+    "description": "Leikjavæddur STEAM-námsheimur þar sem nemendur vinna verkefni í vísindum, tækni, sköpun, stærðfræði og rökhugsun.",
+    "code": "STEAM-ROYALE",
+    "color": "blue"
+  }
+];
+const VALLASKOLI_WEB_TASKS = [
+  {
+    "id": "task-stika-1b",
+    "title": "Vinna með Stika 1B",
+    "code": "5B-STIKA1B",
+    "subject": "Stærðfræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "stika-1b",
+    "description": "Opnaðu vefinn Stika 1B. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-deiling",
+    "title": "Vinna með Deiling",
+    "code": "5B-DEILING",
+    "subject": "Stærðfræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "deiling",
+    "description": "Opnaðu vefinn Deiling. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-margfoldunar-meistari",
+    "title": "Vinna með Margföldunarmeistari",
+    "code": "4B-MARGFOLDUN",
+    "subject": "Stærðfræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "3",
+      "4"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "margfoldunar-meistari",
+    "description": "Opnaðu vefinn Margföldunarmeistari. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-fortnite-heimur",
+    "title": "Vinna með Fortnite heimur",
+    "code": "7B-FORTNITE",
+    "subject": "Þverfaglegt",
+    "type": "Vefverkefni",
+    "grades": [
+      "7",
+      "8"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "fortnite-heimur",
+    "description": "Opnaðu vefinn Fortnite heimur. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-hljodheimar",
+    "title": "Vinna með Hljóðheimar",
+    "code": "HLJOD",
+    "subject": "Íslenska / tónmennt / miðlun",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "hljodheimar",
+    "description": "Opnaðu vefinn Hljóðheimar. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-stae-leikir",
+    "title": "Vinna með Stæ-leikir 3.–4. bekkur",
+    "code": "4B-STAELEIKIR",
+    "subject": "Stærðfræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "3",
+      "4"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "stae-leikir",
+    "description": "Opnaðu vefinn Stæ-leikir 3.–4. bekkur. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-apps-script-verkfaeri",
+    "title": "Vinna með Forritunarverkefni",
+    "code": "UT-FORRITUN",
+    "subject": "Forritun / UT",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "apps-script-verkfaeri",
+    "description": "Opnaðu vefinn Forritunarverkefni. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-ljodaljod",
+    "title": "Vinna með Ljóðaljóð",
+    "code": "LJOD",
+    "subject": "Íslenska",
+    "type": "Vefverkefni",
+    "grades": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "ljodaljod",
+    "description": "Opnaðu vefinn Ljóðaljóð. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-hour-of-ai",
+    "title": "Vinna með Hour of AI",
+    "code": "AI-HOUR",
+    "subject": "Gervigreind / forritun",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "hour-of-ai",
+    "description": "Opnaðu vefinn Hour of AI. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-teachable-machine",
+    "title": "Vinna með Teachable Machine",
+    "code": "AI-TEACHABLE",
+    "subject": "Gervigreind / UT",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "teachable-machine",
+    "description": "Opnaðu vefinn Teachable Machine. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-thatquiz",
+    "title": "Vinna með ThatQuiz bekkjarsíða",
+    "code": "THATQUIZ",
+    "subject": "Stærðfræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "thatquiz",
+    "description": "Opnaðu vefinn ThatQuiz bekkjarsíða. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-natturulega-1-hljodbok",
+    "title": "Vinna með Náttúrulega 1 – hljóðbók",
+    "code": "NATTURULEGA1",
+    "subject": "Náttúrufræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "natturulega-1-hljodbok",
+    "description": "Opnaðu vefinn Náttúrulega 1 – hljóðbók. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-island-hljodbok",
+    "title": "Vinna með Ísland – hér búum við – hljóðbók",
+    "code": "ISLAND-HLJOD",
+    "subject": "Landafræði / samfélagsfræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "island-hljodbok",
+    "description": "Opnaðu vefinn Ísland – hér búum við – hljóðbók. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-vikingaold-hljodbok",
+    "title": "Vinna með Víkingaöld – hljóðbók",
+    "code": "VIKINGAOLD",
+    "subject": "Saga",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "vikingaold-hljodbok",
+    "description": "Opnaðu vefinn Víkingaöld – hljóðbók. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-gradubogi-og-horn",
+    "title": "Vinna með Gráðubogi og horn",
+    "code": "5B-HORN",
+    "subject": "Stærðfræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "gradubogi-og-horn",
+    "description": "Opnaðu vefinn Gráðubogi og horn. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-rod-reikniadgerda",
+    "title": "Vinna með Röð reikniaðgerða",
+    "code": "5B-ROD",
+    "subject": "Stærðfræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "rod-reikniadgerda",
+    "description": "Opnaðu vefinn Röð reikniaðgerða. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-island-her-buum-vid",
+    "title": "Vinna með Ísland – hér búum við",
+    "code": "5B-ISLAND",
+    "subject": "Landafræði / samfélagsfræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "island-her-buum-vid",
+    "description": "Opnaðu vefinn Ísland – hér búum við. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-verkefnasafnsja",
+    "title": "Vinna með Verkefnasafnsjá",
+    "code": "VERKEFNASAFN",
+    "subject": "Þverfaglegt",
+    "type": "Vefverkefni",
+    "grades": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "verkefnasafnsja",
+    "description": "Opnaðu vefinn Verkefnasafnsjá. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-vedurvefur-sudurland",
+    "title": "Vinna með Veðurvefur Árborg / Suðurland",
+    "code": "VEDUR",
+    "subject": "Náttúrufræði / landafræði",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "vedurvefur-sudurland",
+    "description": "Opnaðu vefinn Veðurvefur Árborg / Suðurland. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-skakakademia",
+    "title": "Vinna með Skákakademía",
+    "code": "SKAK",
+    "subject": "Skák / rökhugsun",
+    "type": "Vefverkefni",
+    "grades": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "skakakademia",
+    "description": "Opnaðu vefinn Skákakademía. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-ut-kennsla-vallaskoli",
+    "title": "Vinna með UT-kennsla Vallaskóli",
+    "code": "UT-VALLASKOLI",
+    "subject": "Upplýsinga- og tæknimennt",
+    "type": "Vefverkefni",
+    "grades": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "ut-kennsla-vallaskoli",
+    "description": "Opnaðu vefinn UT-kennsla Vallaskóli. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  },
+  {
+    "id": "task-steam-royale",
+    "title": "Vinna með Steam Royale",
+    "code": "STEAM-ROYALE",
+    "subject": "STEAM / þverfaglegt",
+    "type": "Vefverkefni",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "time": "20–40 mín",
+    "level": "Miðlungs",
+    "moduleId": "steam-royale",
+    "description": "Opnaðu vefinn Steam Royale. Lestu leiðbeiningar, vinnu eitt eða fleiri verkefni og merktu stöðu í Nemendagátt.",
+    "goal": "Nemandi getur nýtt vefinn til að vinna markvisst og skráð eigin framvindu.",
+    "createdAt": "2026-05-16T00:00:00.000Z"
+  }
+];
+
 const DEFAULT_PACKAGES = [
   {
     id:"pkg-prosentur-grunnur",
@@ -1013,10 +1819,25 @@ const els = {
   progressTableBody: document.getElementById("progressTableBody")
 };
 
+
+function mergeById(first, second){
+  const map = new Map();
+  [...(first||[]), ...(second||[])].forEach(x=>{ if(x && x.id) map.set(x.id, x); });
+  return Array.from(map.values());
+}
+function importVallaskoliWebCollection(){
+  modules = mergeById(VALLASKOLI_WEB_COLLECTION, modules).map(m=>({...m, link:m.link || m.url || "", url:m.url || m.link || ""}));
+  tasks = mergeById(VALLASKOLI_WEB_TASKS, tasks);
+  saveModules();
+  saveTasks();
+  render();
+  alert("Vefjasafn Vallaskóla og tengd verkefnaspjöld voru sett inn / uppfærð. Mundu að senda local gögn í Supabase.");
+}
+
 function loadModules(){
   try{
     const saved = localStorage.getItem("namsmidjan_modules_v01");
-    return saved ? JSON.parse(saved) : DEFAULT_MODULES;
+    return saved ? JSON.parse(saved) : mergeById(VALLASKOLI_WEB_COLLECTION, DEFAULT_MODULES);
   }catch(e){ return DEFAULT_MODULES; }
 }
 function saveModules(){
@@ -1026,7 +1847,7 @@ function saveModules(){
 function loadTasks(){
   try{
     const saved = localStorage.getItem("namsmidjan_tasks_v02");
-    return saved ? JSON.parse(saved) : DEFAULT_TASKS;
+    return saved ? JSON.parse(saved) : mergeById(VALLASKOLI_WEB_TASKS, DEFAULT_TASKS);
   }catch(e){ return DEFAULT_TASKS; }
 }
 function saveTasks(){
@@ -2283,6 +3104,7 @@ document.getElementById("openTeacherFromHome")?.addEventListener("click",()=>{ e
 document.getElementById("openSyncFromHome")?.addEventListener("click",()=>{ els.admin.classList.add("open"); activateAdminPane("supabasePane"); });
 document.getElementById("openSyncPanelBtn")?.addEventListener("click",()=>{ els.admin.classList.add("open"); activateAdminPane("supabasePane"); });
 
+document.getElementById("importVefjasafnBtn")?.addEventListener("click", importVallaskoliWebCollection);
 render();
 refreshAuthState();
 </script>

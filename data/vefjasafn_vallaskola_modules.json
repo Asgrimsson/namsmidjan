@@ -1,0 +1,373 @@
+[
+  {
+    "id": "stika-1b",
+    "title": "Stika 1B",
+    "icon": "📘",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/stika-1b",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/stika-1b",
+    "description": "Gagnvirk stærðfræðieining fyrir 5.–6. bekk þar sem nemendur vinna með verkefni úr Stiku 1B. Hentar vel sem æfing, upprifjun eða sjálfstæð vinna.",
+    "code": "5B-STIKA1B",
+    "color": "blue"
+  },
+  {
+    "id": "deiling",
+    "title": "Deiling",
+    "icon": "➗",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/deiling",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/deiling",
+    "description": "Æfingavefur þar sem nemendur þjálfa deilingu skref fyrir skref með endurtekningu, sjónrænum stuðningi og markvissri æfingu.",
+    "code": "5B-DEILING",
+    "color": "blue"
+  },
+  {
+    "id": "margfoldunar-meistari",
+    "title": "Margföldunarmeistari",
+    "icon": "✖️",
+    "subject": "Stærðfræði",
+    "grades": [
+      "3",
+      "4"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/3-og-4-bekkur/margf%C3%B6ldunar-meistari",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/3-og-4-bekkur/margf%C3%B6ldunar-meistari",
+    "description": "Skemmtilegur æfingavefur fyrir 3.–4. bekk þar sem nemendur styrkja margföldunartöflurnar í leikrænu og hvetjandi umhverfi.",
+    "code": "4B-MARGFOLDUN",
+    "color": "blue"
+  },
+  {
+    "id": "fortnite-heimur",
+    "title": "Fortnite heimur",
+    "icon": "🎮",
+    "subject": "Þverfaglegt",
+    "grades": [
+      "7",
+      "8"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/7-og-8-bekkur/fornite-heimur",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/7-og-8-bekkur/fornite-heimur",
+    "description": "Leikjavæddur námsheimur fyrir 7.–8. bekk þar sem verkefni eru sett fram í spennandi leikjaumhverfi sem eykur virkni og áhuga.",
+    "code": "7B-FORTNITE",
+    "color": "blue"
+  },
+  {
+    "id": "hljodheimar",
+    "title": "Hljóðheimar",
+    "icon": "🎧",
+    "subject": "Íslenska / tónmennt / miðlun",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "url": "https://hljod.netlify.app/",
+    "link": "https://hljod.netlify.app/",
+    "description": "Vefur fyrir hljóð, hlustun og skapandi verkefni þar sem nemendur vinna með hljóð, hlusta, skapa og miðla eigin hugmyndum.",
+    "code": "HLJOD",
+    "color": "blue"
+  },
+  {
+    "id": "stae-leikir",
+    "title": "Stæ-leikir 3.–4. bekkur",
+    "icon": "🎲",
+    "subject": "Stærðfræði",
+    "grades": [
+      "3",
+      "4"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/3-og-4-bekkur/st%C3%A6-leikir",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/3-og-4-bekkur/st%C3%A6-leikir",
+    "description": "Safn stærðfræðileikja fyrir 3.–4. bekk þar sem nemendur æfa grunnfærni á leikrænan, fjölbreyttan og aðgengilegan hátt.",
+    "code": "4B-STAELEIKIR",
+    "color": "blue"
+  },
+  {
+    "id": "apps-script-verkfaeri",
+    "title": "Forritunarverkefni",
+    "icon": "🧩",
+    "subject": "Forritun / UT",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "url": "https://script.google.com/a/macros/g.vallaskoli.is/s/AKfycbxMEp03UKcWc5DoeVK31xwWD7pj1Tjc7M5eeZ5uSWcTsMsF-zfEpHo5IzBT5xd-G4aT/exec",
+    "link": "https://script.google.com/a/macros/g.vallaskoli.is/s/AKfycbxMEp03UKcWc5DoeVK31xwWD7pj1Tjc7M5eeZ5uSWcTsMsF-zfEpHo5IzBT5xd-G4aT/exec",
+    "description": "Sérhæfður gagnvirkur vefur eða verkfæri tengt kennslu og verkefnavinnu. Hentar sem kennarastýrt verkfæri eða æfingasvæði.",
+    "code": "UT-FORRITUN",
+    "color": "blue"
+  },
+  {
+    "id": "ljodaljod",
+    "title": "Ljóðaljóð",
+    "icon": "✍️",
+    "subject": "Íslenska",
+    "grades": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "url": "https://ljodaljod.netlify.app/",
+    "link": "https://ljodaljod.netlify.app/",
+    "description": "Skapandi ljóðavefur þar sem nemendur vinna með ljóð, orð, hljóm og tjáningu. Hentar vel í ritun, upplestur og skapandi málnotkun.",
+    "code": "LJOD",
+    "color": "blue"
+  },
+  {
+    "id": "hour-of-ai",
+    "title": "Hour of AI",
+    "icon": "🤖",
+    "subject": "Gervigreind / forritun",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://code.org/en-US/hour-of-ai",
+    "link": "https://code.org/en-US/hour-of-ai",
+    "description": "Kynning á gervigreind í gegnum verkefni frá Code.org. Nemendur prófa hugmyndir tengdar AI, forritun, sköpun og stafrænu læsi.",
+    "code": "AI-HOUR",
+    "color": "blue"
+  },
+  {
+    "id": "teachable-machine",
+    "title": "Teachable Machine",
+    "icon": "🧠",
+    "subject": "Gervigreind / UT",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://teachablemachine.withgoogle.com/",
+    "link": "https://teachablemachine.withgoogle.com/",
+    "description": "Google-verkfæri þar sem nemendur þjálfa einföld gervigreindarlíkön með myndum, hljóði eða hreyfingu. Frábært í AI-kennslu.",
+    "code": "AI-TEACHABLE",
+    "color": "blue"
+  },
+  {
+    "id": "thatquiz",
+    "title": "ThatQuiz bekkjarsíða",
+    "icon": "🧮",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "url": "https://www.thatquiz.org/tq/classpage?034013458ef10715",
+    "link": "https://www.thatquiz.org/tq/classpage?034013458ef10715",
+    "description": "Æfingasvæði fyrir stærðfræði og önnur verkefni í ThatQuiz. Hentar vel fyrir stuttar æfingar, stöðumat og endurtekningu.",
+    "code": "THATQUIZ",
+    "color": "blue"
+  },
+  {
+    "id": "natturulega-1-hljodbok",
+    "title": "Náttúrulega 1 – hljóðbók",
+    "icon": "🌿",
+    "subject": "Náttúrufræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://mms.is/namsefni/natturulega-1-hljodbok",
+    "link": "https://mms.is/namsefni/natturulega-1-hljodbok",
+    "description": "Hljóðbók sem styður við náttúrufræðinám. Hentar vel fyrir hlustun, lesskilning, orðaforða og nemendur sem nýta hljóðstuðning.",
+    "code": "NATTURULEGA1",
+    "color": "blue"
+  },
+  {
+    "id": "island-hljodbok",
+    "title": "Ísland – hér búum við – hljóðbók",
+    "icon": "🇮🇸",
+    "subject": "Landafræði / samfélagsfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://mms.is/namsefni/island-her-buum-vid-hljodbok",
+    "link": "https://mms.is/namsefni/island-her-buum-vid-hljodbok",
+    "description": "Hljóðbók tengd landafræði og samfélagsfræði Íslands. Styður nám um landið, byggðir, náttúru og samfélag.",
+    "code": "ISLAND-HLJOD",
+    "color": "blue"
+  },
+  {
+    "id": "vikingaold-hljodbok",
+    "title": "Víkingaöld – hljóðbók",
+    "icon": "🛡️",
+    "subject": "Saga",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "url": "https://mms.is/namsefni/vikingaold-hljodbok",
+    "link": "https://mms.is/namsefni/vikingaold-hljodbok",
+    "description": "Hljóðbók um víkingaöld sem hentar í sögu, lesskilning og hlustunarverkefni. Nemendur geta hlustað, glósað og unnið úr efninu.",
+    "code": "VIKINGAOLD",
+    "color": "blue"
+  },
+  {
+    "id": "gradubogi-og-horn",
+    "title": "Gráðubogi og horn",
+    "icon": "📐",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/gr%C3%A1%C3%B0ubogi-og-horn",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/gr%C3%A1%C3%B0ubogi-og-horn",
+    "description": "Gagnvirk stærðfræðieining þar sem nemendur læra um horn, gráður og notkun gráðuboga með sjónrænum og verklegum verkefnum.",
+    "code": "5B-HORN",
+    "color": "blue"
+  },
+  {
+    "id": "rod-reikniadgerda",
+    "title": "Röð reikniaðgerða",
+    "icon": "🧾",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/r%C3%B6%C3%B0-reiknia%C3%B0ger%C3%B0a",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li/5-og-6-bekkur/r%C3%B6%C3%B0-reiknia%C3%B0ger%C3%B0a",
+    "description": "Æfingavefur þar sem nemendur læra að reikna í réttri röð með svigum, margföldun, deilingu, samlagningu og frádrætti.",
+    "code": "5B-ROD",
+    "color": "blue"
+  },
+  {
+    "id": "island-her-buum-vid",
+    "title": "Ísland – hér búum við",
+    "icon": "🗺️",
+    "subject": "Landafræði / samfélagsfræði",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "url": "https://island-her-buum-vid-2.onrender.com/",
+    "link": "https://island-her-buum-vid-2.onrender.com/",
+    "description": "Gagnvirkur námsvefur um Ísland, náttúru, veður, staði og samfélag. Hentar vel í landafræði og samþætt verkefni.",
+    "code": "5B-ISLAND",
+    "color": "blue"
+  },
+  {
+    "id": "verkefnasafnsja",
+    "title": "Verkefnasafnsjá",
+    "icon": "🗂️",
+    "subject": "Þverfaglegt",
+    "grades": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://verkefnasafnsja.netlify.app/",
+    "link": "https://verkefnasafnsja.netlify.app/",
+    "description": "Safn og yfirlit yfir verkefni sem kennari getur nýtt í kennslu. Hentar sem verkefnabanki, hugmyndasafn og flýtileið í námsverkefni.",
+    "code": "VERKEFNASAFN",
+    "color": "blue"
+  },
+  {
+    "id": "vedurvefur-sudurland",
+    "title": "Veðurvefur Árborg / Suðurland",
+    "icon": "🌦️",
+    "subject": "Náttúrufræði / landafræði",
+    "grades": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "url": "https://vedurvefur-arborg-sudurlandbranchmainmainfilepathapppy-kcre9n2.streamlit.app/",
+    "link": "https://vedurvefur-arborg-sudurlandbranchmainmainfilepathapppy-kcre9n2.streamlit.app/",
+    "description": "Gagnvirkur veðurvefur sem nýtist í náttúrufræði, landafræði og daglegri umræðu um veður, spár, gögn og nærumhverfi.",
+    "code": "VEDUR",
+    "color": "blue"
+  },
+  {
+    "id": "skakakademia",
+    "title": "Skákakademía",
+    "icon": "♟️",
+    "subject": "Skák / rökhugsun",
+    "grades": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://skakakademia.onrender.com/",
+    "link": "https://skakakademia.onrender.com/",
+    "description": "Skákkennsluvefur með æfingum, verkefnum og skákþrautum. Hentar fyrir byrjendur og lengra komna sem vilja æfa rökhugsun og taktík.",
+    "code": "SKAK",
+    "color": "blue"
+  },
+  {
+    "id": "ut-kennsla-vallaskoli",
+    "title": "UT-kennsla Vallaskóli",
+    "icon": "💻",
+    "subject": "Upplýsinga- og tæknimennt",
+    "grades": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "url": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li?authuser=1",
+    "link": "https://sites.google.com/view/ut-vefurkennara/ut-kennsla-vallask%C3%B3li?authuser=1",
+    "description": "Aðalvefur fyrir upplýsinga- og tæknimennt í Vallaskóla. Hér eru verkefni, leiðir og námsefni fyrir marga árganga og ólík UT-þemu.",
+    "code": "UT-VALLASKOLI",
+    "color": "blue"
+  },
+  {
+    "id": "steam-royale",
+    "title": "Steam Royale",
+    "icon": "🏰",
+    "subject": "STEAM / þverfaglegt",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "url": "https://steam-royale.onrender.com/",
+    "link": "https://steam-royale.onrender.com/",
+    "description": "Leikjavæddur STEAM-námsheimur þar sem nemendur vinna verkefni í vísindum, tækni, sköpun, stærðfræði og rökhugsun.",
+    "code": "STEAM-ROYALE",
+    "color": "blue"
+  }
+]

@@ -1,4 +1,4 @@
-# Námsmiðjan v1.0
+# Námsmiðjan v1.1
 
 Námsmiðjan er fyrsti grunnur að browser-based náms- og kennsluvefja-vistkerfi.
 
@@ -432,3 +432,10 @@ Námsmiðjan v1.0 er fyrsta útgáfan sem er hugsuð sem skólastofuprófun.
 6. Gefðu nemendum verkefnakóða.
 7. Nemendur opna Nemendagátt.
 8. Kennari skoðar Bekkjayfirlit.
+
+
+---
+# v1.1 — Vefjasafn Vallaskóla
+
+22 námsvefir eru komnir sem flísar með lýsingum, fögum, bekkjum og verkefnakóðum.
+
