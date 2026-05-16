@@ -1,4 +1,4 @@
-# Námsmiðjan v0.9
+# Námsmiðjan v1.0
 
 Námsmiðjan er fyrsti grunnur að browser-based náms- og kennsluvefja-vistkerfi.
 
@@ -409,3 +409,26 @@ v0.9 ætti að bæta við öruggri AI-tengingu í gegnum Netlify Function eða a
 
 Ekki setja `OPENAI_API_KEY` í `index.html`.
 Settu lykilinn bara í Netlify undir Environment variables.
+
+---
+
+# v1.0 — Public Beta / skólastofuútgáfa
+
+Námsmiðjan v1.0 er fyrsta útgáfan sem er hugsuð sem skólastofuprófun.
+
+## Gullreglan
+
+- Þegar þú býrð til/breytir verkefni: **Senda local gögn í Supabase**
+- Þegar þú opnar vefinn í nýjum vafra/tölvu: **Sækja gögn úr Supabase**
+- Þegar nemendur hafa unnið: **Sækja nýjustu gögn** í Bekkjayfirliti
+
+## Fyrsta skólastofuprófun
+
+1. Skráðu þig inn sem kennari.
+2. Sæktu gögn úr Supabase.
+3. Búðu til verkefni með AI.
+4. Vistaðu sem verkefnapakka.
+5. Sendu local gögn í Supabase.
+6. Gefðu nemendum verkefnakóða.
+7. Nemendur opna Nemendagátt.
+8. Kennari skoðar Bekkjayfirlit.

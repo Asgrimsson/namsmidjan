@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Námsmiðjan v0.9</title>
+  <title>Námsmiðjan v1.0</title>
   <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
   <style>
     :root{
@@ -213,11 +213,12 @@
         <div class="logo">✦</div>
         <div>
           <h1>Námsmiðjan</h1>
-          <p>Móðurvefur fyrir náms- og kennsluvefi · v0.9</p>
+          <p>Public Beta / skólastofuútgáfa · v1.0</p>
         </div>
       </div>
       <nav class="nav">
         <a class="btn ghost" href="#modules">Námsvefir</a>
+        <a class="btn ghost" href="#classroom-home">Stjórnborð</a>
         <a class="btn ghost" href="#ai-builder">AI verkefnasmiður</a>
         <a class="btn ghost" href="#builder">Verkefnasmiður</a>
         <a class="btn ghost" href="#taskbank">Verkefnabanki</a>
@@ -225,6 +226,7 @@
         <button class="btn ghost" id="dbTopBtn">Gagnagrunnur</button>
         <button class="btn ghost" id="authTopBtn">Innskráning</button>
         <a class="btn ghost" href="#roadmap">Vegferð</a>
+        <a class="btn ghost" href="#help">Leiðbeiningar</a>
         <button class="btn" id="studentModeBtn">Nemendagátt</button>
         <button class="btn primary" id="adminBtn">Kennarasvæði</button>
       <span class="sync-badge" id="syncBadge"><span class="sync-dot local" id="syncDot"></span><span id="syncText">Local mode</span></span>
@@ -244,6 +246,8 @@
         <div class="hero-actions">
           <a class="btn primary" href="#modules">Skoða námsvefi</a>
           <button class="btn" id="quickAddBtn">Bæta við vef</button>
+          <button class="btn primary" id="teacherModeHero">Ég er kennari</button>
+          <button class="btn" id="studentModeHero">Ég er nemandi</button>
           <button class="btn" id="quickTaskBtn">Búa til verkefni</button>
           <a class="btn primary" id="heroAIButton" href="#ai-builder">AI verkefnasmiður</a>
           <button class="btn" id="heroStudentBtn">Opna nemendagátt</button>
@@ -271,7 +275,7 @@
           <div class="chiprow" id="dailyChips"></div>
         </div>
         <div class="notice">
-          <strong>v0.9 markmið:</strong> Þessi útgáfa bætir við öruggri AI-tengingu með Netlify Function. API lykillinn fer ekki í browser; vefurinn kallar á server-side fall sem skilar verkefnapakka.
+          <strong>v1.0 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
         </div>
       </aside>
     </section>
@@ -298,6 +302,40 @@
 
 
 
+
+
+    <section class="section" id="classroom-home">
+      <div class="section-head">
+        <div><h2>Skólastofuútgáfa</h2><p>Veldu hraðleið: kennari býr til og vistar verkefni; nemandi opnar verkefni með kóða.</p></div>
+        <span class="sync-badge"><span class="sync-dot cloud"></span><span>Public Beta v1.0</span></span>
+      </div>
+      <div class="mode-row">
+        <div class="mode-card">
+          <h3>👩‍🏫 Kennarahamur</h3>
+          <p>Búðu til verkefnapakka, notaðu AI, vistaðu í Supabase og fylgstu með skilum nemenda.</p>
+          <div class="builder-actions">
+            <a class="btn primary" href="#ai-builder">AI verkefnasmiður</a>
+            <a class="btn" href="#builder">Verkefnasmiður</a>
+            <a class="btn" href="#progress">Bekkjayfirlit</a>
+            <button class="btn" id="openTeacherFromHome">Gagnagrunnur / innskráning</button>
+          </div>
+        </div>
+        <div class="mode-card student">
+          <h3>🧑‍🎓 Nemendahamur</h3>
+          <p>Nemandi þarf aðeins nafn/hóp og verkefnakóða. Hann merkir stöðu í lok tímans.</p>
+          <div class="builder-actions">
+            <button class="btn primary" id="openStudentFromHome">Opna nemendagátt</button>
+            <a class="btn" href="#taskbank">Sjá verkefnabanka</a>
+          </div>
+        </div>
+      </div>
+      <div class="beta-dashboard">
+        <div class="beta-card"><h3>1. Búa til</h3><p>Notaðu AI eða verkefnasmið til að útbúa verkefnapakka.</p><a class="btn small" href="#ai-builder">Byrja</a></div>
+        <div class="beta-card"><h3>2. Vista</h3><p>Skráðu þig inn og sendu gögnin í Supabase.</p><button class="btn small" id="openSyncFromHome">Vista í ský</button></div>
+        <div class="beta-card"><h3>3. Nemendur vinna</h3><p>Gefðu nemendum kóða eins og <strong>5B-ELDGOS</strong>.</p><button class="btn small" id="openStudentFromCard">Nemendagátt</button></div>
+        <div class="beta-card"><h3>4. Fylgjast með</h3><p>Skoðaðu skil, hjálparbeiðnir, XP og athugasemdir.</p><a class="btn small" href="#progress">Bekkjayfirlit</a></div>
+      </div>
+    </section>
 
     <section class="section" id="ai-builder">
       <div class="section-head">
@@ -502,6 +540,23 @@
     </section>
 
 
+
+    <section class="section" id="sync-flow">
+      <div class="section-head">
+        <div><h2>Hvernig sinkar þetta saman?</h2><p>Netlify hýsir vefinn og AI function; Supabase geymir gögnin; vafrinn heldur tímabundnu local afriti.</p></div>
+        <button class="btn" id="openSyncPanelBtn">Opna sync stillingar</button>
+      </div>
+      <div class="panel">
+        <div class="sync-status-panel"><strong>Flæðið:</strong> Kennari býr til verkefni → sendir local gögn í Supabase → nemendur opna með kóða → kennari sækir nýjustu gögn í bekkjayfirliti.</div>
+        <div class="flow-steps">
+          <div class="flow-step"><div><strong>Kennari býr til verkefni</strong><br><span style="color:var(--muted)">AI verkefnasmiður eða Verkefnasmiður býr til verkefnapakka.</span></div></div>
+          <div class="flow-step"><div><strong>Vista í ský</strong><br><span style="color:var(--muted)">Gagnagrunnur → skrá inn → Senda local gögn í Supabase.</span></div></div>
+          <div class="flow-step"><div><strong>Nemendur opna með kóða</strong><br><span style="color:var(--muted)">Nemendagátt → nafn/hópur → kóði → vinna og merkja stöðu.</span></div></div>
+          <div class="flow-step"><div><strong>Kennari fylgist með</strong><br><span style="color:var(--muted)">Bekkjayfirlit → Sækja nýjustu gögn.</span></div></div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="progress">
       <div class="section-head">
         <div>
@@ -532,6 +587,17 @@
             <tbody id="progressTableBody"></tbody>
           </table>
         </div>
+      </div>
+    </section>
+
+
+    <section class="section" id="help">
+      <div class="section-head"><div><h2>Leiðbeiningar</h2><p>Stuttar kennaraleiðbeiningar fyrir fyrstu skólastofuprófun.</p></div></div>
+      <div class="help-grid">
+        <div class="help-card"><h3>Fyrsta kennsluprófun</h3><ol><li>Skráðu þig inn sem kennari.</li><li>Búðu til verkefni með AI.</li><li>Vistaðu sem verkefnapakka.</li><li>Sendu local gögn í Supabase.</li><li>Skrifaðu verkefnakóðann á töfluna.</li></ol></div>
+        <div class="help-card"><h3>Nemendur</h3><ol><li>Opna vefinn.</li><li>Smella á Nemendagátt.</li><li>Skrifa nafn eða hóp.</li><li>Skrifa verkefnakóða.</li><li>Merkja stöðu.</li></ol></div>
+        <div class="help-card"><h3>Sync-reglan</h3><p><strong>Áður en tími byrjar:</strong> Sækja gögn úr Supabase.</p><p><strong>Eftir breytingar:</strong> Senda local gögn í Supabase.</p><p><strong>Eftir vinnu nemenda:</strong> Sækja nýjustu gögn í bekkjayfirliti.</p></div>
+        <div class="help-card"><h3>Ef eitthvað virkar ekki</h3><ul><li>Athugaðu kennarainnskráningu.</li><li>Prófaðu tengingu í Gagnagrunnur.</li><li>Athugaðu Netlify Function ef AI svarar ekki.</li><li>Endurhlaðaðu síðuna eftir uppfærslu.</li></ul></div>
       </div>
     </section>
 
@@ -567,7 +633,7 @@
   </main>
 
   <footer>
-    Námsmiðjan v0.9 · innskráning, öruggari réttindi og Supabase samstilling.
+    Námsmiðjan v1.0 · innskráning, öruggari réttindi og Supabase samstilling.
   </footer>
 
   <section class="admin" id="adminModal" aria-hidden="true">
@@ -2206,6 +2272,16 @@ function wireAIButtons(){
   document.getElementById("aiPrintBtn")?.addEventListener("click",()=>{ if(!currentAIPackage)return; if(!packages.find(p=>p.id===currentAIPackage.id)) packages=[currentAIPackage,...packages]; printPackage(currentAIPackage.id); });
 }
 wireAIButtons();
+
+
+// v1.0 classroom shortcuts
+document.getElementById("teacherModeHero")?.addEventListener("click",()=>document.getElementById("classroom-home").scrollIntoView({behavior:"smooth"}));
+document.getElementById("studentModeHero")?.addEventListener("click",()=>els.student.classList.add("open"));
+document.getElementById("openStudentFromHome")?.addEventListener("click",()=>els.student.classList.add("open"));
+document.getElementById("openStudentFromCard")?.addEventListener("click",()=>els.student.classList.add("open"));
+document.getElementById("openTeacherFromHome")?.addEventListener("click",()=>{ els.admin.classList.add("open"); activateAdminPane("authPane"); refreshAuthState(); });
+document.getElementById("openSyncFromHome")?.addEventListener("click",()=>{ els.admin.classList.add("open"); activateAdminPane("supabasePane"); });
+document.getElementById("openSyncPanelBtn")?.addEventListener("click",()=>{ els.admin.classList.add("open"); activateAdminPane("supabasePane"); });
 
 render();
 refreshAuthState();
