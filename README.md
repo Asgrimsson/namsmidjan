@@ -1,4 +1,4 @@
-# Námsmiðjan v1.1
+# Námsmiðjan v1.1.1
 
 Námsmiðjan er fyrsti grunnur að browser-based náms- og kennsluvefja-vistkerfi.
 
@@ -439,3 +439,20 @@ Námsmiðjan v1.0 er fyrsta útgáfan sem er hugsuð sem skólastofuprófun.
 
 22 námsvefir eru komnir sem flísar með lýsingum, fögum, bekkjum og verkefnakóðum.
 
+
+
+---
+
+# v1.1.1 — Vistaðar Supabase stillingar
+
+Námsmiðjan getur nú sótt Supabase stillingar sjálfkrafa úr Netlify Function:
+
+`/.netlify/functions/public-config`
+
+Settu í Netlify Environment Variables:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_WORKSPACE`
+
+Síðan redeployarðu.

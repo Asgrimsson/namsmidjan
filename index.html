@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Námsmiðjan v1.1</title>
+  <title>Námsmiðjan v1.1.1.1</title>
   <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
   <style>
     :root{
@@ -213,7 +213,7 @@
         <div class="logo">✦</div>
         <div>
           <h1>Námsmiðjan</h1>
-          <p>Vefjasafn Vallaskóla · v1.1</p>
+          <p>Vefjasafn Vallaskóla · v1.1.1</p>
         </div>
       </div>
       <nav class="nav">
@@ -276,7 +276,7 @@
           <div class="chiprow" id="dailyChips"></div>
         </div>
         <div class="notice">
-          <strong>v1.1 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
+          <strong>v1.1.1 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
         </div>
       </aside>
     </section>
@@ -648,7 +648,7 @@
   </main>
 
   <footer>
-    Námsmiðjan v1.1 · innskráning, öruggari réttindi og Supabase samstilling.
+    Námsmiðjan v1.1.1 · innskráning, öruggari réttindi og Supabase samstilling.
   </footer>
 
   <section class="admin" id="adminModal" aria-hidden="true">
@@ -808,7 +808,7 @@
         <div class="admin-pane" id="supabasePane">
           <div class="notice" style="margin-bottom:14px">
             Hér tengir þú Námsmiðjuna við Supabase. Fyrir v0.5 skaltu keyra <strong>supabase_v0_5_security.sql</strong> í Supabase SQL Editor eftir v0.4 schema.
-            Settu síðan inn Project URL og publishable/anon key. Kennari þarf að skrá sig inn til að senda námsvefi og verkefni.
+            Settu síðan inn Project URL og publishable/anon key. Í v1.1.1 getur vefurinn líka sótt þessar stillingar sjálfkrafa úr Netlify Environment Variables ef þær eru settar inn.
           </div>
 
           <div class="supabase-panel">
@@ -836,6 +836,7 @@
               <div class="full" style="display:flex;gap:10px;flex-wrap:wrap">
                 <button class="btn primary" type="button" id="saveSupabaseBtn">Vista tengingu</button>
                 <button class="btn" type="button" id="testSupabaseBtn">Prófa tengingu</button>
+              <button class="btn" type="button" id="loadPublicConfigBtn">Sækja vistaðar Netlify stillingar</button>
                 <button class="btn" type="button" id="pushSupabaseBtn">Senda local gögn í Supabase</button>
                 <button class="btn" type="button" id="pullSupabaseBtn">Sækja gögn úr Supabase</button>
                 <button class="btn danger" type="button" id="clearSupabaseBtn">Aftengja</button>
@@ -1898,6 +1899,36 @@ function addSyncLog(message){
   const box = document.getElementById("syncLog");
   if(box) box.textContent = syncMessages.join("\\n");
 }
+
+async function loadPublicSupabaseConfig(showAlert=false){
+  try{
+    const res = await fetch("/.netlify/functions/public-config", { method:"GET" });
+    if(!res.ok) throw new Error("public-config svaraði ekki");
+    const cfg = await res.json();
+    if(!cfg.supabaseUrl || !cfg.supabaseAnonKey){
+      throw new Error("SUPABASE_URL eða SUPABASE_ANON_KEY vantar í Netlify Environment Variables");
+    }
+    supabaseConfig.url = cfg.supabaseUrl;
+    supabaseConfig.key = cfg.supabaseAnonKey;
+    supabaseConfig.workspace = cfg.supabaseWorkspace || "vallaskoli";
+    localStorage.setItem("namsmidjan_supabase_config_v04", JSON.stringify(supabaseConfig, null, 2));
+    const urlEl = document.getElementById("supabaseUrl");
+    const keyEl = document.getElementById("supabaseKey");
+    const workspaceEl = document.getElementById("supabaseWorkspace");
+    if(urlEl) urlEl.value = supabaseConfig.url;
+    if(keyEl) keyEl.value = supabaseConfig.key;
+    if(workspaceEl) workspaceEl.value = supabaseConfig.workspace;
+    updateSyncBadge();
+    addSyncLog("Supabase stillingar sóttar sjálfkrafa úr Netlify.");
+    if(showAlert) alert("Supabase stillingar sóttar úr Netlify og vistaðar í vafranum.");
+    return true;
+  }catch(err){
+    addSyncLog("Gat ekki sótt Netlify Supabase stillingar: " + err.message);
+    if(showAlert) alert("Gat ekki sótt Netlify stillingar: " + err.message);
+    return false;
+  }
+}
+
 function updateSyncBadge(){
   const connected = !!(supabaseConfig.url && supabaseConfig.key);
   const dot = document.getElementById("syncDot");
@@ -3105,6 +3136,13 @@ document.getElementById("openSyncFromHome")?.addEventListener("click",()=>{ els.
 document.getElementById("openSyncPanelBtn")?.addEventListener("click",()=>{ els.admin.classList.add("open"); activateAdminPane("supabasePane"); });
 
 document.getElementById("importVefjasafnBtn")?.addEventListener("click", importVallaskoliWebCollection);
+
+// v1.1.1: sækja Supabase stillingar sjálfkrafa úr Netlify ef þær eru ekki til í vafranum
+if(!(supabaseConfig.url && supabaseConfig.key)){
+  loadPublicSupabaseConfig(false).then(()=>refreshAuthState && refreshAuthState());
+}
+document.getElementById("loadPublicConfigBtn")?.addEventListener("click",()=>loadPublicSupabaseConfig(true));
+
 render();
 refreshAuthState();
 </script>
