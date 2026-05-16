@@ -1,0 +1,21 @@
+[
+  {
+    "id": "prosentur",
+    "title": "Prósentureikningur",
+    "icon": "📊",
+    "subject": "Stærðfræði",
+    "grades": [
+      "5",
+      "6",
+      "7"
+    ],
+    "type": "Æfing",
+    "url": "modules/prosentur/index.html",
+    "description": "Gagnvirkar æfingar í prósentum, hlutföllum og daglegum dæmum.",
+    "tags": [
+      "prósentur",
+      "hlutföll",
+      "reikningur"
+    ]
+  }
+]

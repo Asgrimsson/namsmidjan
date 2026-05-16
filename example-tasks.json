@@ -1,0 +1,18 @@
+[
+  {
+    "id": "task-prosentur-5b",
+    "title": "Prósentuáskorun dagsins",
+    "code": "5B-PROSENTUR",
+    "subject": "Stærðfræði",
+    "type": "Æfing",
+    "grades": [
+      "5",
+      "6"
+    ],
+    "time": "15 mín",
+    "level": "Miðlungs",
+    "moduleId": "prosentur",
+    "description": "Farðu í Prósentureikning, byrjaðu á flipanum Læra og kláraðu síðan 10 æfingadæmi.",
+    "goal": "Nemandi skilur að prósenta merkir af hundraði og getur reiknað einfaldar prósentur."
+  }
+]

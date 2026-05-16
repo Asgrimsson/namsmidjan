@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="is">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prósentureikningur · Námsmiðjan</title>
+  <style>
+    :root{
+      --bg:#08111f;--card:rgba(255,255,255,.1);--card2:rgba(255,255,255,.16);
+      --text:#f8fafc;--muted:rgba(248,250,252,.72);--line:rgba(255,255,255,.18);
+      --accent:#7dd3fc;--accent2:#c084fc;--good:#86efac;--warn:#fde68a;--bad:#fca5a5;
+      --shadow:0 20px 70px rgba(0,0,0,.38);--radius:24px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);min-height:100vh;
+      background:
+        radial-gradient(circle at 15% 10%,rgba(125,211,252,.28),transparent 28%),
+        radial-gradient(circle at 84% 12%,rgba(192,132,252,.24),transparent 28%),
+        radial-gradient(circle at 50% 86%,rgba(134,239,172,.16),transparent 34%),
+        linear-gradient(135deg,#07111f,#101827 50%,#1b1230);
+    }
+    a{color:inherit}
+    button,input,select{font:inherit}
+    .wrap{max-width:1180px;margin:0 auto;padding:22px}
+    .top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:48px;height:48px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:26px;box-shadow:0 14px 42px rgba(125,211,252,.28)}
+    h1{font-size:24px;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:13px}
+    .btn{
+      border:1px solid var(--line);background:rgba(255,255,255,.09);color:var(--text);border-radius:999px;
+      padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-flex;gap:8px;align-items:center;
+      transition:.18s transform,.18s background;
+    }
+    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.15)}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#07111f;border-color:transparent;font-weight:900}
+    .hero{
+      border:1px solid var(--line);border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.075));
+      box-shadow:var(--shadow);padding:30px;display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:stretch;
+    }
+    .hero h2{font-size:clamp(34px,5vw,58px);line-height:.96;letter-spacing:-.05em;margin:14px 0}
+    .hero p{font-size:18px;color:var(--muted);line-height:1.55}
+    .pill{display:inline-flex;border:1px solid rgba(125,211,252,.36);background:rgba(125,211,252,.14);padding:8px 12px;border-radius:999px;font-weight:800;font-size:13px}
+    .scorebox{border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.18);border-radius:24px;padding:22px}
+    .scoregrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+    .score{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);border-radius:18px;padding:15px;text-align:center}
+    .score b{font-size:30px;display:block}.score span{font-size:12px;color:var(--muted)}
+    .tabs{display:flex;gap:9px;flex-wrap:wrap;margin:22px 0}
+    .tab{border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);border-radius:999px;padding:11px 15px;cursor:pointer}
+    .tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#07111f;border-color:transparent;font-weight:900}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.115),rgba(255,255,255,.065));border-radius:24px;padding:22px;box-shadow:0 12px 45px rgba(0,0,0,.22)}
+    .card h3{margin:0 0 10px;font-size:24px}.card p{color:var(--muted);line-height:1.5}
+    .bigq{font-size:clamp(28px,5vw,52px);font-weight:950;letter-spacing:-.04em;margin:18px 0;text-align:center}
+    .answer{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:18px 0}
+    .field{border:1px solid var(--line);background:rgba(255,255,255,.1);color:var(--text);border-radius:16px;padding:14px;outline:none;min-width:220px}
+    .feedback{min-height:54px;border-radius:18px;padding:15px;margin-top:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:var(--muted);line-height:1.45}
+    .feedback.good{border-color:rgba(134,239,172,.38);background:rgba(134,239,172,.11);color:#ecfff2}
+    .feedback.bad{border-color:rgba(252,165,165,.38);background:rgba(252,165,165,.10);color:#fff1f1}
+    .examples{display:grid;gap:10px}
+    .ex{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.065);border-radius:18px;padding:15px;line-height:1.45}
+    .ex b{color:#dff7ff}
+    .shop{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .item{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);border-radius:18px;padding:15px}
+    .item h4{margin:0 0 6px}.item p{font-size:13px;margin:0 0 12px}
+    .hidden{display:none}
+    .progress{height:12px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--good));transition:.25s width}
+    .confetti{pointer-events:none;position:fixed;inset:0;overflow:hidden;z-index:99}
+    .star{position:absolute;animation:fall 1100ms linear forwards;font-size:24px}
+    @keyframes fall{0%{transform:translateY(-30px) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(360deg);opacity:0}}
+    @media(max-width:860px){.hero,.grid{grid-template-columns:1fr}.shop,.scoregrid{grid-template-columns:1fr}.wrap{padding:14px}}
+  </style>
+</head>
+<body>
+  <div class="confetti" id="confetti"></div>
+  <main class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo">📊</div>
+        <div>
+          <h1>Prósentureikningur</h1>
+          <p>Fyrsti alvöru námsvefurinn í Námsmiðjunni</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn" href="../../index.html">← Til baka í Námsmiðjuna</a>
+        <button class="btn" id="resetBtn">Núllstilla árangur</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div>
+        <span class="pill">5.–7. bekkur · Stærðfræði · Æfing</span>
+        <h2>Lærðu prósentur með skýringum, æfingum og stigum.</h2>
+        <p>
+          Nemendur fá dæmi, vísbendingar og gullstjörnur fyrir rétt svör.
+          Markmiðið er að skilja hvað prósenta þýðir, ekki bara giska á svarið.
+        </p>
+        <div class="progress"><div class="bar" id="progressBar"></div></div>
+      </div>
+      <div class="scorebox">
+        <h3 style="margin:0 0 8px">Árangur</h3>
+        <p style="color:var(--muted);margin:0">Vistast í þessum vafra með localStorage.</p>
+        <div class="scoregrid">
+          <div class="score"><b id="points">0</b><span>stig</span></div>
+          <div class="score"><b id="correct">0</b><span>rétt</span></div>
+          <div class="score"><b id="streak">0</b><span>streak</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="learn">Læra</button>
+      <button class="tab" data-tab="practice">Æfa</button>
+      <button class="tab" data-tab="challenge">Áskorun</button>
+      <button class="tab" data-tab="shop">Búð</button>
+    </div>
+
+    <section id="learn" class="grid">
+      <div class="card">
+        <h3>Hvað er prósenta?</h3>
+        <p>Prósenta þýðir “af hundraði”. 25% þýðir 25 af 100. Ef þú átt 100 krónur, þá eru 25% = 25 krónur.</p>
+        <div class="examples">
+          <div class="ex"><b>10%</b> er einn tíundi. 10% af 200 = 20.</div>
+          <div class="ex"><b>50%</b> er helmingur. 50% af 80 = 40.</div>
+          <div class="ex"><b>25%</b> er fjórðungur. 25% af 120 = 30.</div>
+          <div class="ex"><b>1%</b> er einn hundraðasti. 1% af 300 = 3.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Aðferð sem virkar</h3>
+        <p>Þegar þú finnur prósentu af tölu getur þú hugsað svona:</p>
+        <div class="examples">
+          <div class="ex"><b>20% af 150</b><br>10% af 150 = 15<br>20% er tvöfalt meira → 30.</div>
+          <div class="ex"><b>5% af 400</b><br>10% af 400 = 40<br>5% er helmingur af 10% → 20.</div>
+          <div class="ex"><b>75% af 80</b><br>50% = 40 og 25% = 20<br>40 + 20 = 60.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="practice" class="card hidden">
+      <h3>Æfing</h3>
+      <p>Reiknaðu dæmið. Ef svarið er rangt færðu vísbendingu.</p>
+      <div class="bigq" id="question">10% af 100</div>
+      <div class="answer">
+        <input class="field" id="answerInput" inputmode="decimal" placeholder="Svarið þitt" />
+        <button class="btn primary" id="checkBtn">Athuga svar</button>
+        <button class="btn" id="hintBtn">Vísbending</button>
+        <button class="btn" id="nextBtn">Næsta dæmi</button>
+      </div>
+      <div class="feedback" id="feedback">Veldu svar og smelltu á “Athuga svar”.</div>
+    </section>
+
+    <section id="challenge" class="card hidden">
+      <h3>60 sekúndna áskorun</h3>
+      <p>Hversu mörgum dæmum nærðu rétt á einni mínútu?</p>
+      <div class="bigq" id="challengeQ">Ýttu á byrja</div>
+      <div class="answer">
+        <input class="field" id="challengeInput" inputmode="decimal" placeholder="Svar" disabled />
+        <button class="btn primary" id="startChallengeBtn">Byrja</button>
+      </div>
+      <div class="scoregrid">
+        <div class="score"><b id="timer">60</b><span>sekúndur</span></div>
+        <div class="score"><b id="challengeScore">0</b><span>rétt í áskorun</span></div>
+        <div class="score"><b id="bestScore">0</b><span>best</span></div>
+      </div>
+      <div class="feedback" id="challengeFeedback">Áskorunin byrjar þegar þú smellir á Byrja.</div>
+    </section>
+
+    <section id="shop" class="card hidden">
+      <h3>Stjörnubúðin</h3>
+      <p>Notaðu stig til að kaupa smá hjálp. Þetta er sýnidæmi fyrir framtíðar “búð” í Námsmiðjunni.</p>
+      <div class="shop">
+        <div class="item"><h4>💡 Vísbending</h4><p>Kostar 20 stig. Gefur skýrari hjálp í næsta dæmi.</p><button class="btn" data-buy="hint">Kaupa</button></div>
+        <div class="item"><h4>🛡️ Streak-skildi</h4><p>Kostar 40 stig. Ver streak einu sinni við rangt svar.</p><button class="btn" data-buy="shield">Kaupa</button></div>
+        <div class="item"><h4>✨ Gullþema</h4><p>Kostar 75 stig. Gefur þér VIP tilfinningu.</p><button class="btn" data-buy="gold">Kaupa</button></div>
+      </div>
+      <div class="feedback" id="shopFeedback">Safnaðu stigum með því að svara rétt.</div>
+    </section>
+  </main>
+
+<script>
+const state = JSON.parse(localStorage.getItem("prosentur_state_v01") || '{"points":0,"correct":0,"streak":0,"shield":0,"hintBoost":0,"gold":false,"best":0}');
+let current = makeQuestion();
+let challenge = {active:false, score:0, time:60, timer:null, q:null};
+
+function save(){ localStorage.setItem("prosentur_state_v01", JSON.stringify(state)); renderStats(); }
+function renderStats(){
+  points.textContent = state.points;
+  correct.textContent = state.correct;
+  streak.textContent = state.streak;
+  bestScore.textContent = state.best || 0;
+  progressBar.style.width = Math.min(100, state.correct * 5) + "%";
+  if(state.gold){
+    document.documentElement.style.setProperty("--accent","#fde68a");
+    document.documentElement.style.setProperty("--accent2","#f59e0b");
+  }
+}
+function makeQuestion(){
+  const percents = [5,10,20,25,30,40,50,60,75];
+  const bases = [40,50,60,80,100,120,150,160,200,240,300,400,500];
+  const p = percents[Math.floor(Math.random()*percents.length)];
+  const n = bases[Math.floor(Math.random()*bases.length)];
+  return {p,n,answer:p*n/100};
+}
+function showQuestion(){
+  question.textContent = `${current.p}% af ${current.n}`;
+  answerInput.value = "";
+  feedback.className = "feedback";
+  feedback.textContent = "Reiknaðu prósentuna. Mundu: prósenta þýðir af hundraði.";
+}
+function hint(q=current){
+  if(q.p === 50) return `50% er helmingur. Helmingur af ${q.n} er ${q.n/2}.`;
+  if(q.p === 25) return `25% er fjórðungur. Finndu helming og helmingaðu aftur.`;
+  if(q.p === 75) return `75% = 50% + 25%. Finndu helming og bættu við fjórðungi.`;
+  if(q.p === 10) return `10% er einn tíundi. Deildu ${q.n} með 10.`;
+  if(q.p === 5) return `5% er helmingur af 10%. Fyrst 10%, síðan helminga.`;
+  if(q.p === 20) return `20% er tvöfalt 10%. Fyrst 10%, síðan tvöfalda.`;
+  return `Reiknaðu ${q.p} ÷ 100 × ${q.n}.`;
+}
+function checkAnswer(){
+  const val = Number(String(answerInput.value).replace(",","."));
+  if(Number.isNaN(val)){ feedback.textContent = "Skrifaðu tölu í reitinn."; return; }
+  if(Math.abs(val - current.answer) < 0.001){
+    state.points += 10 + Math.min(10,state.streak);
+    state.correct += 1;
+    state.streak += 1;
+    feedback.className = "feedback good";
+    feedback.textContent = `Rétt! ${current.p}% af ${current.n} = ${current.answer}. Þú fékkst stig og gullstjörnur.`;
+    burst();
+    current = makeQuestion();
+    setTimeout(showQuestion, 900);
+  }else{
+    if(state.shield > 0){
+      state.shield -= 1;
+      feedback.className = "feedback bad";
+      feedback.textContent = `Ekki alveg — en streak-skjöldurinn bjargaði þér. Vísbending: ${hint()}`;
+    }else{
+      state.streak = 0;
+      feedback.className = "feedback bad";
+      feedback.textContent = `Ekki rétt ennþá. Vísbending: ${hint()}`;
+    }
+  }
+  save();
+}
+function burst(){
+  for(let i=0;i<22;i++){
+    const s=document.createElement("div");
+    s.className="star"; s.textContent=["⭐","✨","🌟"][Math.floor(Math.random()*3)];
+    s.style.left=Math.random()*100+"vw"; s.style.animationDelay=(Math.random()*200)+"ms";
+    confetti.appendChild(s); setTimeout(()=>s.remove(),1400);
+  }
+}
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    ["learn","practice","challenge","shop"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    document.getElementById(btn.dataset.tab).classList.remove("hidden");
+  }
+});
+checkBtn.onclick = checkAnswer;
+answerInput.addEventListener("keydown", e=>{ if(e.key==="Enter") checkAnswer(); });
+hintBtn.onclick = ()=>{ feedback.className="feedback"; feedback.textContent = hint(); };
+nextBtn.onclick = ()=>{ current=makeQuestion(); showQuestion(); };
+resetBtn.onclick = ()=>{ if(confirm("Viltu núllstilla árangur?")){ localStorage.removeItem("prosentur_state_v01"); location.reload(); } };
+
+document.querySelectorAll("[data-buy]").forEach(btn=>{
+  btn.onclick=()=>{
+    const item = btn.dataset.buy;
+    const costs = {hint:20, shield:40, gold:75};
+    if(state.points < costs[item]){ shopFeedback.className="feedback bad"; shopFeedback.textContent="Þú átt ekki nóg af stigum ennþá."; return; }
+    state.points -= costs[item];
+    if(item==="hint") state.hintBoost += 1;
+    if(item==="shield") state.shield += 1;
+    if(item==="gold") state.gold = true;
+    shopFeedback.className="feedback good";
+    shopFeedback.textContent="Keypt! Nú geturðu haldið áfram að safna stigum.";
+    save();
+  };
+});
+
+function showChallengeQ(){
+  challenge.q = makeQuestion();
+  challengeQ.textContent = `${challenge.q.p}% af ${challenge.q.n}`;
+  challengeInput.value = "";
+  challengeInput.focus();
+}
+function startChallenge(){
+  clearInterval(challenge.timer);
+  challenge = {active:true, score:0, time:60, timer:null, q:null};
+  challengeInput.disabled=false;
+  challengeScore.textContent=0; timer.textContent=60;
+  challengeFeedback.className="feedback"; challengeFeedback.textContent="Áfram! Ýttu á Enter eftir hvert svar.";
+  showChallengeQ();
+  challenge.timer=setInterval(()=>{
+    challenge.time--; timer.textContent=challenge.time;
+    if(challenge.time<=0){
+      clearInterval(challenge.timer);
+      challenge.active=false; challengeInput.disabled=true;
+      if(challenge.score > (state.best||0)){ state.best = challenge.score; save(); }
+      challengeFeedback.className="feedback good";
+      challengeFeedback.textContent=`Tíminn búinn! Þú náðir ${challenge.score} réttum svörum.`;
+    }
+  },1000);
+}
+startChallengeBtn.onclick=startChallenge;
+challengeInput.addEventListener("keydown", e=>{
+  if(e.key!=="Enter" || !challenge.active) return;
+  const val = Number(String(challengeInput.value).replace(",","."));
+  if(Math.abs(val - challenge.q.answer) < 0.001){
+    challenge.score++; challengeScore.textContent=challenge.score;
+    state.points += 3; state.correct += 1; save();
+    showChallengeQ();
+  }else{
+    challengeFeedback.className="feedback bad";
+    challengeFeedback.textContent=`Vísbending: ${hint(challenge.q)}`;
+  }
+});
+renderStats();
+showQuestion();
+</script>
+</body>
+</html>

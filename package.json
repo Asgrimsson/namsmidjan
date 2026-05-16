@@ -1,0 +1,17 @@
+{
+  "name": "namsmidjan-v0-9",
+  "version": "0.9.0",
+  "private": true,
+  "description": "Námsmiðjan v0.9 með öruggri AI-tengingu í Netlify Function",
+  "scripts": {
+    "dev": "netlify dev",
+    "start": "netlify dev",
+    "build": "echo \"Static site - no build step\""
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.38.1"
+  }
+}

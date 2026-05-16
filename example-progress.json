@@ -1,0 +1,12 @@
+{
+  "hopur-1::task-prosentur-5b": {
+    "studentName": "Hópur 1",
+    "code": "5B-PROSENTUR",
+    "taskId": "task-prosentur-5b",
+    "taskTitle": "Prósentuáskorun dagsins",
+    "status": "done",
+    "note": "Við kláruðum 10 dæmi og lærðum að 50% er helmingur.",
+    "xp": 25,
+    "updatedAt": "2026-05-15T10:00:00.000Z"
+  }
+}

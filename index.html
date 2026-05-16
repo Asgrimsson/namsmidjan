@@ -1,0 +1,2214 @@
+<!doctype html>
+<html lang="is">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Námsmiðjan v0.9</title>
+  <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
+  <style>
+    :root{
+      --bg:#07111f;
+      --panel:rgba(255,255,255,.09);
+      --panel2:rgba(255,255,255,.13);
+      --text:#f6f7fb;
+      --muted:rgba(246,247,251,.74);
+      --line:rgba(255,255,255,.18);
+      --accent:#7dd3fc;
+      --accent2:#c084fc;
+      --good:#86efac;
+      --warn:#fde68a;
+      --danger:#fca5a5;
+      --shadow:0 18px 60px rgba(0,0,0,.38);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(125,211,252,.24), transparent 26%),
+        radial-gradient(circle at 86% 18%, rgba(192,132,252,.22), transparent 28%),
+        radial-gradient(circle at 55% 82%, rgba(134,239,172,.14), transparent 34%),
+        linear-gradient(135deg,#07111f 0%,#101827 48%,#160f27 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+    a{color:inherit}
+    button,input,select,textarea{font:inherit}
+    .app{max-width:1320px;margin:0 auto;padding:24px}
+    .topbar{
+      position:sticky; top:0; z-index:50; backdrop-filter:blur(18px);
+      background:linear-gradient(to bottom, rgba(7,17,31,.92), rgba(7,17,31,.58));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .topbar-inner{max-width:1320px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:14px;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:46px;height:46px;border-radius:16px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 12px 35px rgba(125,211,252,.25);
+      font-size:25px;
+    }
+    .brand h1{font-size:20px;line-height:1;margin:0}
+    .brand p{font-size:12px;color:var(--muted);margin:4px 0 0}
+    .nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .btn{
+      border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);
+      border-radius:999px;padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-flex;gap:8px;align-items:center;
+      transition:.18s transform,.18s background,.18s border-color;
+    }
+    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.32)}
+    .btn.primary{background:linear-gradient(135deg,rgba(125,211,252,.95),rgba(192,132,252,.95));color:#07111f;border-color:transparent;font-weight:800}
+    .btn.ghost{background:transparent}
+    .hero{padding:46px 0 26px;display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch}
+    .hero-card,.panel{
+      border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.07));
+      border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
+    }
+    .hero-card{padding:34px;position:relative}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(125,211,252,.38);background:rgba(125,211,252,.13);border-radius:999px;padding:8px 12px;color:#dff7ff;font-weight:700;font-size:13px}
+    .hero h2{font-size:clamp(34px,5vw,64px);line-height:.95;margin:20px 0 14px;letter-spacing:-.05em}
+    .hero p{font-size:18px;line-height:1.55;color:var(--muted);max-width:720px}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:26px}
+    .stat{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);border-radius:18px;padding:16px}
+    .stat b{font-size:28px;display:block}
+    .stat span{color:var(--muted);font-size:13px}
+    .spotlight{padding:22px;display:flex;flex-direction:column;gap:14px}
+    .spot-title{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .spot-title h3{margin:0;font-size:20px}
+    .mission{
+      min-height:250px;border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;
+      background:
+        linear-gradient(135deg,rgba(125,211,252,.22),rgba(192,132,252,.24)),
+        radial-gradient(circle at top right,rgba(255,255,255,.22),transparent 35%);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .mission h4{font-size:28px;margin:0 0 8px}
+    .mission p{color:rgba(255,255,255,.82);line-height:1.5}
+    .chiprow{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{font-size:12px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.82)}
+    .section{padding:18px 0}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:16px 0}
+    .section-head h2{font-size:28px;margin:0;letter-spacing:-.03em}
+    .section-head p{color:var(--muted);margin:6px 0 0}
+    .filters{display:grid;grid-template-columns:1.3fr .7fr .7fr .7fr auto;gap:10px;margin:18px 0}
+    .field{
+      width:100%;border:1px solid var(--line);background:rgba(255,255,255,.09);color:var(--text);
+      padding:13px 14px;border-radius:16px;outline:none;
+    }
+    select.field option{color:#111827}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .module{
+      border:1px solid rgba(255,255,255,.16);background:linear-gradient(180deg,rgba(255,255,255,.115),rgba(255,255,255,.065));
+      border-radius:22px;padding:20px;position:relative;overflow:hidden;min-height:255px;display:flex;flex-direction:column;justify-content:space-between;
+      transition:.2s transform,.2s border-color,.2s background;
+    }
+    .module:hover{transform:translateY(-4px);border-color:rgba(125,211,252,.45);background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.08))}
+    .module:before{
+      content:"";position:absolute;inset:-70px -80px auto auto;width:190px;height:190px;border-radius:50%;
+      background:var(--glow,rgba(125,211,252,.18));filter:blur(5px)
+    }
+    .module-top{position:relative}
+    .module-icon{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15)}
+    .module h3{font-size:23px;margin:14px 0 8px;letter-spacing:-.02em}
+    .module p{color:var(--muted);line-height:1.48;margin:0}
+    .meta{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}
+    .tag{font-size:12px;color:rgba(255,255,255,.86);padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.105);border:1px solid rgba(255,255,255,.11)}
+    .module-actions{display:flex;gap:9px;flex-wrap:wrap;position:relative}
+    .small{font-size:13px;padding:9px 11px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .panel{padding:22px}
+    .panel h3{margin:0 0 12px;font-size:22px}
+    .timeline{display:grid;gap:10px}
+    .step{display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);border-radius:16px;padding:13px}
+    .step b{display:grid;place-items:center;width:31px;height:31px;border-radius:11px;background:rgba(125,211,252,.18);flex:0 0 auto}
+    .step p{margin:0;color:var(--muted);line-height:1.4}
+    .admin{
+      display:none; position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.64);backdrop-filter:blur(8px);padding:18px;overflow:auto;
+    }
+    .admin.open{display:block}
+    .modal{max-width:920px;margin:38px auto;background:#0b1424;border:1px solid rgba(255,255,255,.18);border-radius:26px;box-shadow:var(--shadow);overflow:hidden}
+    .modal-head{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:20px 22px;border-bottom:1px solid rgba(255,255,255,.12)}
+    .modal-head h2{margin:0}
+    .modal-body{padding:22px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-grid .full{grid-column:1/-1}
+    label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
+    textarea.field{min-height:92px;resize:vertical}
+    .notice{border:1px solid rgba(134,239,172,.26);background:rgba(134,239,172,.09);border-radius:16px;padding:14px;color:rgba(255,255,255,.84);line-height:1.45}
+    .student-card{
+      display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);border-radius:18px;padding:15px;margin-top:12px
+    }
+    .student-card h4{margin:0 0 4px}.student-card p{margin:0;color:var(--muted)}
+    footer{padding:40px 0;color:var(--muted);text-align:center}
+    .empty{border:1px dashed rgba(255,255,255,.25);border-radius:22px;padding:30px;text-align:center;color:var(--muted);grid-column:1/-1}
+
+    .admin-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .admin-tab{border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);border-radius:999px;padding:10px 13px;cursor:pointer}
+    .admin-tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#07111f;border-color:transparent;font-weight:900}
+    .admin-pane{display:none}
+    .admin-pane.active{display:block}
+    .taskbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+    .task-list{display:grid;gap:12px;margin-top:14px}
+    .task-card{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.065);border-radius:18px;padding:15px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+    .task-card h4{margin:0 0 6px;font-size:18px}
+    .task-card p{margin:0 0 10px;color:var(--muted);line-height:1.42}
+    .task-meta{display:flex;gap:7px;flex-wrap:wrap}
+    .danger{border-color:rgba(252,165,165,.3);background:rgba(252,165,165,.08)}
+
+    .progress-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+    .progress-stat{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);border-radius:16px;padding:13px;text-align:center}
+    .progress-stat b{font-size:26px;display:block}.progress-stat span{font-size:12px;color:var(--muted)}
+    .student-portal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 16px}
+    .status-dot{width:10px;height:10px;border-radius:99px;background:var(--muted);display:inline-block;margin-right:6px}
+    .status-not_started{background:rgba(255,255,255,.45)}
+    .status-started{background:var(--warn)}
+    .status-done{background:var(--good)}
+    .status-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:8px}
+    .note-box{margin-top:10px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.16);border-radius:14px;padding:10px;color:rgba(255,255,255,.82);font-size:13px;line-height:1.4}
+    .mini-input{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);border-radius:14px;padding:10px;margin-top:9px;outline:none}
+    .teacher-table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:18px}
+    .teacher-table th,.teacher-table td{padding:12px;border-bottom:1px solid rgba(255,255,255,.1);text-align:left;vertical-align:top}
+    .teacher-table th{color:#dff7ff;background:rgba(125,211,252,.08);font-size:13px}
+    .teacher-table td{color:rgba(255,255,255,.82);font-size:14px}
+    .teacher-table tr:hover td{background:rgba(255,255,255,.04)}
+
+    .sync-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);border-radius:999px;padding:8px 11px;font-size:12px;color:rgba(255,255,255,.82)}
+    .sync-dot{width:9px;height:9px;border-radius:999px;background:rgba(255,255,255,.45)}
+    .sync-dot.cloud{background:var(--good);box-shadow:0 0 16px rgba(134,239,172,.5)}
+    .sync-dot.local{background:var(--warn);box-shadow:0 0 16px rgba(253,230,138,.35)}
+    .supabase-panel{border:1px solid rgba(125,211,252,.25);background:rgba(125,211,252,.08);border-radius:18px;padding:15px;margin:14px 0}
+    .logbox{white-space:pre-wrap;background:rgba(0,0,0,.26);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px;color:#dff7ff;max-height:220px;overflow:auto;font-size:13px}
+
+    .auth-card{border:1px solid rgba(125,211,252,.22);background:rgba(125,211,252,.07);border-radius:18px;padding:15px;margin:14px 0}
+    .auth-user{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid rgba(134,239,172,.24);background:rgba(134,239,172,.08);border-radius:16px;padding:12px;margin:10px 0}
+    .lock-note{border:1px solid rgba(253,230,138,.28);background:rgba(253,230,138,.08);border-radius:16px;padding:12px;color:rgba(255,255,255,.85);line-height:1.45;margin:12px 0}
+
+
+
+
+    @media(max-width:980px){
+      .hero,.two-col{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .filters{grid-template-columns:1fr 1fr}
+      .filters input{grid-column:1/-1}
+    }
+    @media(max-width:640px){
+      .app,.topbar-inner{padding-left:14px;padding-right:14px}
+      .grid,.filters,.form-grid{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr}
+      .hero-card{padding:22px}
+      .topbar-inner{align-items:flex-start;flex-direction:column}
+      .nav{justify-content:flex-start}
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo">✦</div>
+        <div>
+          <h1>Námsmiðjan</h1>
+          <p>Móðurvefur fyrir náms- og kennsluvefi · v0.9</p>
+        </div>
+      </div>
+      <nav class="nav">
+        <a class="btn ghost" href="#modules">Námsvefir</a>
+        <a class="btn ghost" href="#ai-builder">AI verkefnasmiður</a>
+        <a class="btn ghost" href="#builder">Verkefnasmiður</a>
+        <a class="btn ghost" href="#taskbank">Verkefnabanki</a>
+        <button class="btn ghost" id="studentPortalTopBtn">Nemendagátt</button>
+        <button class="btn ghost" id="dbTopBtn">Gagnagrunnur</button>
+        <button class="btn ghost" id="authTopBtn">Innskráning</button>
+        <a class="btn ghost" href="#roadmap">Vegferð</a>
+        <button class="btn" id="studentModeBtn">Nemendagátt</button>
+        <button class="btn primary" id="adminBtn">Kennarasvæði</button>
+      <span class="sync-badge" id="syncBadge"><span class="sync-dot local" id="syncDot"></span><span id="syncText">Local mode</span></span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="hero">
+      <div class="hero-card">
+        <span class="eyebrow">🚀 Browser based · stækkanlegt · tilbúið fyrir næstu vefi</span>
+        <h2>Ein miðja fyrir alla námsvefina þína.</h2>
+        <p>
+          Námsmiðjan er upphafið að stærra vistkerfi: fallegur hub þar sem nemendur finna verkefni,
+          kennarar tengja inn nýja vefi og allt er hannað til að vaxa í skrefum.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#modules">Skoða námsvefi</a>
+          <button class="btn" id="quickAddBtn">Bæta við vef</button>
+          <button class="btn" id="quickTaskBtn">Búa til verkefni</button>
+          <a class="btn primary" id="heroAIButton" href="#ai-builder">AI verkefnasmiður</a>
+          <button class="btn" id="heroStudentBtn">Opna nemendagátt</button>
+          <button class="btn" id="syncNowBtn">Samstilla núna</button>
+          <button class="btn" id="heroAuthBtn">Kennarainnskráning</button>
+          <button class="btn" id="exportBtn">Flytja út gögn</button>
+        </div>
+        <div class="stats">
+          <div class="stat"><b id="statModules">0</b><span>námsvefir</span></div>
+          <div class="stat"><b id="statSubjects">0</b><span>fög</span></div>
+          <div class="stat"><b id="statGrades">0</b><span>bekkjarstig</span></div>
+        </div>
+      </div>
+
+      <aside class="panel spotlight">
+        <div class="spot-title">
+          <h3>Verkefni dagsins</h3>
+          <span class="chip">Kennari getur breytt</span>
+        </div>
+        <div class="mission">
+          <div>
+            <h4 id="dailyTitle">Skapandi upphaf</h4>
+            <p id="dailyDesc">Veldu eitt verkefni, prófaðu það í 15 mínútur og skráðu hvað gekk vel.</p>
+          </div>
+          <div class="chiprow" id="dailyChips"></div>
+        </div>
+        <div class="notice">
+          <strong>v0.9 markmið:</strong> Þessi útgáfa bætir við öruggri AI-tengingu með Netlify Function. API lykillinn fer ekki í browser; vefurinn kallar á server-side fall sem skilar verkefnapakka.
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="modules">
+      <div class="section-head">
+        <div>
+          <h2>Námsvefir og einingar</h2>
+          <p>Leitaðu, síaðu og opnaðu vefi. Nýir vefir bætast auðveldlega inn sem einingar.</p>
+        </div>
+        <button class="btn" id="resetBtn">Endurhlaða grunnlista</button>
+      </div>
+
+      <div class="filters">
+        <input class="field" id="searchInput" placeholder="Leita: prósentur, skák, veður, UT..." />
+        <select class="field" id="subjectFilter"><option value="">Öll fög</option></select>
+        <select class="field" id="gradeFilter"><option value="">Allir bekkir</option></select>
+        <select class="field" id="typeFilter"><option value="">Allar tegundir</option></select>
+        <button class="btn" id="randomBtn">Velja handahófskennt</button>
+      </div>
+
+      <div class="grid" id="moduleGrid"></div>
+    </section>
+
+
+
+
+    <section class="section" id="ai-builder">
+      <div class="section-head">
+        <div>
+          <h2>AI verkefnasmiður</h2>
+          <p>Skrifaðu hugmynd og fáðu tilbúinn verkefnapakka með fjölvali, textasvörum, vísbendingum og lausnum.</p>
+        </div>
+        <button class="btn primary" id="aiGenerateBtnTop">Búa til með alvöru AI</button>
+      </div>
+
+      <div class="ai-layout">
+        <div class="panel">
+          <h3>Hugmynd kennara</h3>
+          <div class="ai-warning">
+            <strong>Örugg browser-útgáfa:</strong> Enginn leynilykill fer í HTML-kóðann. Þessi útgáfa getur notað örugga Netlify Function fyrir alvöru AI. Ef function er ekki tengd virkar innbyggða sniðmátið áfram.
+          </div>
+
+          <div class="form-grid" style="margin-top:14px">
+            <div class="full">
+              <label>Hvað á verkefnið að fjalla um?</label>
+              <textarea class="field" id="aiTopic" placeholder="t.d. Búðu til verkefni um eldgos fyrir 5. bekk"></textarea>
+            </div>
+            <div><label>Fag</label><input class="field" id="aiSubject" placeholder="Náttúrufræði" /></div>
+            <div><label>Bekkur</label><input class="field" id="aiGrades" placeholder="5" /></div>
+            <div><label>Verkefnakóði</label><input class="field" id="aiCode" placeholder="5B-ELDGOS" /></div>
+            <div><label>Fjöldi spurninga</label><select class="field" id="aiCount"><option>5</option><option selected>8</option><option>10</option><option>15</option></select></div>
+            <div><label>Erfiðleikastig</label><select class="field" id="aiDifficulty"><option>Létt</option><option selected>Miðlungs</option><option>Krefjandi</option></select></div>
+            <div class="full"><label>Séróskir</label><input class="field" id="aiNotes" placeholder="t.d. tengja við Ísland, hafa eitt hópverkefni" /></div>
+          </div>
+
+          <div class="ai-chip-grid">
+            <button class="ai-chip" data-ai-template="eldgos">🌋 Eldgos 5. bekkur</button>
+            <button class="ai-chip" data-ai-template="prosentur">📊 Prósentur</button>
+            <button class="ai-chip" data-ai-template="skak">♟️ Skákþrautir</button>
+            <button class="ai-chip" data-ai-template="ut">💻 Netöryggi</button>
+            <button class="ai-chip" data-ai-template="enska">🇬🇧 English vocabulary</button>
+          </div>
+
+          <div class="builder-actions">
+            <button class="btn primary" id="aiRealGenerateBtn">Búa til með alvöru AI</button>
+            <button class="btn" id="aiGenerateBtn">Búa til með sniðmáti</button>
+            <button class="btn" id="aiPromptBtn">Búa til ChatGPT prompt</button>
+            <button class="btn" id="aiCopyJsonBtn">Afrita JSON</button>
+            <button class="btn" id="aiImportJsonBtn">Flytja inn JSON úr ChatGPT</button>
+          </div>
+          <textarea class="field" id="aiJsonImport" placeholder="Límdu JSON frá ChatGPT hér..." style="margin-top:12px;min-height:110px"></textarea>
+        </div>
+
+        <div class="panel">
+          <h3>AI úttak</h3>
+          <div class="lock-note" id="aiStatus">AI staða: tilbúið. Alvöru AI virkar þegar vefurinn er keyrður á Netlify með OPENAI_API_KEY.</div>
+          <div class="ai-output" id="aiOutput">Enginn pakki búinn til ennþá.</div>
+          <div class="ai-result-card" id="aiResultActions" style="display:none">
+            <h3 style="margin:0 0 8px">Tilbúinn pakki</h3>
+            <p style="color:var(--muted);margin:0 0 12px">Vistaðu pakkann og opnaðu hann í Verkefnasmið.</p>
+            <div class="builder-actions">
+              <button class="btn primary" id="aiSavePackageBtn">Vista sem verkefnapakka</button>
+              <button class="btn" id="aiOpenInBuilderBtn">Opna í verkefnasmið</button>
+              <button class="btn" id="aiPrintBtn">Prenta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="builder">
+      <div class="section-head">
+        <div>
+          <h2>Verkefnasmiður kennara</h2>
+          <p>Búðu til verkefnapakka með fjölvali, textasvörum, lausnum og prentvænni útgáfu.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn primary" id="newPackageBtn">+ Nýr verkefnapakki</button>
+          <button class="btn" id="exportPackagesBtn">Flytja út pakka</button>
+        </div>
+      </div>
+
+      <div class="builder-layout">
+        <div class="panel">
+          <h3>Verkefnapakkar</h3>
+          <div class="filters" style="grid-template-columns:1fr 1fr">
+            <input class="field" id="packageSearchInput" placeholder="Leita í pökkum..." />
+            <select class="field" id="packageGradeFilter"><option value="">Allir bekkir</option></select>
+          </div>
+          <div class="builder-list" id="packageList"></div>
+        </div>
+
+        <div class="panel">
+          <h3 id="builderTitle">Búa til verkefnapakka</h3>
+          <form id="packageForm" class="form-grid">
+            <div>
+              <label>Heiti verkefnapakka</label>
+              <input class="field" id="pTitle" required placeholder="t.d. Eldgos og jarðskjálftar" />
+            </div>
+            <div>
+              <label>Verkefnakóði</label>
+              <input class="field" id="pCode" required placeholder="t.d. 5B-ELDGOS" />
+            </div>
+            <div>
+              <label>Fag</label>
+              <input class="field" id="pSubject" required placeholder="Náttúrufræði" />
+            </div>
+            <div>
+              <label>Bekkur / bekkir</label>
+              <input class="field" id="pGrades" required placeholder="5,6" />
+            </div>
+            <div>
+              <label>Tími</label>
+              <input class="field" id="pTime" placeholder="30 mín" />
+            </div>
+            <div>
+              <label>Tengdur námsvefur</label>
+              <select class="field" id="pModule"></select>
+            </div>
+            <div class="full">
+              <label>Lýsing / fyrirmæli</label>
+              <textarea class="field" id="pDesc" required placeholder="Hvað eiga nemendur að gera?"></textarea>
+            </div>
+            <div class="full">
+              <label>Markmið</label>
+              <textarea class="field" id="pGoal" placeholder="Nemandi getur..."></textarea>
+            </div>
+            <div class="full">
+              <div class="lock-note">
+                <strong>Spurningar:</strong> Bættu við fjölvali eða textasvörum. Þú getur sett lausn og vísbendingu fyrir hverja spurningu.
+              </div>
+            </div>
+            <div class="full builder-mini-grid">
+              <div>
+                <label>Tegund spurningar</label>
+                <select class="field" id="qType">
+                  <option value="multiple">Fjölval</option>
+                  <option value="text">Textasvar</option>
+                  <option value="instruction">Leiðbeining / umræðuspurning</option>
+                </select>
+              </div>
+              <div>
+                <label>Erfiðleikastig</label>
+                <select class="field" id="qLevel">
+                  <option>Létt</option>
+                  <option selected>Miðlungs</option>
+                  <option>Krefjandi</option>
+                </select>
+              </div>
+            </div>
+            <div class="full">
+              <label>Spurning / fyrirmæli</label>
+              <textarea class="field" id="qText" placeholder="Skrifaðu spurningu hér..."></textarea>
+            </div>
+            <div class="full">
+              <label>Valkostir fyrir fjölval</label>
+              <input class="field" id="qOptions" placeholder="A | B | C | D" />
+            </div>
+            <div class="builder-mini-grid full">
+              <div>
+                <label>Rétt svar / lausn</label>
+                <input class="field" id="qAnswer" placeholder="t.d. B eða stutt svar" />
+              </div>
+              <div>
+                <label>Vísbending</label>
+                <input class="field" id="qHint" placeholder="Vísbending fyrir nemanda" />
+              </div>
+            </div>
+            <div class="full builder-actions">
+              <button class="btn" type="button" id="addQuestionBtn">+ Bæta við spurningu</button>
+              <button class="btn primary" type="submit">Vista verkefnapakka</button>
+              <button class="btn" type="button" id="clearPackageBtn">Hreinsa form</button>
+            </div>
+          </form>
+
+          <h3 style="margin-top:18px">Spurningar í pakka</h3>
+          <div class="q-list" id="draftQuestions"></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <h3>Forskoðun og prentun</h3>
+        <div id="packagePreview" class="q-list"></div>
+      </div>
+    </section>
+
+    <div id="printSheet" class="print-sheet"></div>
+
+    <section class="section" id="taskbank">
+      <div class="section-head">
+        <div>
+          <h2>Verkefnabanki kennara</h2>
+          <p>Búðu til verkefnaspjöld, tengdu við bekki og láttu nemendur opna með kóða.</p>
+        </div>
+        <button class="btn primary" id="newTaskBtn">+ Nýtt verkefni</button>
+      </div>
+
+      <div class="filters">
+        <input class="field" id="taskSearchInput" placeholder="Leita í verkefnum: eldgos, prósentur, skák..." />
+        <select class="field" id="taskGradeFilter"><option value="">Allir bekkir</option></select>
+        <select class="field" id="taskSubjectFilter"><option value="">Öll fög</option></select>
+        <select class="field" id="taskTypeFilter"><option value="">Allar tegundir</option></select>
+        <button class="btn" id="exportTasksBtn">Flytja út verkefni</button>
+      </div>
+
+      <div class="task-list" id="taskList"></div>
+    </section>
+
+
+    <section class="section" id="progress">
+      <div class="section-head">
+        <div>
+          <h2>Framvinda nemenda</h2>
+          <p>Einfalt kennarayfirlit yfir það sem nemendur merkja sem hafið eða lokið í þessum vafra.</p>
+        </div>
+        <button class="btn" id="exportProgressBtn">Flytja út framvindu</button>
+      </div>
+      <div class="panel">
+        <div class="progress-grid">
+          <div class="progress-stat"><b id="progressStudents">0</b><span>nemendur / nöfn</span></div>
+          <div class="progress-stat"><b id="progressStarted">0</b><span>hafin verkefni</span></div>
+          <div class="progress-stat"><b id="progressDone">0</b><span>lokin verkefni</span></div>
+          <div class="progress-stat"><b id="progressPercent">0%</b><span>lokahlutfall</span></div>
+        </div>
+        <div style="overflow:auto">
+          <table class="teacher-table">
+            <thead>
+              <tr>
+                <th>Nemandi</th>
+                <th>Kóði</th>
+                <th>Verkefni</th>
+                <th>Staða</th>
+                <th>Athugasemd</th>
+                <th>Tími</th>
+              </tr>
+            </thead>
+            <tbody id="progressTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section two-col" id="roadmap">
+      <div class="panel">
+        <h3>Næstu útgáfur</h3>
+        <div class="timeline">
+          <div class="step"><b>0.1</b><p>Móðurvefur, einingalisti, leit, síur, kennarasvæði og JSON útflutningur.</p></div>
+          <div class="step"><b>0.2</b><p>Verkefnabanki: kennari býr til verkefni, flokkar eftir fagi og bekk. <strong>Komið í þessari útgáfu.</strong></p></div>
+          <div class="step"><b>0.3</b><p>Nemendagátt: nemendur opna verkefni með kóða, merkja hafið/lokið og kennari sér framvindu. <strong>Komið í þessari útgáfu.</strong></p></div>
+          <div class="step"><b>0.4</b><p>Supabase gagnagrunnur: námsvefir, verkefni og framvinda geta vistast í skýi. <strong>Komið í þessari útgáfu.</strong></p></div>
+          <div class="step"><b>0.5</b><p>Kennarainnskráning, öruggari réttindi og Auth-stýrð samstilling. <strong>Komið í þessari útgáfu.</strong></p></div>
+          <div class="step"><b>0.6</b><p>Bekkjayfirlit, nemendahópar, skilakerfi og betri mælaborð.</p></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Hönnunarregla fyrir nýja vefi</h3>
+        <p style="color:var(--muted);line-height:1.55">
+          Hver nýr námsvefur fær sitt “manifest”: heiti, lýsingu, fag, bekk, slóð og merki.
+          Þannig verður auðvelt að tengja nýja vefi við Námsmiðjuna án þess að endurbyggja allt kerfið.
+        </p>
+        <pre style="white-space:pre-wrap;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;color:#dff7ff;overflow:auto"><code>{
+  "id": "prosentur",
+  "title": "Prósentureikningur",
+  "subject": "Stærðfræði",
+  "grades": ["5", "6", "7"],
+  "type": "Æfing",
+  "url": "/modules/prosentur",
+  "tags": ["prósentur", "hlutföll"]
+}</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Námsmiðjan v0.9 · innskráning, öruggari réttindi og Supabase samstilling.
+  </footer>
+
+  <section class="admin" id="adminModal" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>Kennarasvæði</h2>
+        <button class="btn" id="closeAdminBtn">Loka</button>
+      </div>
+      <div class="modal-body">
+        <div class="admin-tabs">
+          <button class="admin-tab active" data-admin-tab="modulePane">Námsvefir</button>
+          <button class="admin-tab" data-admin-tab="taskPane">Verkefni</button>
+          <button class="admin-tab" data-admin-tab="dataPane">Gögn</button>
+          <button class="admin-tab" data-admin-tab="supabasePane">Supabase</button>
+          <button class="admin-tab" data-admin-tab="authPane">Innskráning</button>
+        </div>
+
+        <div class="admin-pane active" id="modulePane">
+          <div class="notice" style="margin-bottom:16px">
+            Hér getur þú bætt við námsvef. Í v0.2 vistast breytingar í vafranum með localStorage.
+            Síðar tengjum við þetta við Supabase svo gögnin vistist miðlægt.
+          </div>
+
+          <form id="moduleForm" class="form-grid">
+            <div>
+              <label>Heiti vefs</label>
+              <input class="field" id="fTitle" required placeholder="t.d. Prósentureikningur" />
+            </div>
+            <div>
+              <label>Tákn / emoji</label>
+              <input class="field" id="fIcon" placeholder="📊" />
+            </div>
+            <div>
+              <label>Fag</label>
+              <input class="field" id="fSubject" required placeholder="Stærðfræði" />
+            </div>
+            <div>
+              <label>Tegund</label>
+              <input class="field" id="fType" required placeholder="Æfing / Leikur / Verkefni" />
+            </div>
+            <div>
+              <label>Bekkur / bekkir</label>
+              <input class="field" id="fGrades" required placeholder="5,6,7" />
+            </div>
+            <div>
+              <label>Slóð</label>
+              <input class="field" id="fUrl" required placeholder="https://..." />
+            </div>
+            <div class="full">
+              <label>Lýsing</label>
+              <textarea class="field" id="fDesc" required placeholder="Stutt lýsing á vefnum"></textarea>
+            </div>
+            <div class="full">
+              <label>Merki / tags</label>
+              <input class="field" id="fTags" placeholder="prósentur, hlutföll, reikningur" />
+            </div>
+            <div class="full" style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn primary" type="submit">Vista námsvef</button>
+              <button class="btn" type="button" id="importBtn">Flytja inn námsvefi JSON</button>
+              <input type="file" id="importFile" accept=".json,application/json" hidden />
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-pane" id="taskPane">
+          <div class="notice" style="margin-bottom:16px">
+            Hér býrð þú til verkefnaspjöld. Þau birtast í Verkefnabankanum og nemendur geta fundið þau með kóða eins og <strong>5B</strong> eða <strong>5B-PROSENTUR</strong>.
+          </div>
+
+          <form id="taskForm" class="form-grid">
+            <div>
+              <label>Heiti verkefnis</label>
+              <input class="field" id="tTitle" required placeholder="t.d. Prósentuáskorun dagsins" />
+            </div>
+            <div>
+              <label>Verkefnakóði</label>
+              <input class="field" id="tCode" required placeholder="t.d. 5B-PROSENTUR" />
+            </div>
+            <div>
+              <label>Fag</label>
+              <input class="field" id="tSubject" required placeholder="Stærðfræði" />
+            </div>
+            <div>
+              <label>Tegund</label>
+              <input class="field" id="tType" required placeholder="Æfing / Hópverkefni / Leikur" />
+            </div>
+            <div>
+              <label>Bekkur / bekkir</label>
+              <input class="field" id="tGrades" required placeholder="5,6" />
+            </div>
+            <div>
+              <label>Tími</label>
+              <input class="field" id="tTime" placeholder="15 mín" />
+            </div>
+            <div>
+              <label>Tengdur námsvefur</label>
+              <select class="field" id="tModule"></select>
+            </div>
+            <div>
+              <label>Erfiðleikastig</label>
+              <select class="field" id="tLevel">
+                <option>Létt</option>
+                <option selected>Miðlungs</option>
+                <option>Krefjandi</option>
+              </select>
+            </div>
+            <div class="full">
+              <label>Lýsing / fyrirmæli</label>
+              <textarea class="field" id="tDesc" required placeholder="Hvað eiga nemendur að gera?"></textarea>
+            </div>
+            <div class="full">
+              <label>Hæfniviðmið / markmið</label>
+              <textarea class="field" id="tGoal" placeholder="Nemandi getur..."></textarea>
+            </div>
+            <div class="full" style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn primary" type="submit">Vista verkefni</button>
+              <button class="btn" type="button" id="importTasksBtn">Flytja inn verkefni JSON</button>
+              <input type="file" id="importTasksFile" accept=".json,application/json" hidden />
+            </div>
+          </form>
+        </div>
+
+
+
+        <div class="admin-pane" id="authPane">
+          <div class="notice" style="margin-bottom:14px">
+            Hér skráir kennari sig inn með Supabase Auth. Í v0.5 þarf kennari að vera skráður inn til að senda eða breyta námsvefjum og verkefnum í Supabase.
+            Nemendur geta áfram notað kóða í Nemendagátt til að skila framvindu.
+          </div>
+
+          <div class="auth-card">
+            <h3 style="margin:0 0 10px">Kennarainnskráning</h3>
+            <div id="authStateBox" class="lock-note">Athuga stöðu...</div>
+            <div class="form-grid">
+              <div>
+                <label>Netfang kennara</label>
+                <input class="field" id="authEmail" type="email" placeholder="nafn@skoli.is" />
+              </div>
+              <div>
+                <label>Lykilorð</label>
+                <input class="field" id="authPassword" type="password" placeholder="Lykilorð" />
+              </div>
+              <div class="full" style="display:flex;gap:10px;flex-wrap:wrap">
+                <button class="btn primary" type="button" id="signInBtn">Skrá inn</button>
+                <button class="btn" type="button" id="signUpBtn">Búa til kennaraaðgang</button>
+                <button class="btn" type="button" id="signOutBtn">Skrá út</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="lock-note">
+            <strong>Mikilvægt:</strong> Ef þú býrð til nýjan aðgang gæti Supabase beðið um staðfestingu í tölvupósti.
+            Fyrir fyrstu prófun er oft þægilegt að leyfa email/password í Supabase Auth.
+          </div>
+        </div>
+
+        <div class="admin-pane" id="supabasePane">
+          <div class="notice" style="margin-bottom:14px">
+            Hér tengir þú Námsmiðjuna við Supabase. Fyrir v0.5 skaltu keyra <strong>supabase_v0_5_security.sql</strong> í Supabase SQL Editor eftir v0.4 schema.
+            Settu síðan inn Project URL og publishable/anon key. Kennari þarf að skrá sig inn til að senda námsvefi og verkefni.
+          </div>
+
+          <div class="supabase-panel">
+            <h3 style="margin:0 0 10px">Supabase stillingar</h3>
+            <div class="form-grid">
+              <div class="full">
+                <label>Supabase Project URL</label>
+                <input class="field" id="sbUrl" placeholder="https://xxxxx.supabase.co" />
+              </div>
+              <div class="full">
+                <label>Supabase anon key</label>
+                <input class="field" id="sbKey" placeholder="eyJhbGciOi..." />
+              </div>
+              <div>
+                <label>Skóli / workspace ID</label>
+                <input class="field" id="sbWorkspace" placeholder="vallaskoli" />
+              </div>
+              <div>
+                <label>Samstilling</label>
+                <select class="field" id="sbAutoSync">
+                  <option value="manual">Handvirk</option>
+                  <option value="auto">Sjálfvirk eftir vistun</option>
+                </select>
+              </div>
+              <div class="full" style="display:flex;gap:10px;flex-wrap:wrap">
+                <button class="btn primary" type="button" id="saveSupabaseBtn">Vista tengingu</button>
+                <button class="btn" type="button" id="testSupabaseBtn">Prófa tengingu</button>
+                <button class="btn" type="button" id="pushSupabaseBtn">Senda local gögn í Supabase</button>
+                <button class="btn" type="button" id="pullSupabaseBtn">Sækja gögn úr Supabase</button>
+                <button class="btn danger" type="button" id="clearSupabaseBtn">Aftengja</button>
+              </div>
+            </div>
+          </div>
+
+          <h3>Samstillingarskrá</h3>
+          <div class="logbox" id="syncLog">Engin samstilling keyrð ennþá.</div>
+        </div>
+
+        <div class="admin-pane" id="dataPane">
+          <div class="notice">
+            Í v0.5 geta gögn vistast local og í Supabase. Kennarainnskráning stýrir nú öruggari skrifréttindum á námsvefi og verkefni.
+          </div>
+          <div class="taskbar">
+            <button class="btn" id="exportAllBtn">Flytja út allt</button>
+            <button class="btn danger" id="resetAllBtn">Núllstilla öll gögn í þessum vafra</button>
+          </div>
+          <pre id="dataPreview" style="white-space:pre-wrap;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;color:#dff7ff;overflow:auto;max-height:360px"></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="admin" id="studentModal" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>Nemendakóði</h2>
+        <button class="btn" id="closeStudentBtn">Loka</button>
+      </div>
+      <div class="modal-body">
+        <div class="student-portal-head">
+          <div>
+            <h3 style="margin:0 0 6px">Nemendagátt</h3>
+            <p style="color:var(--muted);line-height:1.5;margin:0">
+              Sláðu inn nafn og kóða. Dæmi: <strong>5B</strong>, <strong>5B-PROSENTUR</strong> eða <strong>7A-SKAK</strong>.
+            </p>
+          </div>
+          <span class="chip">v0.3 · localStorage</span>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label>Nafn nemanda eða hóps</label>
+            <input class="field" id="studentNameInput" placeholder="t.d. Sveinbjörn / Hópur 1" />
+          </div>
+          <div>
+            <label>Kóði</label>
+            <input class="field" id="studentCodeInput" placeholder="t.d. 5B-PROSENTUR" />
+          </div>
+          <div class="full" style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn primary" id="studentCodeBtn">Opna verkefni</button>
+            <button class="btn" id="studentClearBtn">Hreinsa reiti</button>
+          </div>
+        </div>
+
+        <div class="progress-grid">
+          <div class="progress-stat"><b id="studentFound">0</b><span>verkefni fundust</span></div>
+          <div class="progress-stat"><b id="studentStarted">0</b><span>hafin</span></div>
+          <div class="progress-stat"><b id="studentDone">0</b><span>lokin</span></div>
+          <div class="progress-stat"><b id="studentXP">0</b><span>XP</span></div>
+        </div>
+
+        <div id="studentResult"></div>
+      </div>
+    </div>
+  </section>
+
+<script>
+const DEFAULT_MODULES = [
+  {
+    id:"prosentur", title:"Prósentureikningur", icon:"📊", subject:"Stærðfræði", grades:["5","6","7"],
+    type:"Æfing", url:"modules/prosentur/index.html", color:"rgba(125,211,252,.22)",
+    description:"Gagnvirkar æfingar í prósentum, hlutföllum og daglegum dæmum.",
+    tags:["prósentur","hlutföll","reikningur"]
+  },
+  {
+    id:"skola-royale", title:"Skóla Royale", icon:"🏰", subject:"Þverfaglegt", grades:["4","5","6","7"],
+    type:"Leikur", url:"#", color:"rgba(192,132,252,.24)",
+    description:"Námsleikur með eyjum, XP, búð, boss-bardögum og verkefnum úr mörgum fögum.",
+    tags:["leikur","XP","verkefni"]
+  },
+  {
+    id:"skakakademia", title:"Skákakademía", icon:"♟️", subject:"Skák", grades:["1","2","3","4","5","6","7","8","9","10"],
+    type:"Þjálfun", url:"#", color:"rgba(253,230,138,.20)",
+    description:"Skákþrautir, kennslusýningar, mót og síðar vistaðar skákir nemenda.",
+    tags:["skák","rökhugsun","þrautir"]
+  },
+  {
+    id:"vedurverkefni", title:"Veðurverkefni", icon:"🌦️", subject:"Náttúrufræði", grades:["5","6","7","8","9","10"],
+    type:"Vefleiðangur", url:"#", color:"rgba(134,239,172,.20)",
+    description:"Nemendur skoða veður, kort, viðvaranir og gögn um Ísland.",
+    tags:["veður","kort","gögn"]
+  },
+  {
+    id:"ut-verkefnabanki", title:"UT verkefnabanki", icon:"💻", subject:"Upplýsinga- og tæknimennt", grades:["1","2","3","4","5","6","7","8","9","10"],
+    type:"Verkefnabanki", url:"#", color:"rgba(251,146,60,.18)",
+    description:"Safn af verkefnum í tölvufærni, netöryggi, forritun og gervigreind.",
+    tags:["UT","gervigreind","forritun"]
+  },
+  {
+    id:"lestrarvefur", title:"Lestrarþjálfun", icon:"📚", subject:"Íslenska", grades:["1","2","3","4","5","6"],
+    type:"Æfing", url:"#", color:"rgba(248,113,113,.18)",
+    description:"Lestrarverkefni, orðaforði, lesskilningur og skráning á framförum.",
+    tags:["lestur","íslenska","lesskilningur"]
+  }
+];
+
+
+
+const DEFAULT_PACKAGES = [
+  {
+    id:"pkg-prosentur-grunnur",
+    title:"Prósentur í daglegu lífi",
+    code:"5B-PROSENTUR",
+    subject:"Stærðfræði",
+    grades:["5","6"],
+    time:"30 mín",
+    moduleId:"prosentur",
+    description:"Nemendur æfa að skilja prósentur með dæmum úr daglegu lífi.",
+    goal:"Nemandi getur útskýrt að prósenta merkir af hundraði og reiknað einfaldar prósentur.",
+    questions:[
+      {id:"q1",type:"multiple",level:"Létt",text:"Hvað þýðir 50%?",options:["Einn fjórði","Helmingur","Tvöfalt meira","Einn tíundi"],answer:"Helmingur",hint:"50 af 100 er helmingur."},
+      {id:"q2",type:"text",level:"Miðlungs",text:"Reiknaðu 25% af 200.",options:[],answer:"50",hint:"25% er fjórðungur."},
+      {id:"q3",type:"instruction",level:"Miðlungs",text:"Skrifaðu eitt dæmi úr daglegu lífi þar sem þú sérð prósentur.",options:[],answer:"Mismunandi svör.",hint:"Hugsaðu um afslátt, hleðslu á síma eða íþróttatölfræði."}
+    ],
+    createdAt:new Date().toISOString()
+  }
+];
+
+const DEFAULT_TASKS = [
+  {
+    id:"task-prosentur-5b",
+    title:"Prósentuáskorun dagsins",
+    code:"5B-PROSENTUR",
+    subject:"Stærðfræði",
+    type:"Æfing",
+    grades:["5","6"],
+    time:"15 mín",
+    level:"Miðlungs",
+    moduleId:"prosentur",
+    description:"Farðu í Prósentureikning, byrjaðu á flipanum Læra og kláraðu síðan 10 æfingadæmi.",
+    goal:"Nemandi skilur að prósenta merkir af hundraði og getur reiknað einfaldar prósentur.",
+    createdAt:new Date().toISOString()
+  },
+  {
+    id:"task-skola-royale-kynning",
+    title:"Finndu námsleik sem þú vilt prófa",
+    code:"5B",
+    subject:"Þverfaglegt",
+    type:"Könnun",
+    grades:["4","5","6"],
+    time:"10 mín",
+    level:"Létt",
+    moduleId:"skola-royale",
+    description:"Skoðaðu námsvefina á forsíðunni og veldu einn sem þér finnst spennandi. Skrifaðu niður af hverju.",
+    goal:"Nemandi getur valið námsverkefni og rökstutt val sitt.",
+    createdAt:new Date().toISOString()
+  }
+];
+
+let modules = loadModules();
+let tasks = loadTasks();
+let packages = loadPackages();
+let progress = loadProgress();
+let draftQuestions = [];
+let selectedPackageId = null;
+let currentAIPackage = null;
+let supabaseConfig = loadSupabaseConfig();
+let syncMessages = [];
+let currentUser = null;
+
+const els = {
+  grid: document.getElementById("moduleGrid"),
+  search: document.getElementById("searchInput"),
+  subject: document.getElementById("subjectFilter"),
+  grade: document.getElementById("gradeFilter"),
+  type: document.getElementById("typeFilter"),
+  statModules: document.getElementById("statModules"),
+  statSubjects: document.getElementById("statSubjects"),
+  statGrades: document.getElementById("statGrades"),
+  admin: document.getElementById("adminModal"),
+  student: document.getElementById("studentModal"),
+  taskList: document.getElementById("taskList"),
+  taskSearch: document.getElementById("taskSearchInput"),
+  taskGrade: document.getElementById("taskGradeFilter"),
+  taskSubject: document.getElementById("taskSubjectFilter"),
+  taskType: document.getElementById("taskTypeFilter"),
+  progressTableBody: document.getElementById("progressTableBody")
+};
+
+function loadModules(){
+  try{
+    const saved = localStorage.getItem("namsmidjan_modules_v01");
+    return saved ? JSON.parse(saved) : DEFAULT_MODULES;
+  }catch(e){ return DEFAULT_MODULES; }
+}
+function saveModules(){
+  localStorage.setItem("namsmidjan_modules_v01", JSON.stringify(modules, null, 2));
+  maybeAutoSync();
+}
+function loadTasks(){
+  try{
+    const saved = localStorage.getItem("namsmidjan_tasks_v02");
+    return saved ? JSON.parse(saved) : DEFAULT_TASKS;
+  }catch(e){ return DEFAULT_TASKS; }
+}
+function saveTasks(){
+  localStorage.setItem("namsmidjan_tasks_v02", JSON.stringify(tasks, null, 2));
+  maybeAutoSync();
+}
+function loadPackages(){
+  try{
+    const saved = localStorage.getItem("namsmidjan_packages_v07");
+    return saved ? JSON.parse(saved) : DEFAULT_PACKAGES;
+  }catch(e){ return DEFAULT_PACKAGES; }
+}
+function savePackages(){
+  localStorage.setItem("namsmidjan_packages_v07", JSON.stringify(packages, null, 2));
+}
+function loadProgress(){
+  try{
+    const saved = localStorage.getItem("namsmidjan_progress_v03");
+    return saved ? JSON.parse(saved) : {};
+  }catch(e){ return {}; }
+}
+function saveProgress(){
+  localStorage.setItem("namsmidjan_progress_v03", JSON.stringify(progress, null, 2));
+  maybeAutoSync();
+}
+function loadSupabaseConfig(){
+  try{
+    return JSON.parse(localStorage.getItem("namsmidjan_supabase_v04") || '{"url":"","key":"","workspace":"vallaskoli","autoSync":"manual"}');
+  }catch(e){
+    return {url:"",key:"",workspace:"vallaskoli",autoSync:"manual"};
+  }
+}
+function saveSupabaseConfig(){
+  localStorage.setItem("namsmidjan_supabase_v04", JSON.stringify(supabaseConfig, null, 2));
+}
+function getSupabaseClient(){
+  if(!supabaseConfig.url || !supabaseConfig.key || !window.supabase) return null;
+  try{
+    return window.supabase.createClient(supabaseConfig.url, supabaseConfig.key);
+  }catch(e){
+    addSyncLog("Villa við að búa til Supabase client: " + e.message);
+    return null;
+  }
+}
+function addSyncLog(message){
+  const line = `[${new Date().toLocaleTimeString("is-IS")}] ${message}`;
+  syncMessages = [line, ...syncMessages].slice(0, 25);
+  const box = document.getElementById("syncLog");
+  if(box) box.textContent = syncMessages.join("\\n");
+}
+function updateSyncBadge(){
+  const connected = !!(supabaseConfig.url && supabaseConfig.key);
+  const dot = document.getElementById("syncDot");
+  const text = document.getElementById("syncText");
+  if(!dot || !text) return;
+  dot.className = "sync-dot " + (connected ? "cloud" : "local");
+  text.textContent = connected ? "Supabase tengt" : "Local mode";
+}
+
+async function refreshAuthState(){
+  const client = getSupabaseClient();
+  const box = document.getElementById("authStateBox");
+  if(!client){
+    currentUser = null;
+    if(box) box.textContent = "Supabase er ekki tengt. Settu fyrst inn URL og publishable key í Supabase flipanum.";
+    return;
+  }
+  const { data } = await client.auth.getUser();
+  currentUser = data?.user || null;
+  if(box){
+    if(currentUser){
+      box.className = "auth-user";
+      box.innerHTML = `<div><strong>Innskráður kennari</strong><br>${escapeHtml(currentUser.email || currentUser.id)}</div><span class="chip">authenticated</span>`;
+    }else{
+      box.className = "lock-note";
+      box.textContent = "Enginn kennari er skráður inn í þessum vafra.";
+    }
+  }
+}
+async function signInTeacher(){
+  const client = getSupabaseClient();
+  if(!client){ alert("Settu fyrst inn Supabase tengingu."); return; }
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  if(!email || !password){ alert("Settu inn netfang og lykilorð."); return; }
+  const { error } = await client.auth.signInWithPassword({ email, password });
+  if(error){ alert("Innskráning mistókst: " + error.message); addSyncLog("Innskráning mistókst: " + error.message); return; }
+  addSyncLog("Kennari skráður inn.");
+  await refreshAuthState();
+  render();
+}
+async function signUpTeacher(){
+  const client = getSupabaseClient();
+  if(!client){ alert("Settu fyrst inn Supabase tengingu."); return; }
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  if(!email || !password){ alert("Settu inn netfang og lykilorð."); return; }
+  const { error } = await client.auth.signUp({ email, password });
+  if(error){ alert("Gat ekki búið til aðgang: " + error.message); addSyncLog("Nýr aðgangur mistókst: " + error.message); return; }
+  addSyncLog("Kennaraaðgangur búinn til. Staðfestu tölvupóst ef Supabase biður um það.");
+  alert("Kennaraaðgangur búinn til. Athugaðu tölvupóst ef staðfestingar er krafist.");
+  await refreshAuthState();
+}
+async function signOutTeacher(){
+  const client = getSupabaseClient();
+  if(!client) return;
+  await client.auth.signOut();
+  currentUser = null;
+  addSyncLog("Kennari skráður út.");
+  await refreshAuthState();
+  render();
+}
+async function requireTeacherForCloudWrite(){
+  const client = getSupabaseClient();
+  if(!client) return false;
+  const { data } = await client.auth.getUser();
+  currentUser = data?.user || null;
+  if(!currentUser){
+    addSyncLog("Aðgerð stöðvuð: kennari er ekki skráður inn.");
+    alert("Skráðu kennara inn áður en þú sendir námsvefi/verkefni í Supabase.");
+    return false;
+  }
+  return true;
+}
+
+async function maybeAutoSync(){
+  if(supabaseConfig.autoSync === "auto" && supabaseConfig.url && supabaseConfig.key){
+    await pushToSupabase(false);
+  }
+}
+function unique(arr){ return [...new Set(arr)].sort((a,b)=>String(a).localeCompare(String(b),'is')); }
+function getAllGrades(){ return unique(modules.flatMap(m=>m.grades || [])); }
+
+function populateFilters(){
+  const subjects = unique(modules.map(m=>m.subject).filter(Boolean));
+  const grades = getAllGrades();
+  const types = unique(modules.map(m=>m.type).filter(Boolean));
+  fillSelect(els.subject, "Öll fög", subjects);
+  fillSelect(els.grade, "Allir bekkir", grades);
+  fillSelect(els.type, "Allar tegundir", types);
+  if(els.taskGrade){
+    fillSelect(els.taskGrade, "Allir bekkir", unique(tasks.flatMap(t=>t.grades || [])));
+    fillSelect(els.taskSubject, "Öll fög", unique(tasks.map(t=>t.subject).filter(Boolean)));
+    fillSelect(els.taskType, "Allar tegundir", unique(tasks.map(t=>t.type).filter(Boolean)));
+  }
+  fillModuleSelect();
+}
+function fillSelect(select, label, values){
+  const current = select.value;
+  select.innerHTML = `<option value="">${label}</option>` + values.map(v=>`<option value="${escapeHtml(v)}">${escapeHtml(v)}${select.id==="gradeFilter" ? ". bekkur" : ""}</option>`).join("");
+  if(values.includes(current)) select.value = current;
+}
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, s=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[s]));
+}
+function filteredModules(){
+  const q = els.search.value.trim().toLowerCase();
+  return modules.filter(m=>{
+    const hay = [m.title,m.description,m.subject,m.type,...(m.tags||[]),...(m.grades||[])].join(" ").toLowerCase();
+    return (!q || hay.includes(q)) &&
+      (!els.subject.value || m.subject === els.subject.value) &&
+      (!els.grade.value || (m.grades||[]).includes(els.grade.value)) &&
+      (!els.type.value || m.type === els.type.value);
+  });
+}
+
+function fillModuleSelect(){
+  ["tModule","pModule"].forEach(id=>{
+    const select = document.getElementById(id);
+    if(!select) return;
+    const current = select.value;
+    select.innerHTML = `<option value="">Enginn sérstakur</option>` + modules.map(m=>`<option value="${escapeHtml(m.id)}">${escapeHtml(m.title)}</option>`).join("");
+    if([...select.options].some(o=>o.value===current)) select.value = current;
+  });
+}
+function filteredTasks(){
+  if(!els.taskList) return [];
+  const q = (els.taskSearch?.value || "").trim().toLowerCase();
+  return tasks.filter(t=>{
+    const hay = [t.title,t.description,t.goal,t.subject,t.type,t.code,t.level,...(t.grades||[])].join(" ").toLowerCase();
+    return (!q || hay.includes(q)) &&
+      (!els.taskGrade.value || (t.grades||[]).includes(els.taskGrade.value)) &&
+      (!els.taskSubject.value || t.subject === els.taskSubject.value) &&
+      (!els.taskType.value || t.type === els.taskType.value);
+  });
+}
+function moduleForTask(t){ return modules.find(m=>m.id===t.moduleId); }
+function taskHtml(t){
+  const m = moduleForTask(t);
+  const grades = (t.grades||[]).map(g=>`${escapeHtml(g)}. bekkur`).join(" · ");
+  return `
+    <article class="task-card">
+      <div>
+        <h4>${escapeHtml(t.title)}</h4>
+        <p>${escapeHtml(t.description)}</p>
+        <div class="task-meta">
+          <span class="tag">Kóði: ${escapeHtml(t.code)}</span>
+          <span class="tag">${escapeHtml(t.subject)}</span>
+          <span class="tag">${escapeHtml(t.type)}</span>
+          <span class="tag">${grades}</span>
+          <span class="tag">${escapeHtml(t.time || "óskráður tími")}</span>
+          <span class="tag">${escapeHtml(t.level || "Miðlungs")}</span>
+          ${m ? `<span class="tag">Vefur: ${escapeHtml(m.title)}</span>` : ""}
+        </div>
+        ${t.goal ? `<p style="margin-top:10px"><strong>Markmið:</strong> ${escapeHtml(t.goal)}</p>` : ""}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        ${m ? `<button class="btn primary small" data-open="${escapeHtml(m.id)}">Opna vef</button>` : ""}
+        <button class="btn small" data-copy-task="${escapeHtml(t.id)}">Afrita</button>
+        <button class="btn small danger" data-delete-task="${escapeHtml(t.id)}">Eyða</button>
+      </div>
+    </article>
+  `;
+}
+function renderTasks(){
+  if(!els.taskList) return;
+  const list = filteredTasks();
+  els.taskList.innerHTML = list.length ? list.map(taskHtml).join("") : `<div class="empty">Engin verkefni fundust. Smelltu á “Nýtt verkefni” til að búa til fyrsta verkefnið.</div>`;
+  document.querySelectorAll("[data-delete-task]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      if(!confirm("Viltu eyða þessu verkefni úr þessum vafra?")) return;
+      tasks = tasks.filter(t=>t.id !== btn.dataset.deleteTask);
+      saveTasks();
+      render();
+    });
+  });
+  document.querySelectorAll("[data-copy-task]").forEach(btn=>{
+    btn.addEventListener("click",async()=>{
+      const t = tasks.find(x=>x.id===btn.dataset.copyTask);
+      await navigator.clipboard.writeText(JSON.stringify(t,null,2));
+      btn.textContent = "Afritað ✓";
+      setTimeout(()=>btn.textContent="Afrita",1200);
+    });
+  });
+}
+
+
+function progressKey(studentName, taskId){
+  return `${(studentName || "Ónefndur").trim().toLowerCase()}::${taskId}`;
+}
+function getTaskProgress(studentName, taskId){
+  return progress[progressKey(studentName, taskId)] || {status:"not_started", note:"", xp:0};
+}
+function setTaskProgress(studentName, code, task, status, note){
+  const key = progressKey(studentName, task.id);
+  const old = progress[key] || {};
+  const xp = status === "done" ? 25 : status === "started" ? 5 : 0;
+  progress[key] = {
+    studentName: (studentName || "Ónefndur").trim() || "Ónefndur",
+    code: code || "",
+    taskId: task.id,
+    taskTitle: task.title,
+    status,
+    note: note ?? old.note ?? "",
+    xp,
+    updatedAt: new Date().toISOString()
+  };
+  saveProgress();
+  render();
+}
+function statusLabel(status){
+  if(status === "done") return "Lokið";
+  if(status === "started") return "Hafið";
+  return "Ekki hafið";
+}
+function statusHtml(status){
+  return `<span class="status-dot status-${escapeHtml(status || "not_started")}"></span>${statusLabel(status)}`;
+}
+function renderProgress(){
+  if(!els.progressTableBody) return;
+  const rows = Object.values(progress).sort((a,b)=>String(b.updatedAt||"").localeCompare(String(a.updatedAt||"")));
+  const students = unique(rows.map(r=>r.studentName).filter(Boolean));
+  const started = rows.filter(r=>r.status==="started").length;
+  const done = rows.filter(r=>r.status==="done").length;
+  const totalActive = rows.filter(r=>r.status==="started" || r.status==="done").length;
+  const percent = totalActive ? Math.round((done/totalActive)*100) : 0;
+
+  document.getElementById("progressStudents").textContent = students.length;
+  document.getElementById("progressStarted").textContent = started;
+  document.getElementById("progressDone").textContent = done;
+  document.getElementById("progressPercent").textContent = percent + "%";
+
+  els.progressTableBody.innerHTML = rows.length ? rows.map(r=>`
+    <tr>
+      <td>${escapeHtml(r.studentName || "Ónefndur")}</td>
+      <td>${escapeHtml(r.code || "")}</td>
+      <td>${escapeHtml(r.taskTitle || r.taskId)}</td>
+      <td>${statusHtml(r.status || "not_started")}</td>
+      <td>${escapeHtml(r.note || "")}</td>
+      <td>${r.updatedAt ? new Date(r.updatedAt).toLocaleString("is-IS") : ""}</td>
+    </tr>
+  `).join("") : `<tr><td colspan="6">Engin framvinda skráð ennþá. Opnaðu Nemendagátt og merktu verkefni sem hafið eða lokið.</td></tr>`;
+}
+
+
+function fillSupabaseFields(){
+  const url = document.getElementById("sbUrl");
+  if(!url) return;
+  if(document.activeElement === url || document.activeElement === document.getElementById("sbKey")) return;
+  url.value = supabaseConfig.url || "";
+  document.getElementById("sbKey").value = supabaseConfig.key || "";
+  document.getElementById("sbWorkspace").value = supabaseConfig.workspace || "vallaskoli";
+  document.getElementById("sbAutoSync").value = supabaseConfig.autoSync || "manual";
+}
+function rowModule(m){
+  return {
+    id: m.id,
+    workspace: supabaseConfig.workspace || "vallaskoli",
+    title: m.title,
+    icon: m.icon || "✦",
+    subject: m.subject || "",
+    grades: m.grades || [],
+    type: m.type || "",
+    url: m.url || "#",
+    description: m.description || "",
+    tags: m.tags || [],
+    color: m.color || "rgba(125,211,252,.20)",
+    updated_at: new Date().toISOString()
+  };
+}
+function rowTask(t){
+  return {
+    id: t.id,
+    workspace: supabaseConfig.workspace || "vallaskoli",
+    title: t.title,
+    code: t.code || "",
+    subject: t.subject || "",
+    type: t.type || "",
+    grades: t.grades || [],
+    time: t.time || "",
+    level: t.level || "Miðlungs",
+    module_id: t.moduleId || "",
+    description: t.description || "",
+    goal: t.goal || "",
+    created_at: t.createdAt || new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+}
+function rowPackage(p){
+  return {
+    id: p.id,
+    workspace: supabaseConfig.workspace || "vallaskoli",
+    title: p.title,
+    code: p.code || "",
+    subject: p.subject || "",
+    grades: p.grades || [],
+    time: p.time || "",
+    module_id: p.moduleId || "",
+    description: p.description || "",
+    goal: p.goal || "",
+    questions: p.questions || [],
+    created_at: p.createdAt || new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+}
+function packageFromRow(r){
+  return {id:r.id,title:r.title,code:r.code,subject:r.subject,grades:r.grades||[],time:r.time,moduleId:r.module_id,description:r.description,goal:r.goal,questions:r.questions||[],createdAt:r.created_at};
+}
+function rowProgress(p, key){
+  return {
+    id: key,
+    workspace: supabaseConfig.workspace || "vallaskoli",
+    student_name: p.studentName || "Ónefndur",
+    code: p.code || "",
+    task_id: p.taskId || "",
+    task_title: p.taskTitle || "",
+    status: p.status || "not_started",
+    note: p.note || "",
+    xp: p.xp || 0,
+    updated_at: p.updatedAt || new Date().toISOString()
+  };
+}
+function moduleFromRow(r){
+  return {id:r.id,title:r.title,icon:r.icon,subject:r.subject,grades:r.grades||[],type:r.type,url:r.url,description:r.description,tags:r.tags||[],color:r.color};
+}
+function taskFromRow(r){
+  return {id:r.id,title:r.title,code:r.code,subject:r.subject,type:r.type,grades:r.grades||[],time:r.time,level:r.level,moduleId:r.module_id,description:r.description,goal:r.goal,createdAt:r.created_at};
+}
+function progressFromRow(r){
+  return {studentName:r.student_name,code:r.code,taskId:r.task_id,taskTitle:r.task_title,status:r.status,note:r.note,xp:r.xp,updatedAt:r.updated_at};
+}
+async function testSupabase(){
+  const client = getSupabaseClient();
+  if(!client){ addSyncLog("Supabase er ekki stillt."); return false; }
+  addSyncLog("Prófa tengingu...");
+  const { error } = await client.from("namsmidjan_modules").select("id").limit(1);
+  if(error){ addSyncLog("Tenging mistókst: " + error.message); return false; }
+  addSyncLog("Tenging tókst.");
+  return true;
+}
+async function pushToSupabase(showAlert=true){
+  const client = getSupabaseClient();
+  if(!client){ addSyncLog("Get ekki samstillt: Supabase er ekki stillt."); return; }
+  if(!(await requireTeacherForCloudWrite())) return;
+  const workspace = supabaseConfig.workspace || "vallaskoli";
+  addSyncLog("Sendi gögn í Supabase...");
+  try{
+    const moduleRows = modules.map(rowModule);
+    const taskRows = tasks.map(rowTask);
+    const packageRows = packages.map(rowPackage);
+    const progressRows = Object.entries(progress).map(([key,p])=>rowProgress(p,key));
+
+    if(moduleRows.length){
+      const {error} = await client.from("namsmidjan_modules").upsert(moduleRows, {onConflict:"id"});
+      if(error) throw error;
+    }
+    if(taskRows.length){
+      const {error} = await client.from("namsmidjan_tasks").upsert(taskRows, {onConflict:"id"});
+      if(error) throw error;
+    }
+    if(packageRows.length){
+      const {error} = await client.from("namsmidjan_packages").upsert(packageRows, {onConflict:"id"});
+      if(error) throw error;
+    }
+    if(progressRows.length){
+      const {error} = await client.from("namsmidjan_progress").upsert(progressRows, {onConflict:"id"});
+      if(error) throw error;
+    }
+    addSyncLog(`Samstilling tókst: ${moduleRows.length} námsvefir, ${taskRows.length} verkefni, ${packageRows.length} verkefnapakkar, ${progressRows.length} framvindufærslur.`);
+    if(showAlert) alert("Gögn send í Supabase.");
+  }catch(e){
+    addSyncLog("Villa við að senda gögn: " + e.message);
+    if(showAlert) alert("Villa við samstillingu: " + e.message);
+  }
+}
+async function pullFromSupabase(){
+  const client = getSupabaseClient();
+  if(!client){ addSyncLog("Get ekki sótt: Supabase er ekki stillt."); return; }
+  const workspace = supabaseConfig.workspace || "vallaskoli";
+  addSyncLog("Sæki gögn úr Supabase...");
+  try{
+    const modRes = await client.from("namsmidjan_modules").select("*").eq("workspace", workspace).order("title");
+    if(modRes.error) throw modRes.error;
+    const taskRes = await client.from("namsmidjan_tasks").select("*").eq("workspace", workspace).order("created_at", {ascending:false});
+    if(taskRes.error) throw taskRes.error;
+    const pkgRes = await client.from("namsmidjan_packages").select("*").eq("workspace", workspace).order("created_at", {ascending:false});
+    if(pkgRes.error && !String(pkgRes.error.message || "").includes("does not exist")) throw pkgRes.error;
+    const progRes = await client.from("namsmidjan_progress").select("*").eq("workspace", workspace).order("updated_at", {ascending:false});
+    if(progRes.error) throw progRes.error;
+
+    modules = (modRes.data || []).map(moduleFromRow);
+    tasks = (taskRes.data || []).map(taskFromRow);
+    packages = pkgRes.error ? packages : (pkgRes.data || []).map(packageFromRow);
+    progress = {};
+    (progRes.data || []).forEach(r=>{ progress[r.id] = progressFromRow(r); });
+
+    localStorage.setItem("namsmidjan_modules_v01", JSON.stringify(modules, null, 2));
+    localStorage.setItem("namsmidjan_tasks_v02", JSON.stringify(tasks, null, 2));
+    localStorage.setItem("namsmidjan_packages_v07", JSON.stringify(packages, null, 2));
+    localStorage.setItem("namsmidjan_progress_v03", JSON.stringify(progress, null, 2));
+    addSyncLog(`Sótt: ${modules.length} námsvefir, ${tasks.length} verkefni, ${packages.length} verkefnapakkar, ${Object.keys(progress).length} framvindufærslur.`);
+    render();
+    alert("Gögn sótt úr Supabase.");
+  }catch(e){
+    addSyncLog("Villa við að sækja gögn: " + e.message);
+    alert("Villa við að sækja gögn: " + e.message);
+  }
+}
+
+
+function filteredPackages(){
+  if(!els.packageList) return [];
+  const q = (els.packageSearch?.value || "").trim().toLowerCase();
+  const grade = els.packageGrade?.value || "";
+  return packages.filter(p=>{
+    const hay = [p.title,p.description,p.goal,p.subject,p.code,...(p.grades||[])].join(" ").toLowerCase();
+    return (!q || hay.includes(q)) && (!grade || (p.grades||[]).includes(grade));
+  }).sort((a,b)=>String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
+}
+function renderPackageList(){
+  if(!els.packageList) return;
+  fillSelect(els.packageGrade, "Allir bekkir", unique(packages.flatMap(p=>p.grades||[])));
+  const list = filteredPackages();
+  els.packageList.innerHTML = list.length ? list.map(p=>`
+    <article class="package-card ${p.id===selectedPackageId ? "active" : ""}" data-package-id="${escapeHtml(p.id)}">
+      <h4>${escapeHtml(p.title)}</h4>
+      <p>${escapeHtml(p.description || "")}</p>
+      <div class="task-meta" style="margin-top:8px">
+        <span class="tag">${escapeHtml(p.code || "")}</span>
+        <span class="tag">${escapeHtml(p.subject || "")}</span>
+        <span class="tag">${(p.grades||[]).map(g=>escapeHtml(g)+". bekkur").join(" · ")}</span>
+        <span class="tag">${(p.questions||[]).length} spurningar</span>
+      </div>
+    </article>
+  `).join("") : `<div class="empty">Engir verkefnapakkar fundust. Búðu til fyrsta pakkann.</div>`;
+  document.querySelectorAll("[data-package-id]").forEach(card=>{
+    card.addEventListener("click",()=>selectPackage(card.dataset.packageId));
+  });
+}
+function renderDraftQuestions(){
+  if(!els.draftQuestions) return;
+  els.draftQuestions.innerHTML = draftQuestions.length ? draftQuestions.map((q,i)=>questionCardHtml(q,i,true)).join("") : `<div class="empty">Engar spurningar komnar í þennan pakka ennþá.</div>`;
+  document.querySelectorAll("[data-delete-draft-q]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      draftQuestions.splice(Number(btn.dataset.deleteDraftQ),1);
+      renderDraftQuestions();
+    });
+  });
+}
+function questionCardHtml(q, i, allowDelete=false){
+  return `
+    <div class="q-card">
+      <h5>${i+1}. ${escapeHtml(q.text || "")}</h5>
+      <p><span class="tag">${q.type==="multiple" ? "Fjölval" : q.type==="text" ? "Textasvar" : "Leiðbeining"}</span> <span class="tag">${escapeHtml(q.level || "Miðlungs")}</span></p>
+      ${q.options && q.options.length ? `<div class="option-list">${q.options.map((o,idx)=>`<div class="option">${String.fromCharCode(65+idx)}. ${escapeHtml(o)}</div>`).join("")}</div>` : ""}
+      ${q.answer ? `<div class="answer-key"><strong>Lausn:</strong> ${escapeHtml(q.answer)}</div>` : ""}
+      ${q.hint ? `<div class="answer-key"><strong>Vísbending:</strong> ${escapeHtml(q.hint)}</div>` : ""}
+      ${allowDelete ? `<div class="builder-actions"><button class="btn small danger" data-delete-draft-q="${i}">Eyða spurningu</button></div>` : ""}
+    </div>
+  `;
+}
+function selectPackage(id){
+  const p = packages.find(x=>x.id===id);
+  if(!p) return;
+  selectedPackageId = id;
+  document.getElementById("builderTitle").textContent = "Breyta verkefnapakka";
+  document.getElementById("pTitle").value = p.title || "";
+  document.getElementById("pCode").value = p.code || "";
+  document.getElementById("pSubject").value = p.subject || "";
+  document.getElementById("pGrades").value = (p.grades||[]).join(",");
+  document.getElementById("pTime").value = p.time || "";
+  document.getElementById("pModule").value = p.moduleId || "";
+  document.getElementById("pDesc").value = p.description || "";
+  document.getElementById("pGoal").value = p.goal || "";
+  draftQuestions = JSON.parse(JSON.stringify(p.questions || []));
+  renderPackageList();
+  renderDraftQuestions();
+  renderPackagePreview(p);
+}
+function clearPackageForm(){
+  selectedPackageId = null;
+  draftQuestions = [];
+  document.getElementById("builderTitle").textContent = "Búa til verkefnapakka";
+  document.getElementById("packageForm").reset();
+  renderDraftQuestions();
+  renderPackagePreview(null);
+  renderPackageList();
+}
+function renderPackagePreview(p){
+  if(!els.packagePreview) return;
+  if(!p && selectedPackageId) p = packages.find(x=>x.id===selectedPackageId);
+  if(!p){
+    els.packagePreview.innerHTML = `<div class="empty">Veldu eða vistaðu verkefnapakka til að sjá forskoðun.</div>`;
+    return;
+  }
+  const mod = modules.find(m=>m.id===p.moduleId);
+  els.packagePreview.innerHTML = `
+    <div class="q-card">
+      <h5>${escapeHtml(p.title)}</h5>
+      <p>${escapeHtml(p.description || "")}</p>
+      <div class="task-meta">
+        <span class="tag">Kóði: ${escapeHtml(p.code || "")}</span>
+        <span class="tag">${escapeHtml(p.subject || "")}</span>
+        <span class="tag">${(p.grades||[]).map(g=>escapeHtml(g)+". bekkur").join(" · ")}</span>
+        <span class="tag">${escapeHtml(p.time || "óskráður tími")}</span>
+        ${mod ? `<span class="tag">Vefur: ${escapeHtml(mod.title)}</span>` : ""}
+      </div>
+      <div class="builder-actions">
+        <button class="btn primary" data-print-package="${escapeHtml(p.id)}">Prenta verkefni</button>
+        <button class="btn" data-task-from-package="${escapeHtml(p.id)}">Búa til verkefnaspjald</button>
+        <button class="btn" data-copy-package="${escapeHtml(p.id)}">Afrita JSON</button>
+        <button class="btn danger" data-delete-package="${escapeHtml(p.id)}">Eyða pakka</button>
+      </div>
+    </div>
+    ${(p.questions||[]).map((q,i)=>questionCardHtml(q,i,false)).join("")}
+  `;
+  document.querySelectorAll("[data-print-package]").forEach(btn=>btn.addEventListener("click",()=>printPackage(btn.dataset.printPackage)));
+  document.querySelectorAll("[data-task-from-package]").forEach(btn=>btn.addEventListener("click",()=>createTaskFromPackage(btn.dataset.taskFromPackage)));
+  document.querySelectorAll("[data-copy-package]").forEach(btn=>btn.addEventListener("click",async()=>{
+    const p = packages.find(x=>x.id===btn.dataset.copyPackage);
+    await navigator.clipboard.writeText(JSON.stringify(p,null,2));
+    btn.textContent = "Afritað ✓";
+    setTimeout(()=>btn.textContent="Afrita JSON",1200);
+  }));
+  document.querySelectorAll("[data-delete-package]").forEach(btn=>btn.addEventListener("click",()=>{
+    if(!confirm("Viltu eyða þessum verkefnapakka?")) return;
+    packages = packages.filter(x=>x.id!==btn.dataset.deletePackage);
+    savePackages();
+    clearPackageForm();
+    render();
+  }));
+}
+function makePackageFromForm(){
+  const title = document.getElementById("pTitle").value.trim();
+  const id = selectedPackageId || "pkg-" + title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") + "-" + Date.now().toString().slice(-4);
+  return {
+    id,
+    title,
+    code: document.getElementById("pCode").value.trim().toUpperCase(),
+    subject: document.getElementById("pSubject").value.trim(),
+    grades: document.getElementById("pGrades").value.split(",").map(x=>x.trim()).filter(Boolean),
+    time: document.getElementById("pTime").value.trim(),
+    moduleId: document.getElementById("pModule").value,
+    description: document.getElementById("pDesc").value.trim(),
+    goal: document.getElementById("pGoal").value.trim(),
+    questions: draftQuestions,
+    createdAt: selectedPackageId ? (packages.find(p=>p.id===selectedPackageId)?.createdAt || new Date().toISOString()) : new Date().toISOString()
+  };
+}
+function createTaskFromPackage(id){
+  const p = packages.find(x=>x.id===id);
+  if(!p) return;
+  const task = {
+    id:"task-from-"+p.id+"-"+Date.now().toString().slice(-4),
+    title:p.title,
+    code:p.code,
+    subject:p.subject,
+    type:"Verkefnapakki",
+    grades:p.grades || [],
+    time:p.time || "",
+    level:"Miðlungs",
+    moduleId:p.moduleId || "",
+    description:p.description + ` (${(p.questions||[]).length} spurningar í verkefnapakka)`,
+    goal:p.goal || "",
+    createdAt:new Date().toISOString()
+  };
+  tasks = [task, ...tasks];
+  saveTasks();
+  alert("Verkefnaspjald búið til úr pakkanum.");
+  render();
+}
+function printPackage(id){
+  const p = packages.find(x=>x.id===id);
+  if(!p) return;
+  const mod = modules.find(m=>m.id===p.moduleId);
+  const sheet = document.getElementById("printSheet");
+  sheet.innerHTML = `
+    <h1>${escapeHtml(p.title)}</h1>
+    <div class="print-meta">
+      <p><strong>Kóði:</strong> ${escapeHtml(p.code || "")}</p>
+      <p><strong>Fag:</strong> ${escapeHtml(p.subject || "")} · <strong>Bekkur:</strong> ${(p.grades||[]).map(g=>escapeHtml(g)+". bekkur").join(", ")} · <strong>Tími:</strong> ${escapeHtml(p.time || "")}</p>
+      ${mod ? `<p><strong>Tengdur námsvefur:</strong> ${escapeHtml(mod.title)}</p>` : ""}
+      <p><strong>Lýsing:</strong> ${escapeHtml(p.description || "")}</p>
+      ${p.goal ? `<p><strong>Markmið:</strong> ${escapeHtml(p.goal)}</p>` : ""}
+    </div>
+    <h2>Verkefni</h2>
+    ${(p.questions||[]).map((q,i)=>`
+      <div class="print-question">
+        <p><strong>${i+1}. ${escapeHtml(q.text || "")}</strong></p>
+        ${q.options && q.options.length ? `<ol type="A">${q.options.map(o=>`<li>${escapeHtml(o)}</li>`).join("")}</ol>` : `<div class="answer-lines"></div>`}
+      </div>
+    `).join("")}
+    <div class="print-answer-key">
+      <h2>Lausnir og vísbendingar</h2>
+      ${(p.questions||[]).map((q,i)=>`
+        <div class="print-question">
+          <p><strong>${i+1}.</strong> ${escapeHtml(q.answer || "Mismunandi svör / engin ein rétt lausn.")}</p>
+          ${q.hint ? `<p><em>Vísbending:</em> ${escapeHtml(q.hint)}</p>` : ""}
+        </div>
+      `).join("")}
+    </div>
+  `;
+  window.print();
+}
+
+function render(){
+  populateFilters();
+  const list = filteredModules();
+  els.grid.innerHTML = list.length ? list.map(cardHtml).join("") : `<div class="empty">Enginn vefur fannst. Prófaðu að breyta leit eða bæta við nýjum námsvef.</div>`;
+  document.querySelectorAll("[data-open]").forEach(btn=>{
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.open;
+      const m = modules.find(x=>x.id===id);
+      if(!m) return;
+      if(!m.url || m.url === "#"){
+        alert("Þessi eining er sýnidæmi í v0.1. Settu inn alvöru slóð í kennarasvæði þegar vefurinn er tilbúinn.");
+      }else{
+        window.open(m.url, "_blank", "noopener,noreferrer");
+      }
+    });
+  });
+  document.querySelectorAll("[data-copy]").forEach(btn=>{
+    btn.addEventListener("click", async()=>{
+      const id = btn.dataset.copy;
+      const m = modules.find(x=>x.id===id);
+      await navigator.clipboard.writeText(JSON.stringify(m,null,2));
+      btn.textContent = "Afritað ✓";
+      setTimeout(()=>btn.textContent="Afrita manifest",1200);
+    });
+  });
+  els.statModules.textContent = modules.length;
+  els.statSubjects.textContent = unique(modules.map(m=>m.subject)).length;
+  els.statGrades.textContent = getAllGrades().length;
+  setDaily();
+  renderTasks();
+  renderPackageList();
+  renderDraftQuestions();
+  if(selectedPackageId){ renderPackagePreview(packages.find(p=>p.id===selectedPackageId)); }
+  renderProgress();
+  const preview = document.getElementById("dataPreview");
+  if(preview) preview.textContent = JSON.stringify({modules,tasks,packages,progress,supabaseConfig:{...supabaseConfig,key:supabaseConfig.key ? "••••" : ""}}, null, 2);
+  updateSyncBadge();
+  fillSupabaseFields();
+}
+function cardHtml(m){
+  const grades = (m.grades||[]).map(g=>`${escapeHtml(g)}. bekkur`).join(" · ");
+  const tags = (m.tags||[]).slice(0,4).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join("");
+  return `
+    <article class="module" style="--glow:${m.color || 'rgba(125,211,252,.18)'}">
+      <div class="module-top">
+        <div class="module-icon">${escapeHtml(m.icon || "✦")}</div>
+        <h3>${escapeHtml(m.title)}</h3>
+        <p>${escapeHtml(m.description)}</p>
+        <div class="meta">
+          <span class="tag">${escapeHtml(m.subject)}</span>
+          <span class="tag">${escapeHtml(m.type)}</span>
+          <span class="tag">${grades}</span>
+        </div>
+        <div class="meta">${tags}</div>
+      </div>
+      <div class="module-actions">
+        <button class="btn primary small" data-open="${escapeHtml(m.id)}">Opna</button>
+        <button class="btn small" data-copy="${escapeHtml(m.id)}">Afrita manifest</button>
+      </div>
+    </article>
+  `;
+}
+function setDaily(){
+  const m = modules[new Date().getDate() % modules.length] || modules[0];
+  if(!m) return;
+  document.getElementById("dailyTitle").textContent = m.title;
+  document.getElementById("dailyDesc").textContent = m.description;
+  document.getElementById("dailyChips").innerHTML = [
+    m.subject, m.type, ...(m.grades||[]).slice(0,3).map(g=>g+". bekkur")
+  ].map(x=>`<span class="chip">${escapeHtml(x)}</span>`).join("");
+}
+
+["input","change"].forEach(evt=>{
+  els.search.addEventListener(evt, render);
+  els.subject.addEventListener(evt, render);
+  els.grade.addEventListener(evt, render);
+  els.type.addEventListener(evt, render);
+  if(els.taskSearch){
+    els.taskSearch.addEventListener(evt, render);
+    els.taskGrade.addEventListener(evt, render);
+    els.taskSubject.addEventListener(evt, render);
+    els.taskType.addEventListener(evt, render);
+  }
+});
+
+document.getElementById("adminBtn").onclick = () => els.admin.classList.add("open");
+document.getElementById("quickAddBtn").onclick = () => { els.admin.classList.add("open"); activateAdminPane("modulePane"); };
+document.getElementById("quickTaskBtn").onclick = () => { els.admin.classList.add("open"); activateAdminPane("taskPane"); };
+document.getElementById("newTaskBtn").onclick = () => { els.admin.classList.add("open"); activateAdminPane("taskPane"); };
+function activateAdminPane(id){
+  document.querySelectorAll(".admin-tab").forEach(b=>b.classList.toggle("active", b.dataset.adminTab===id));
+  document.querySelectorAll(".admin-pane").forEach(p=>p.classList.toggle("active", p.id===id));
+}
+document.querySelectorAll(".admin-tab").forEach(btn=>btn.addEventListener("click",()=>activateAdminPane(btn.dataset.adminTab)));
+document.getElementById("closeAdminBtn").onclick = () => els.admin.classList.remove("open");
+document.getElementById("studentModeBtn").onclick = () => els.student.classList.add("open");
+document.getElementById("studentPortalTopBtn").onclick = () => els.student.classList.add("open");
+document.getElementById("heroStudentBtn").onclick = () => els.student.classList.add("open");
+document.getElementById("dbTopBtn").onclick = () => { els.admin.classList.add("open"); activateAdminPane("supabasePane"); };
+document.getElementById("authTopBtn").onclick = () => { els.admin.classList.add("open"); activateAdminPane("authPane"); refreshAuthState(); };
+document.getElementById("heroAuthBtn").onclick = () => { els.admin.classList.add("open"); activateAdminPane("authPane"); refreshAuthState(); };
+document.getElementById("syncNowBtn").onclick = () => pushToSupabase(true);
+document.getElementById("closeStudentBtn").onclick = () => els.student.classList.remove("open");
+
+document.getElementById("moduleForm").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  const title = document.getElementById("fTitle").value.trim();
+  const id = title.toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") + "-" + Date.now().toString().slice(-4);
+  const item = {
+    id,
+    title,
+    icon: document.getElementById("fIcon").value.trim() || "✦",
+    subject: document.getElementById("fSubject").value.trim(),
+    type: document.getElementById("fType").value.trim(),
+    grades: document.getElementById("fGrades").value.split(",").map(x=>x.trim()).filter(Boolean),
+    url: document.getElementById("fUrl").value.trim(),
+    description: document.getElementById("fDesc").value.trim(),
+    tags: document.getElementById("fTags").value.split(",").map(x=>x.trim()).filter(Boolean),
+    color: "rgba(125,211,252,.20)"
+  };
+  modules = [item, ...modules];
+  saveModules();
+  e.target.reset();
+  els.admin.classList.remove("open");
+  render();
+});
+
+
+document.getElementById("taskForm").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  const title = document.getElementById("tTitle").value.trim();
+  const code = document.getElementById("tCode").value.trim().toUpperCase();
+  const item = {
+    id: "task-" + title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") + "-" + Date.now().toString().slice(-4),
+    title,
+    code,
+    subject: document.getElementById("tSubject").value.trim(),
+    type: document.getElementById("tType").value.trim(),
+    grades: document.getElementById("tGrades").value.split(",").map(x=>x.trim()).filter(Boolean),
+    time: document.getElementById("tTime").value.trim(),
+    level: document.getElementById("tLevel").value,
+    moduleId: document.getElementById("tModule").value,
+    description: document.getElementById("tDesc").value.trim(),
+    goal: document.getElementById("tGoal").value.trim(),
+    createdAt: new Date().toISOString()
+  };
+  tasks = [item, ...tasks];
+  saveTasks();
+  e.target.reset();
+  els.admin.classList.remove("open");
+  render();
+});
+
+document.getElementById("exportBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify(modules,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "namsmidjan-modules.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById("importBtn").onclick = () => document.getElementById("importFile").click();
+document.getElementById("importFile").addEventListener("change", async(e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const data = JSON.parse(await file.text());
+    if(!Array.isArray(data)) throw new Error("JSON þarf að vera listi af námsvefjum.");
+    modules = data;
+    saveModules();
+    render();
+    alert("Innflutningur tókst.");
+  }catch(err){
+    alert("Gat ekki flutt inn JSON: " + err.message);
+  }
+});
+
+
+document.getElementById("exportTasksBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify(tasks,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "namsmidjan-verkefni.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById("exportAllBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify({modules,tasks,packages,progress},null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "namsmidjan-allt-v04.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById("importTasksBtn").onclick = () => document.getElementById("importTasksFile").click();
+document.getElementById("importTasksFile").addEventListener("change", async(e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const data = JSON.parse(await file.text());
+    if(!Array.isArray(data)) throw new Error("JSON þarf að vera listi af verkefnum.");
+    tasks = data;
+    saveTasks();
+    render();
+    alert("Verkefni flutt inn.");
+  }catch(err){
+    alert("Gat ekki flutt inn verkefni: " + err.message);
+  }
+});
+
+document.getElementById("resetAllBtn").onclick = () => {
+  if(confirm("Viltu eyða öllum Námsmiðju-gögnum úr þessum vafra?")){
+    localStorage.removeItem("namsmidjan_modules_v01");
+    localStorage.removeItem("namsmidjan_tasks_v02");
+    localStorage.removeItem("namsmidjan_progress_v03");
+    localStorage.removeItem("namsmidjan_packages_v07");
+    modules = DEFAULT_MODULES;
+    tasks = DEFAULT_TASKS;
+    packages = DEFAULT_PACKAGES;
+    progress = {};
+    render();
+  }
+};
+
+
+document.getElementById("exportProgressBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify(progress,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "namsmidjan-framvinda-v03.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById("resetBtn").onclick = () => {
+  if(confirm("Viltu endurhlaða grunnlistann? Þetta yfirskrifar breytingar í þessum vafra.")){
+    modules = DEFAULT_MODULES;
+    tasks = DEFAULT_TASKS;
+    saveModules();
+    saveTasks();
+    render();
+  }
+};
+
+document.getElementById("randomBtn").onclick = () => {
+  const list = filteredModules();
+  if(!list.length) return;
+  const m = list[Math.floor(Math.random()*list.length)];
+  alert("Tillaga: " + m.title + "\n\n" + m.description);
+};
+
+function findTasksByStudentCode(code){
+  const targetGrade = (code.match(/\d+/)||[""])[0];
+  let matchedTasks = tasks.filter(t => {
+    const taskCode = String(t.code || "").toUpperCase();
+    return (code && taskCode === code) ||
+      (code && taskCode.startsWith(code + "-")) ||
+      (targetGrade && (t.grades||[]).includes(targetGrade));
+  });
+  if(!code) matchedTasks = tasks.slice(0,5);
+  return matchedTasks;
+}
+
+function renderStudentPortal(){
+  const name = document.getElementById("studentNameInput").value.trim() || "Ónefndur";
+  const code = document.getElementById("studentCodeInput").value.trim().toUpperCase();
+  const matchedTasks = findTasksByStudentCode(code);
+
+  const studentProgress = matchedTasks.map(t=>getTaskProgress(name, t.id));
+  document.getElementById("studentFound").textContent = matchedTasks.length;
+  document.getElementById("studentStarted").textContent = studentProgress.filter(p=>p.status==="started").length;
+  document.getElementById("studentDone").textContent = studentProgress.filter(p=>p.status==="done").length;
+  document.getElementById("studentXP").textContent = studentProgress.reduce((sum,p)=>sum+(p.xp||0),0);
+
+  document.getElementById("studentResult").innerHTML = `
+    <div class="student-card">
+      <div>
+        <h4>${escapeHtml(name)} · ${escapeHtml(code || "Sýnikóði")}</h4>
+        <p>${matchedTasks.length ? "Verkefnin þín birtast hér. Merktu verkefni sem hafið eða lokið." : "Engin verkefni fundust fyrir þennan kóða ennþá."}</p>
+      </div>
+      <span class="chip">${matchedTasks.length} verkefni</span>
+    </div>
+    ${matchedTasks.slice(0,10).map(t=>{
+      const m = moduleForTask(t);
+      const p = getTaskProgress(name, t.id);
+      return `
+      <div class="student-card">
+        <div>
+          <h4>${escapeHtml(t.title)}</h4>
+          <p>${escapeHtml(t.description)}</p>
+          <div class="task-meta" style="margin-top:8px">
+            <span class="tag">Kóði: ${escapeHtml(t.code)}</span>
+            <span class="tag">${escapeHtml(t.subject)}</span>
+            <span class="tag">${escapeHtml(t.time || "óskráður tími")}</span>
+            ${m ? `<span class="tag">Vefur: ${escapeHtml(m.title)}</span>` : ""}
+          </div>
+          <div class="status-row">
+            <span class="tag">${statusHtml(p.status || "not_started")}</span>
+            <span class="tag">XP: ${p.xp || 0}</span>
+          </div>
+          ${p.note ? `<div class="note-box"><strong>Athugasemd:</strong> ${escapeHtml(p.note)}</div>` : ""}
+          <input class="mini-input" data-note="${escapeHtml(t.id)}" placeholder="Stutt athugasemd: hvað gerðir þú / hvernig gekk?" value="${escapeHtml(p.note || "")}" />
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+          ${m ? `<button class="btn primary small" data-open="${escapeHtml(m.id)}">Opna vef</button>` : ""}
+          <button class="btn small" data-start-task="${escapeHtml(t.id)}">Hefja</button>
+          <button class="btn small" data-done-task="${escapeHtml(t.id)}">Merkja lokið</button>
+        </div>
+      </div>`}).join("")}
+  `;
+
+  document.querySelectorAll("#studentResult [data-open]").forEach(btn=>{
+    btn.addEventListener("click", () => {
+      const m = modules.find(x=>x.id===btn.dataset.open);
+      if(!m || !m.url || m.url === "#") alert("Þessi eining er sýnidæmi í v0.3.");
+      else window.open(m.url, "_blank", "noopener,noreferrer");
+    });
+  });
+  document.querySelectorAll("#studentResult [data-start-task]").forEach(btn=>{
+    btn.addEventListener("click", () => {
+      const task = tasks.find(t=>t.id===btn.dataset.startTask);
+      const noteEl = document.querySelector(`[data-note="${CSS.escape(task.id)}"]`);
+      setTaskProgress(name, code, task, "started", noteEl?.value || "");
+      renderStudentPortal();
+    });
+  });
+  document.querySelectorAll("#studentResult [data-done-task]").forEach(btn=>{
+    btn.addEventListener("click", () => {
+      const task = tasks.find(t=>t.id===btn.dataset.doneTask);
+      const noteEl = document.querySelector(`[data-note="${CSS.escape(task.id)}"]`);
+      setTaskProgress(name, code, task, "done", noteEl?.value || "");
+      renderStudentPortal();
+    });
+  });
+}
+
+
+document.getElementById("saveSupabaseBtn").onclick = () => {
+  supabaseConfig = {
+    url: document.getElementById("sbUrl").value.trim(),
+    key: document.getElementById("sbKey").value.trim(),
+    workspace: document.getElementById("sbWorkspace").value.trim() || "vallaskoli",
+    autoSync: document.getElementById("sbAutoSync").value
+  };
+  saveSupabaseConfig();
+  updateSyncBadge();
+  addSyncLog("Supabase stillingar vistaðar.");
+  refreshAuthState();
+  alert("Supabase stillingar vistaðar.");
+};
+document.getElementById("testSupabaseBtn").onclick = testSupabase;
+document.getElementById("pushSupabaseBtn").onclick = () => pushToSupabase(true);
+document.getElementById("pullSupabaseBtn").onclick = pullFromSupabase;
+document.getElementById("clearSupabaseBtn").onclick = () => {
+  if(confirm("Viltu aftengja Supabase í þessum vafra? Gögnin í Supabase eyðast ekki.")){
+    supabaseConfig = {url:"",key:"",workspace:"vallaskoli",autoSync:"manual"};
+    saveSupabaseConfig();
+    fillSupabaseFields();
+    updateSyncBadge();
+    addSyncLog("Supabase aftengt.");
+  }
+};
+
+
+
+document.getElementById("newPackageBtn").onclick = () => {
+  clearPackageForm();
+  document.getElementById("builder").scrollIntoView({behavior:"smooth"});
+};
+document.getElementById("clearPackageBtn").onclick = clearPackageForm;
+document.getElementById("addQuestionBtn").onclick = () => {
+  const text = document.getElementById("qText").value.trim();
+  if(!text){ alert("Skrifaðu spurningu eða fyrirmæli fyrst."); return; }
+  const q = {
+    id:"q-"+Date.now().toString().slice(-6),
+    type:document.getElementById("qType").value,
+    level:document.getElementById("qLevel").value,
+    text,
+    options:document.getElementById("qOptions").value.split("|").map(x=>x.trim()).filter(Boolean),
+    answer:document.getElementById("qAnswer").value.trim(),
+    hint:document.getElementById("qHint").value.trim()
+  };
+  draftQuestions.push(q);
+  ["qText","qOptions","qAnswer","qHint"].forEach(id=>document.getElementById(id).value="");
+  renderDraftQuestions();
+};
+document.getElementById("packageForm").addEventListener("submit",(e)=>{
+  e.preventDefault();
+  const p = makePackageFromForm();
+  const idx = packages.findIndex(x=>x.id===p.id);
+  if(idx >= 0) packages[idx] = p;
+  else packages = [p, ...packages];
+  selectedPackageId = p.id;
+  savePackages();
+  createTaskFromPackage(p.id);
+  render();
+  renderPackagePreview(p);
+  alert("Verkefnapakki vistaður og verkefnaspjald búið til.");
+});
+document.getElementById("exportPackagesBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify(packages,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "namsmidjan-verkefnapakkar-v07.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById("signInBtn").onclick = signInTeacher;
+document.getElementById("signUpBtn").onclick = signUpTeacher;
+document.getElementById("signOutBtn").onclick = signOutTeacher;
+
+document.getElementById("studentCodeBtn").onclick = renderStudentPortal;
+document.getElementById("studentClearBtn").onclick = () => {
+  document.getElementById("studentNameInput").value = "";
+  document.getElementById("studentCodeInput").value = "";
+  document.getElementById("studentResult").innerHTML = "";
+  document.getElementById("studentFound").textContent = "0";
+  document.getElementById("studentStarted").textContent = "0";
+  document.getElementById("studentDone").textContent = "0";
+  document.getElementById("studentXP").textContent = "0";
+};
+document.getElementById("studentCodeInput").addEventListener("keydown", e=>{ if(e.key==="Enter") renderStudentPortal(); });
+document.getElementById("studentNameInput").addEventListener("keydown", e=>{ if(e.key==="Enter") renderStudentPortal(); });
+
+
+function aiValue(id){ return document.getElementById(id)?.value?.trim() || ""; }
+function aiSlug(text){
+  return String(text || "verkefni").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"").slice(0,50) || "verkefni";
+}
+function setAITemplate(type){
+  const templates = {
+    eldgos:{topic:"Eldgos, jarðskjálftar og hvernig Ísland breytist",subject:"Náttúrufræði",grades:"5",code:"5B-ELDGOS",notes:"Tengja við Ísland og hafa eitt hópverkefni"},
+    prosentur:{topic:"Prósentur í daglegu lífi",subject:"Stærðfræði",grades:"5,6",code:"5B-PROSENTUR",notes:"Nota afslátt, símahleðslu og íþróttadæmi"},
+    skak:{topic:"Skákþrautir, mát í einum og góð ákvörðun",subject:"Skák",grades:"4,5,6",code:"5B-SKAK",notes:"Stuttar þrautir og rökhugsun"},
+    ut:{topic:"Netöryggi, lykilorð og að hugsa áður en maður smellir",subject:"Upplýsinga- og tæknimennt",grades:"5,6,7",code:"5B-NETORYGGI",notes:"Barnvænt og hagnýtt"},
+    enska:{topic:"English vocabulary: sports, hobbies and daily routine",subject:"Enska",grades:"5",code:"5B-ENGLISH",notes:"Simple English and Icelandic instructions"}
+  };
+  const t = templates[type];
+  if(!t) return;
+  document.getElementById("aiTopic").value = t.topic;
+  document.getElementById("aiSubject").value = t.subject;
+  document.getElementById("aiGrades").value = t.grades;
+  document.getElementById("aiCode").value = t.code;
+  document.getElementById("aiNotes").value = t.notes;
+}
+function buildAIPrompt(){
+  const topic = aiValue("aiTopic") || "verkefni fyrir nemendur";
+  const subject = aiValue("aiSubject") || "Þverfaglegt";
+  const grades = aiValue("aiGrades") || "5";
+  const code = (aiValue("aiCode") || `${grades}B-${aiSlug(topic).toUpperCase().slice(0,10)}`).toUpperCase();
+  const count = Number(aiValue("aiCount") || 8);
+  const difficulty = aiValue("aiDifficulty") || "Miðlungs";
+  const notes = aiValue("aiNotes");
+  return `Búðu til verkefnapakka fyrir Námsmiðjuna. Skilaðu AÐEINS gildu JSON.
+
+Form:
+{
+  "title": "...",
+  "code": "${code}",
+  "subject": "${subject}",
+  "grades": ["${grades.split(",").map(x=>x.trim()).filter(Boolean).join('","')}"],
+  "time": "30 mín",
+  "description": "...",
+  "goal": "...",
+  "questions": [
+    {"type":"multiple","level":"${difficulty}","text":"...","options":["...","...","...","..."],"answer":"...","hint":"..."},
+    {"type":"text","level":"${difficulty}","text":"...","options":[],"answer":"...","hint":"..."}
+  ]
+}
+
+Viðfangsefni: ${topic}
+Fjöldi spurninga: ${count}
+Séróskir: ${notes || "Engar"}
+Notaðu skýrt íslenskt grunnskólamál.`;
+}
+function generateLocalAIPackage(){
+  const topic = aiValue("aiTopic") || "verkefni fyrir nemendur";
+  const subject = aiValue("aiSubject") || "Þverfaglegt";
+  const grades = aiValue("aiGrades").split(",").map(x=>x.trim()).filter(Boolean);
+  const code = (aiValue("aiCode") || `${grades[0] || "5"}B-${aiSlug(topic).toUpperCase().slice(0,10)}`).toUpperCase();
+  const count = Number(aiValue("aiCount") || 8);
+  const difficulty = aiValue("aiDifficulty") || "Miðlungs";
+  const notes = aiValue("aiNotes");
+  const q = [];
+  const add = (type,text,options,answer,hint,level=difficulty)=>q.push({id:"q-ai-"+q.length+"-"+Date.now().toString().slice(-4),type,level,text,options:options||[],answer:answer||"",hint:hint||""});
+  add("multiple", `Hvað lýsir best viðfangsefninu: ${topic}?`, ["Það má útskýra með dæmum","Það er bara eitt orð","Það tengist ekki námi","Það má ekki ræða"], "Það má útskýra með dæmum", "Veldu svar sem sýnir skilning.", "Létt");
+  add("text", `Útskýrðu með þínum orðum hvað þú veist um ${topic}.`, [], "Mismunandi svör. Leitað er eftir skýrri hugsun.", "Byrjaðu á: Ég held að...", "Létt");
+  add("multiple", `Hvaða vinnubrögð hjálpa best við að læra um ${topic}?`, ["Spyrja, prófa og útskýra","Giska og flýta sér","Afrita án skilnings","Sleppa dæmum"], "Spyrja, prófa og útskýra", "Góð námsvinna notar spurningar og dæmi.");
+  add("text", `Búðu til raunverulegt dæmi sem tengist ${topic}.`, [], "Mismunandi svör með tengingu við efnið.", "Hugsaðu um skóla, heimili, náttúru eða samfélag.");
+  add("instruction", `Paravinna: Berið saman tvær hugmyndir sem tengjast ${topic}. Hvað er líkt og ólíkt?`, [], "Munnleg eða skrifleg svör.", "Notið: Þetta er líkt vegna þess að...");
+  while(q.length < count){
+    add(q.length % 2 ? "text" : "multiple",
+      q.length % 2 ? `Nefndu eitt mikilvægt atriði um ${topic} og rökstuddu.` : `Hvað sýnir góðan skilning á ${topic}?`,
+      q.length % 2 ? [] : ["Að útskýra með eigin orðum","Að muna eitt orð","Að sleppa rökum","Að vinna án dæma"],
+      q.length % 2 ? "Mismunandi rökstudd svör." : "Að útskýra með eigin orðum",
+      "Notaðu dæmi eða rökstuðning.");
+  }
+  return {id:"pkg-ai-"+aiSlug(topic)+"-"+Date.now().toString().slice(-5),title:topic,code,subject,grades:grades.length?grades:["5"],time:count<=5?"20 mín":"30 mín",moduleId:"",description:`AI-smíðaður verkefnapakki. ${notes}`,goal:`Nemandi getur unnið með hugtök, dæmi og eigin útskýringar tengdar ${topic}.`,questions:q.slice(0,count),createdAt:new Date().toISOString()};
+}
+function showAIPackage(pkg){
+  currentAIPackage = pkg;
+  document.getElementById("aiOutput").textContent = JSON.stringify(pkg,null,2);
+  document.getElementById("aiResultActions").style.display = "block";
+}
+function saveAIPackage(){
+  if(!currentAIPackage){ alert("Búðu fyrst til pakka."); return; }
+  const i = packages.findIndex(p=>p.id===currentAIPackage.id);
+  if(i>=0) packages[i]=currentAIPackage; else packages=[currentAIPackage,...packages];
+  savePackages();
+  selectedPackageId = currentAIPackage.id;
+  if(typeof createTaskFromPackage === "function") createTaskFromPackage(currentAIPackage.id);
+  render();
+  alert("AI verkefnapakki vistaður.");
+}
+function importAIJson(){
+  try{
+    const parsed = JSON.parse(document.getElementById("aiJsonImport").value.trim());
+    const pkg = {id:parsed.id||"pkg-ai-import-"+Date.now().toString().slice(-5),title:parsed.title||"AI verkefnapakki",code:(parsed.code||aiValue("aiCode")||"VERKEFNI").toUpperCase(),subject:parsed.subject||aiValue("aiSubject")||"Þverfaglegt",grades:parsed.grades||aiValue("aiGrades").split(",").map(x=>x.trim()).filter(Boolean),time:parsed.time||"30 mín",moduleId:parsed.moduleId||"",description:parsed.description||"",goal:parsed.goal||"",questions:(parsed.questions||[]).map((q,i)=>({id:q.id||"q-import-"+i,type:q.type||"text",level:q.level||"Miðlungs",text:q.text||"",options:q.options||[],answer:q.answer||"",hint:q.hint||""})),createdAt:parsed.createdAt||new Date().toISOString()};
+    showAIPackage(pkg);
+  }catch(e){ alert("JSON er ekki gilt: "+e.message); }
+}
+
+async function generateServerAIPackage(){
+  const status = document.getElementById("aiStatus");
+  const topic = aiValue("aiTopic") || "verkefni fyrir nemendur";
+  const payload = {
+    topic,
+    subject: aiValue("aiSubject") || "Þverfaglegt",
+    grades: aiValue("aiGrades") || "5",
+    code: (aiValue("aiCode") || "").toUpperCase(),
+    count: Number(aiValue("aiCount") || 8),
+    difficulty: aiValue("aiDifficulty") || "Miðlungs",
+    notes: aiValue("aiNotes") || ""
+  };
+
+  try{
+    if(status) status.textContent = "AI staða: sendi beiðni á Netlify Function...";
+    const res = await fetch("/.netlify/functions/generate-package", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify(payload)
+    });
+
+    const data = await res.json().catch(()=>null);
+    if(!res.ok){
+      const msg = data?.error || `HTTP ${res.status}`;
+      throw new Error(msg);
+    }
+
+    const pkg = data.package || data;
+    if(!pkg || !pkg.questions || !Array.isArray(pkg.questions)){
+      throw new Error("AI skilaði ekki gildu verkefnapakka-formi.");
+    }
+
+    pkg.id = pkg.id || "pkg-ai-live-" + aiSlug(pkg.title || topic) + "-" + Date.now().toString().slice(-5);
+    pkg.code = (pkg.code || payload.code || "AI-VERKEFNI").toUpperCase();
+    pkg.subject = pkg.subject || payload.subject;
+    pkg.grades = pkg.grades || payload.grades.split(",").map(x=>x.trim()).filter(Boolean);
+    pkg.createdAt = pkg.createdAt || new Date().toISOString();
+    pkg.moduleId = pkg.moduleId || "";
+
+    showAIPackage(pkg);
+    if(status) status.textContent = "AI staða: verkefnapakki kom frá Netlify Function.";
+  }catch(err){
+    if(status) status.textContent = "AI staða: alvöru AI virkaði ekki, nota sniðmát. Villa: " + err.message;
+    const fallback = generateLocalAIPackage();
+    fallback.description = (fallback.description || "") + " (Ath.: búið til með staðbundnu sniðmáti vegna þess að AI function svaraði ekki.)";
+    showAIPackage(fallback);
+  }
+}
+
+function wireAIButtons(){
+  document.querySelectorAll("[data-ai-template]").forEach(btn=>btn.addEventListener("click",()=>setAITemplate(btn.dataset.aiTemplate)));
+  document.getElementById("aiRealGenerateBtn")?.addEventListener("click",generateServerAIPackage);
+  document.getElementById("aiGenerateBtn")?.addEventListener("click",()=>showAIPackage(generateLocalAIPackage()));
+  document.getElementById("aiGenerateBtnTop")?.addEventListener("click",generateServerAIPackage);
+  document.getElementById("aiPromptBtn")?.addEventListener("click",async()=>{ const p=buildAIPrompt(); document.getElementById("aiOutput").textContent=p; await navigator.clipboard.writeText(p); alert("Prompt afritaður."); });
+  document.getElementById("aiCopyJsonBtn")?.addEventListener("click",async()=>{ if(!currentAIPackage){alert("Búðu fyrst til pakka.");return;} await navigator.clipboard.writeText(JSON.stringify(currentAIPackage,null,2)); alert("JSON afritað."); });
+  document.getElementById("aiImportJsonBtn")?.addEventListener("click",importAIJson);
+  document.getElementById("aiSavePackageBtn")?.addEventListener("click",saveAIPackage);
+  document.getElementById("aiOpenInBuilderBtn")?.addEventListener("click",()=>{ saveAIPackage(); selectPackage(currentAIPackage.id); document.getElementById("builder").scrollIntoView({behavior:"smooth"}); });
+  document.getElementById("aiPrintBtn")?.addEventListener("click",()=>{ if(!currentAIPackage)return; if(!packages.find(p=>p.id===currentAIPackage.id)) packages=[currentAIPackage,...packages]; printPackage(currentAIPackage.id); });
+}
+wireAIButtons();
+
+render();
+refreshAuthState();
+</script>
+</body>
+</html>
