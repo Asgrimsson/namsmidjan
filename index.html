@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Námsmiðjan v1.1.1.1</title>
+  <title>Námsmiðjan v1.2.1</title>
   <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
   <style>
     :root{
@@ -213,7 +213,7 @@
         <div class="logo">✦</div>
         <div>
           <h1>Námsmiðjan</h1>
-          <p>Vefjasafn Vallaskóla · v1.1.1</p>
+          <p>Leiðbeiningar og kennsluhamur · v1.2</p>
         </div>
       </div>
       <nav class="nav">
@@ -227,7 +227,7 @@
         <button class="btn ghost" id="dbTopBtn">Gagnagrunnur</button>
         <button class="btn ghost" id="authTopBtn">Innskráning</button>
         <a class="btn ghost" href="#roadmap">Vegferð</a>
-        <a class="btn ghost" href="#help">Leiðbeiningar</a>
+        <a class="btn ghost" href="#leidbeiningar">Leiðbeiningar</a>
         <button class="btn" id="studentModeBtn">Nemendagátt</button>
         <button class="btn primary" id="adminBtn">Kennarasvæði</button>
       <span class="sync-badge" id="syncBadge"><span class="sync-dot local" id="syncDot"></span><span id="syncText">Local mode</span></span>
@@ -276,7 +276,7 @@
           <div class="chiprow" id="dailyChips"></div>
         </div>
         <div class="notice">
-          <strong>v1.1.1 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
+          <strong>v1.2 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
         </div>
       </aside>
     </section>
@@ -606,6 +606,68 @@
     </section>
 
 
+
+    <section class="section" id="leidbeiningar">
+      <div class="section-head">
+        <div><h2>Leiðbeiningar og kennsluhamur</h2><p>Skýrar leiðbeiningar fyrir kennara og nemendur — með prentun, afritun og töfluham.</p></div>
+        <div class="builder-actions">
+          <button class="btn primary" id="showTeacherGuideBtn">Kennari</button>
+          <button class="btn" id="showStudentGuideBtn">Nemandi</button>
+          <button class="btn" id="showBoardModeBtn">Töfluhamur</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="guide-tabs">
+          <button class="guide-tab active" data-guide-tab="teacherGuide">Fyrir kennara</button>
+          <button class="guide-tab" data-guide-tab="studentGuide">Fyrir nemendur</button>
+          <button class="guide-tab" data-guide-tab="boardGuide">Stutt útgáfa á töflu</button>
+        </div>
+
+        <div class="guide-panel active" id="teacherGuide">
+          <div class="guide-hero">
+            <h3>Kennaraflæði í Námsmiðjunni</h3>
+            <p>Sækja gögn, búa til eða velja verkefni, vista í Supabase og gefa nemendum verkefnakóða.</p>
+            <div class="builder-actions">
+              <button class="btn primary" data-print-guide="teacher">Prenta kennaraleiðbeiningar</button>
+              <button class="btn" data-copy-guide="teacher">Afrita kennaraleiðbeiningar</button>
+              <button class="btn" id="openDbFromGuide">Opna gagnagrunn</button>
+            </div>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-card"><h3>1. Áður en tími byrjar</h3><ol><li>Opnaðu Námsmiðjuna.</li><li>Farðu í Gagnagrunnur.</li><li>Sæktu vistaðar Netlify stillingar ef þarf.</li><li>Skráðu þig inn sem kennari.</li><li>Sæktu gögn úr Supabase.</li></ol></div>
+            <div class="guide-card"><h3>2. Velja eða búa til verkefni</h3><ol><li>Veldu vef úr Vefjasafni, eða</li><li>búðu til verkefni í Verkefnasmið, eða</li><li>notaðu AI verkefnasmið.</li><li>Vistaðu verkefnapakka.</li></ol></div>
+            <div class="guide-card"><h3>3. Vista í ský</h3><p>Þegar þú býrð til eða breytir verkefni þarftu að senda breytingarnar í Supabase.</p><p><strong>Gagnagrunnur → Senda local gögn í Supabase</strong></p></div>
+            <div class="guide-card"><h3>4. Eftir vinnu nemenda</h3><ol><li>Farðu í Bekkjayfirlit.</li><li>Smelltu á Sækja nýjustu gögn.</li><li>Skoðaðu hverjir þurfa hjálp eða meiri áskorun.</li></ol></div>
+          </div>
+          <div class="sync-status-panel"><strong>Gullreglan:</strong> Býrð til/breytir verkefni → Senda local gögn í Supabase. Opnar á nýrri tölvu → Sækja gögn úr Supabase. Nemendur hafa unnið → Sækja nýjustu gögn.</div>
+        </div>
+
+        <div class="guide-panel" id="studentGuide">
+          <div class="guide-hero">
+            <h3>Nemendaflæði í Námsmiðjunni</h3>
+            <p>Nemendur opna Nemendagátt, skrifa nafn/hóp, slá inn verkefnakóða og merkja stöðu.</p>
+            <div class="builder-actions">
+              <button class="btn primary" data-print-guide="student">Prenta nemendaleiðbeiningar</button>
+              <button class="btn" data-copy-guide="student">Afrita nemendaleiðbeiningar</button>
+              <button class="btn" id="openStudentFromGuide">Opna nemendagátt</button>
+            </div>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-card"><h3>1. Opnaðu vefinn</h3><p>Farðu á <strong>namsmidjan.netlify.app</strong> og smelltu á <strong>Nemendagátt</strong>.</p></div>
+            <div class="guide-card"><h3>2. Skráðu þig inn í verkefni</h3><ol><li>Skrifaðu nafn eða hóp.</li><li>Sláðu inn verkefnakóðann frá kennara.</li><li>Byrjaðu verkefnið.</li></ol></div>
+            <div class="guide-card"><h3>3. Merktu stöðu</h3><div class="status-mini-grid"><div class="status-mini"><b>Hafið</b><span>ég er byrjaður</span></div><div class="status-mini"><b>Þarf hjálp</b><span>ég þarf aðstoð</span></div><div class="status-mini"><b>Áskorun</b><span>ég vil meira</span></div><div class="status-mini"><b>Lokið</b><span>ég er búinn</span></div></div></div>
+            <div class="guide-card"><h3>4. Góð vinnubrögð</h3><ul><li>Lestu fyrirmælin vel.</li><li>Reyndu fyrst sjálf/ur.</li><li>Merktu Þarf hjálp ef þú festist.</li><li>Merktu Lokið í lokin.</li></ul></div>
+          </div>
+        </div>
+
+        <div class="guide-panel" id="boardGuide">
+          <div class="guide-hero"><h3>Töfluhamur</h3><p>Stutt útgáfa sem kennari getur sýnt á skjávarpa eða skrifað á töfluna.</p><div class="builder-actions"><button class="btn primary" data-print-guide="board">Prenta töfluútgáfu</button><button class="btn" data-copy-guide="board">Afrita töfluútgáfu</button></div></div>
+          <div class="teacher-mode-board"><h3>Nemendur — byrjið hér</h3><ol><li>Farðu á <strong>namsmidjan.netlify.app</strong></li><li>Smelltu á <strong>Nemendagátt</strong></li><li>Skrifaðu nafn eða hóp</li><li>Sláðu inn verkefnakóða frá kennara</li><li>Byrjaðu verkefnið</li><li>Merktu stöðu í lok tímans</li></ol></div>
+          <div class="status-mini-grid"><div class="status-mini"><b>Hafið</b><span>ég er byrjaður</span></div><div class="status-mini"><b>Þarf hjálp</b><span>ég þarf aðstoð</span></div><div class="status-mini"><b>Vil meiri áskorun</b><span>ég vil erfiðara verkefni</span></div><div class="status-mini"><b>Lokið</b><span>ég er búinn</span></div></div>
+        </div>
+      </div>
+    </section>
+    <div id="printGuideSheet" class="print-guide-sheet"></div>
     <section class="section" id="help">
       <div class="section-head"><div><h2>Leiðbeiningar</h2><p>Stuttar kennaraleiðbeiningar fyrir fyrstu skólastofuprófun.</p></div></div>
       <div class="help-grid">
@@ -648,7 +710,7 @@
   </main>
 
   <footer>
-    Námsmiðjan v1.1.1 · innskráning, öruggari réttindi og Supabase samstilling.
+    Námsmiðjan v1.2 · innskráning, öruggari réttindi og Supabase samstilling.
   </footer>
 
   <section class="admin" id="adminModal" aria-hidden="true">
@@ -3142,6 +3204,84 @@ if(!(supabaseConfig.url && supabaseConfig.key)){
   loadPublicSupabaseConfig(false).then(()=>refreshAuthState && refreshAuthState());
 }
 document.getElementById("loadPublicConfigBtn")?.addEventListener("click",()=>loadPublicSupabaseConfig(true));
+
+
+const GUIDE_TEXTS = {
+teacher:`LEIÐBEININGAR FYRIR KENNARA — NÁMSMIÐJAN
+
+1. Áður en kennslustund byrjar
+- Opnaðu https://namsmidjan.netlify.app
+- Farðu í Gagnagrunnur
+- Sæktu vistaðar Netlify stillingar ef þarf
+- Skráðu þig inn sem kennari
+- Smelltu á Sækja gögn úr Supabase
+
+2. Velja eða búa til verkefni
+- Veldu vef úr Vefjasafni
+- eða búðu til verkefni í Verkefnasmið
+- eða notaðu AI verkefnasmið
+- Vistaðu verkefnapakka
+
+3. Vista í ský
+- Þegar þú býrð til eða breytir verkefni: Gagnagrunnur → Senda local gögn í Supabase
+
+4. Fylgjast með nemendum
+- Bekkjayfirlit → Sækja nýjustu gögn
+- Skoðaðu hverjir þurfa hjálp, eru búnir eða vilja meiri áskorun
+
+GULLREGLAN:
+Breyti/bý til verkefni → Senda local gögn í Supabase
+Opna á nýrri tölvu → Sækja gögn úr Supabase
+Nemendur hafa unnið → Sækja nýjustu gögn`,
+student:`LEIÐBEININGAR FYRIR NEMENDUR — NÁMSMIÐJAN
+
+1. Farðu á https://namsmidjan.netlify.app
+2. Smelltu á Nemendagátt
+3. Skrifaðu nafn eða hóp
+4. Sláðu inn verkefnakóða frá kennara
+5. Byrjaðu verkefnið
+6. Merktu stöðu í lok tímans
+
+STÖÐUR:
+Hafið = ég er byrjaður
+Þarf hjálp = ég þarf aðstoð
+Vil meiri áskorun = ég vil erfiðara verkefni
+Lokið = ég er búinn`,
+board:`NEMENDUR — BYRJIÐ HÉR
+
+1. Farðu á namsmidjan.netlify.app
+2. Smelltu á Nemendagátt
+3. Skrifaðu nafn eða hóp
+4. Sláðu inn verkefnakóða
+5. Byrjaðu verkefnið
+6. Merktu stöðu í lok tímans
+
+Hafið = ég er byrjaður
+Þarf hjálp = ég þarf aðstoð
+Vil meiri áskorun = ég vil erfiðara verkefni
+Lokið = ég er búinn`
+};
+function setGuideTab(id){
+  document.querySelectorAll(".guide-tab").forEach(btn=>btn.classList.toggle("active", btn.dataset.guideTab===id));
+  document.querySelectorAll(".guide-panel").forEach(panel=>panel.classList.toggle("active", panel.id===id));
+  document.getElementById("leidbeiningar")?.scrollIntoView({behavior:"smooth"});
+}
+function printGuide(type){
+  const sheet=document.getElementById("printGuideSheet");
+  sheet.innerHTML=`<h1>${type==="teacher"?"Leiðbeiningar fyrir kennara":type==="student"?"Leiðbeiningar fyrir nemendur":"Stutt útgáfa fyrir töflu"}</h1>`+GUIDE_TEXTS[type].split("\\n").filter(Boolean).map(line=>`<p>${line}</p>`).join("");
+  document.body.classList.add("printing-guide");
+  window.print();
+  setTimeout(()=>document.body.classList.remove("printing-guide"),600);
+}
+async function copyGuide(type){ await navigator.clipboard.writeText(GUIDE_TEXTS[type]); alert("Leiðbeiningar afritaðar."); }
+document.querySelectorAll(".guide-tab").forEach(btn=>btn.addEventListener("click",()=>setGuideTab(btn.dataset.guideTab)));
+document.getElementById("showTeacherGuideBtn")?.addEventListener("click",()=>setGuideTab("teacherGuide"));
+document.getElementById("showStudentGuideBtn")?.addEventListener("click",()=>setGuideTab("studentGuide"));
+document.getElementById("showBoardModeBtn")?.addEventListener("click",()=>setGuideTab("boardGuide"));
+document.querySelectorAll("[data-print-guide]").forEach(btn=>btn.addEventListener("click",()=>printGuide(btn.dataset.printGuide)));
+document.querySelectorAll("[data-copy-guide]").forEach(btn=>btn.addEventListener("click",()=>copyGuide(btn.dataset.copyGuide)));
+document.getElementById("openDbFromGuide")?.addEventListener("click",()=>{ els.admin.classList.add("open"); activateAdminPane("supabasePane"); });
+document.getElementById("openStudentFromGuide")?.addEventListener("click",()=>els.student.classList.add("open"));
 
 render();
 refreshAuthState();

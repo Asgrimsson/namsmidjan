@@ -1,4 +1,4 @@
-# Námsmiðjan v1.1.1
+# Námsmiðjan v1.2
 
 Námsmiðjan er fyrsti grunnur að browser-based náms- og kennsluvefja-vistkerfi.
 
@@ -456,3 +456,12 @@ Settu í Netlify Environment Variables:
 - `SUPABASE_WORKSPACE`
 
 Síðan redeployarðu.
+
+---
+
+# v1.2 — Leiðbeiningar og kennsluhamur
+
+- Leiðbeiningar fyrir kennara
+- Leiðbeiningar fyrir nemendur
+- Stutt töfluútgáfa
+- Prentun og afritun
