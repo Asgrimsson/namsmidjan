@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Námsmiðjan v1.4.1</title>
+  <title>Námsmiðjan v1.4.1.1</title>
   <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
   <style>
     :root{
@@ -232,7 +232,7 @@
         <div class="logo">✦</div>
         <div>
           <h1>Námsmiðjan</h1>
-          <p>Bekkir og nemendaskrá · v1.4</p>
+          <p>Bekkir og nemendaskrá · v1.4.1</p>
         </div>
       </div>
       <nav class="nav">
@@ -296,7 +296,7 @@
           <div class="chiprow" id="dailyChips"></div>
         </div>
         <div class="notice">
-          <strong>v1.4 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
+          <strong>v1.4.1 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
         </div>
       </aside>
     </section>
@@ -793,7 +793,7 @@
   </main>
 
   <footer>
-    Námsmiðjan v1.4 · innskráning, öruggari réttindi og Supabase samstilling.
+    Námsmiðjan v1.4.1 · innskráning, öruggari réttindi og Supabase samstilling.
   </footer>
 
   <section class="admin" id="adminModal" aria-hidden="true">
@@ -3598,6 +3598,34 @@ function saveClassesLocal(){
 }
 function activeClasses(){ return classes.filter(c=>c.is_active !== false); }
 function studentsInClass(classId){ return students.filter(st=>st.class_id === classId && st.is_active !== false); }
+
+function populateStudentClassSelects(){
+  const classSelect = document.getElementById("studentClassSelect");
+  const studentSelect = document.getElementById("studentNameSelect");
+  if(!classSelect || !studentSelect) return;
+
+  const currentClass = classSelect.value || selectedClassId || "";
+  classSelect.innerHTML = `<option value="">Veldu bekk</option>` + activeClasses()
+    .map(c => `<option value="${escapeHtml(c.id)}">${escapeHtml(c.name)}</option>`)
+    .join("");
+
+  if(currentClass && activeClasses().some(c => c.id === currentClass)){
+    classSelect.value = currentClass;
+  }
+
+  const chosenClass = classSelect.value || selectedClassId || "";
+  const currentStudent = studentSelect.value || "";
+  const list = studentsInClass(chosenClass);
+
+  studentSelect.innerHTML = `<option value="">Veldu nafn</option>` + list
+    .map(st => `<option value="${escapeHtml(st.id)}">${escapeHtml(st.display_name || st.name)}</option>`)
+    .join("");
+
+  if(currentStudent && list.some(st => st.id === currentStudent)){
+    studentSelect.value = currentStudent;
+  }
+}
+
 function renderClasses(){
   const box=document.getElementById("classListBox"); if(!box) return;
   box.innerHTML = activeClasses().map(c=>{
@@ -3711,6 +3739,18 @@ document.getElementById("copyClassRosterBtn")?.addEventListener("click",copyClas
 document.getElementById("exportClassCsvBtn")?.addEventListener("click",exportClassCsv);
 document.getElementById("syncClassesBtn")?.addEventListener("click",()=>pushClassesToSupabase(true));
 document.getElementById("loadClassesBtn")?.addEventListener("click",()=>loadClassesFromSupabase(true));
+
+document.getElementById("studentClassSelect")?.addEventListener("change",()=>{
+  selectedClassId = document.getElementById("studentClassSelect").value || selectedClassId;
+  saveClassesLocal();
+  populateStudentClassSelects();
+});
+document.getElementById("studentNameSelect")?.addEventListener("change",()=>{
+  const st = students.find(s => s.id === document.getElementById("studentNameSelect").value);
+  const nameInput = document.getElementById("studentName");
+  if(st && nameInput) nameInput.value = st.display_name || st.name;
+});
+
 renderClasses();
 
 render();

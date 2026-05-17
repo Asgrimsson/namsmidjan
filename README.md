@@ -1,4 +1,4 @@
-# Námsmiðjan v1.4
+# Námsmiðjan v1.4.1
 
 Námsmiðjan er fyrsti grunnur að browser-based náms- og kennsluvefja-vistkerfi.
 
@@ -495,3 +495,14 @@ Til að eyða úr Supabase þarf kennari að vera innskráður.
 
 Keyra þarf `supabase_v1_4_classes_students.sql` í Supabase SQL Editor.
 
+
+
+---
+
+# v1.4.1 — Bekkir villulagfæring
+
+Lagar villuna:
+
+`populateStudentClassSelects is not defined`
+
+og tryggir að bekkir/nemendalisti birtist rétt þegar nemendagáttin styður bekkja-/nafnaval.
