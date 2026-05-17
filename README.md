@@ -1,4 +1,4 @@
-# Námsmiðjan v1.3
+# Námsmiðjan v1.4
 
 Námsmiðjan er fyrsti grunnur að browser-based náms- og kennsluvefja-vistkerfi.
 
@@ -488,3 +488,10 @@ Síðan redeployarðu.
 ## Mikilvægt
 
 Til að eyða úr Supabase þarf kennari að vera innskráður.
+
+
+---
+# v1.4 — Bekkir og nemendaskrá
+
+Keyra þarf `supabase_v1_4_classes_students.sql` í Supabase SQL Editor.
+

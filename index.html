@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Námsmiðjan v1.3.1</title>
+  <title>Námsmiðjan v1.4.1</title>
   <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
   <style>
     :root{
@@ -193,6 +193,21 @@
     .module-actions .danger{border-color:rgba(248,113,113,.45);background:rgba(248,113,113,.10);color:#fecaca}
     .autosync-note{border:1px solid rgba(134,239,172,.24);background:rgba(134,239,172,.075);border-radius:16px;padding:12px;margin:10px 0;color:rgba(255,255,255,.88);line-height:1.45}
 
+
+    .class-manager-grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
+    .class-list{display:grid;gap:10px}
+    .class-row{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.06);border-radius:16px;padding:12px;cursor:pointer}
+    .class-row.active{border-color:rgba(125,211,252,.55);background:rgba(125,211,252,.10)}
+    .class-row h3{margin:0 0 6px;font-size:16px}.class-row p{margin:0;color:var(--muted);font-size:13px}
+    .student-table{width:100%;border-collapse:collapse;margin-top:12px;overflow:hidden;border-radius:16px}
+    .student-table th,.student-table td{padding:10px;border-bottom:1px solid rgba(255,255,255,.10);text-align:left;font-size:14px}
+    .student-table th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+    .student-table tr:hover td{background:rgba(255,255,255,.035)}
+    .mini-danger{border-color:rgba(248,113,113,.45)!important;background:rgba(248,113,113,.10)!important;color:#fecaca!important}
+    .student-import-box{min-height:150px}
+    .student-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:6px 9px;background:rgba(255,255,255,.06);font-size:12px}
+    @media(max-width:1000px){.class-manager-grid{grid-template-columns:1fr}}
+
     @media(max-width:980px){
       .hero,.two-col{grid-template-columns:1fr}
       .grid{grid-template-columns:repeat(2,1fr)}
@@ -217,12 +232,13 @@
         <div class="logo">✦</div>
         <div>
           <h1>Námsmiðjan</h1>
-          <p>Eyða flísum og autosync · v1.3</p>
+          <p>Bekkir og nemendaskrá · v1.4</p>
         </div>
       </div>
       <nav class="nav">
         <a class="btn ghost" href="#modules">Námsvefir</a>
         <a class="btn ghost" href="#vefjasafn">Vefjasafn</a>
+        <a class="btn ghost" href="#bekkir">Bekkir</a>
         <a class="btn ghost" href="#classroom-home">Stjórnborð</a>
         <a class="btn ghost" href="#ai-builder">AI verkefnasmiður</a>
         <a class="btn ghost" href="#builder">Verkefnasmiður</a>
@@ -280,7 +296,7 @@
           <div class="chiprow" id="dailyChips"></div>
         </div>
         <div class="notice">
-          <strong>v1.3 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
+          <strong>v1.4 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
         </div>
       </aside>
     </section>
@@ -321,6 +337,68 @@
       </div>
       <div class="panel">
         <div class="sync-status-panel"><strong>Hvernig virkar þetta?</strong> Smelltu á hnappinn til að bæta öllum vefjunum inn sem flísum og tengdum verkefnaspjöldum. Farðu svo í Gagnagrunnur og sendu local gögn í Supabase.</div>
+      </div>
+    </section>
+
+
+    <section class="section" id="bekkir">
+      <div class="section-head">
+        <div>
+          <h2>Bekkir og nemendaskrá</h2>
+          <p>Stofnaðu bekki, límdu inn nemendalista og tengdu nemendur við verkefni og framvindu.</p>
+        </div>
+        <div class="builder-actions">
+          <button class="btn primary" id="newClassBtn">Nýr bekkur</button>
+          <button class="btn" id="syncClassesBtn">Vista bekki í Supabase</button>
+          <button class="btn" id="loadClassesBtn">Sækja bekki úr Supabase</button>
+        </div>
+      </div>
+      <div class="class-manager-grid">
+        <div class="panel">
+          <h3>Bekkir / hópar</h3>
+          <div class="form-grid" style="margin-top:12px">
+            <div class="full"><label>Heiti bekkjar</label><input class="field" id="classNameInput" placeholder="t.d. 5. bekkur SÁ" /></div>
+            <div><label>Árgangur</label><input class="field" id="classGradeInput" placeholder="5" /></div>
+            <div><label>Kennari</label><input class="field" id="classTeacherInput" placeholder="Sveinbjörn" /></div>
+            <div class="full"><label>Lýsing</label><input class="field" id="classDescriptionInput" placeholder="Almennur hópur / UT / skák..." /></div>
+          </div>
+          <div class="builder-actions" style="margin-top:12px">
+            <button class="btn primary" id="saveClassBtn">Vista bekk</button>
+            <button class="btn mini-danger" id="deleteClassBtn">Eyða bekk</button>
+          </div>
+          <div class="class-list" id="classListBox" style="margin-top:16px"></div>
+        </div>
+        <div class="panel">
+          <div class="section-head" style="padding:0;margin:0 0 10px">
+            <div><h3 id="selectedClassTitle">Enginn bekkur valinn</h3><p id="selectedClassInfo" style="color:var(--muted)">Veldu eða stofnaðu bekk til að bæta nemendum inn.</p></div>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-card">
+              <h3>Bæta við einum nemanda</h3>
+              <div class="form-grid">
+                <div><label>Nafn</label><input class="field" id="studentNameInput" placeholder="Anna Jónsdóttir" /></div>
+                <div><label>Birtingarnafn</label><input class="field" id="studentDisplayInput" placeholder="Anna" /></div>
+                <div><label>Hópur</label><input class="field" id="studentGroupInput" placeholder="Hópur 1" /></div>
+                <div><label>Nemendakóði</label><input class="field" id="studentCodeInput" placeholder="ANNA-5" /></div>
+              </div>
+              <div class="builder-actions" style="margin-top:12px"><button class="btn primary" id="addStudentBtn">Bæta við nemanda</button></div>
+            </div>
+            <div class="guide-card">
+              <h3>Líma inn nemendalista</h3>
+              <p>Settu eitt nafn í hverja línu. Má líka nota: <strong>Nafn, Hópur</strong></p>
+              <textarea class="field student-import-box" id="bulkStudentsInput" placeholder="Anna Jónsdóttir&#10;Bjarni Karlsson, Hópur 1&#10;Elín Ósk, Hópur 2"></textarea>
+              <div class="builder-actions" style="margin-top:12px"><button class="btn primary" id="bulkImportStudentsBtn">Búa til nemendur</button></div>
+            </div>
+          </div>
+          <div class="builder-actions" style="margin-top:14px">
+            <button class="btn" id="copyClassRosterBtn">Afrita nemendalista</button>
+            <button class="btn" id="exportClassCsvBtn">Sækja CSV</button>
+          </div>
+          <table class="student-table">
+            <thead><tr><th>Nafn</th><th>Birtingarnafn</th><th>Hópur</th><th>Kóði</th><th>Staða</th><th></th></tr></thead>
+            <tbody id="studentTableBody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -715,7 +793,7 @@
   </main>
 
   <footer>
-    Námsmiðjan v1.3 · innskráning, öruggari réttindi og Supabase samstilling.
+    Námsmiðjan v1.4 · innskráning, öruggari réttindi og Supabase samstilling.
   </footer>
 
   <section class="admin" id="adminModal" aria-hidden="true">
@@ -3504,6 +3582,137 @@ document.getElementById("openStudentFromGuide")?.addEventListener("click",()=>el
 
 
 document.getElementById("fixLestarTileBtn")?.addEventListener("click", improveLestarThjalfunTile);
+
+// v1.4 Bekkir og nemendaskrá
+let classes = JSON.parse(localStorage.getItem("namsmidjan_classes_v04") || "[]");
+let students = JSON.parse(localStorage.getItem("namsmidjan_students_v04") || "[]");
+let selectedClassId = localStorage.getItem("namsmidjan_selected_class_v04") || "";
+
+function slugifyIcelandic(text){
+  return String(text || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ð/g,"d").replace(/þ/g,"th").replace(/æ/g,"ae").replace(/ö/g,"o").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") || ("id-"+Date.now());
+}
+function saveClassesLocal(){
+  localStorage.setItem("namsmidjan_classes_v04", JSON.stringify(classes, null, 2));
+  localStorage.setItem("namsmidjan_students_v04", JSON.stringify(students, null, 2));
+  if(selectedClassId) localStorage.setItem("namsmidjan_selected_class_v04", selectedClassId);
+}
+function activeClasses(){ return classes.filter(c=>c.is_active !== false); }
+function studentsInClass(classId){ return students.filter(st=>st.class_id === classId && st.is_active !== false); }
+function renderClasses(){
+  const box=document.getElementById("classListBox"); if(!box) return;
+  box.innerHTML = activeClasses().map(c=>{
+    const count=studentsInClass(c.id).length;
+    return `<div class="class-row ${c.id===selectedClassId?"active":""}" data-select-class="${escapeHtml(c.id)}"><h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.grade?c.grade+". bekkur":"Árgangur óskráður")} · ${count} nemendur</p><p>${escapeHtml(c.description||"")}</p></div>`;
+  }).join("") || `<p style="color:var(--muted)">Engir bekkir skráðir ennþá.</p>`;
+  document.querySelectorAll("[data-select-class]").forEach(row=>row.addEventListener("click",()=>selectClass(row.dataset.selectClass)));
+  const c=classes.find(x=>x.id===selectedClassId);
+  const title=document.getElementById("selectedClassTitle"), info=document.getElementById("selectedClassInfo");
+  if(c){
+    title.textContent=c.name;
+    info.textContent=`${c.grade?c.grade+". bekkur":"Árgangur óskráður"} · ${studentsInClass(c.id).length} nemendur · ${c.teacher||"Kennari óskráður"}`;
+    ["classNameInput","classGradeInput","classTeacherInput","classDescriptionInput"].forEach((id,i)=>{
+      const vals=[c.name||"",c.grade||"",c.teacher||"",c.description||""]; const el=document.getElementById(id); if(el) el.value=vals[i];
+    });
+  }else if(title){ title.textContent="Enginn bekkur valinn"; info.textContent="Veldu eða stofnaðu bekk til að bæta nemendum inn."; }
+  renderStudents(); populateStudentClassSelects();
+}
+function renderStudents(){
+  const body=document.getElementById("studentTableBody"); if(!body) return;
+  if(!selectedClassId){ body.innerHTML=`<tr><td colspan="6" style="color:var(--muted)">Veldu bekk fyrst.</td></tr>`; return; }
+  const rows=studentsInClass(selectedClassId);
+  body.innerHTML = rows.map(st=>`<tr><td>${escapeHtml(st.name)}</td><td>${escapeHtml(st.display_name||"")}</td><td>${escapeHtml(st.group_name||"")}</td><td><span class="student-pill">${escapeHtml(st.student_code||"")}</span></td><td>${st.is_active===false?"Óvirkur":"Virkur"}</td><td><button class="btn small mini-danger" data-delete-student="${escapeHtml(st.id)}">Eyða</button></td></tr>`).join("") || `<tr><td colspan="6" style="color:var(--muted)">Engir nemendur í þessum bekk.</td></tr>`;
+  document.querySelectorAll("[data-delete-student]").forEach(btn=>btn.addEventListener("click",()=>deleteStudent(btn.dataset.deleteStudent)));
+}
+function selectClass(id){ selectedClassId=id; saveClassesLocal(); renderClasses(); }
+function clearClassForm(){ selectedClassId=""; ["classNameInput","classGradeInput","classTeacherInput","classDescriptionInput"].forEach(id=>{const el=document.getElementById(id); if(el) el.value="";}); saveClassesLocal(); renderClasses(); }
+function saveClassFromForm(){
+  const name=document.getElementById("classNameInput")?.value.trim();
+  const grade=document.getElementById("classGradeInput")?.value.trim();
+  const teacher=document.getElementById("classTeacherInput")?.value.trim();
+  const description=document.getElementById("classDescriptionInput")?.value.trim();
+  if(!name){ alert("Settu inn heiti bekkjar."); return; }
+  const id=selectedClassId || slugifyIcelandic(name);
+  const existing=classes.find(c=>c.id===id);
+  const item={id, workspace:supabaseConfig.workspace||"vallaskoli", name, grade, teacher, description, is_active:true, created_at:existing?.created_at||new Date().toISOString(), updated_at:new Date().toISOString()};
+  classes=classes.filter(c=>c.id!==id); classes.unshift(item); selectedClassId=id; saveClassesLocal(); renderClasses(); maybeAutoSyncClasses();
+}
+function deleteClass(){
+  if(!selectedClassId){ alert("Veldu bekk fyrst."); return; }
+  const c=classes.find(x=>x.id===selectedClassId); if(!c) return;
+  if(!confirm(`Viltu eyða bekknum „${c.name}“ og ${studentsInClass(c.id).length} nemendum?`)) return;
+  classes=classes.filter(x=>x.id!==c.id); students=students.filter(st=>st.class_id!==c.id); selectedClassId=""; saveClassesLocal(); renderClasses(); maybeAutoSyncClasses();
+}
+function makeStudentCode(name){
+  const first=String(name||"").split(" ")[0]||"nemandi"; const cls=classes.find(c=>c.id===selectedClassId); const g=cls?.grade||"";
+  return (slugifyIcelandic(first).replace(/-/g,"").slice(0,8)+(g?"-"+g:"")).toUpperCase();
+}
+function addStudent(data){
+  const base=slugifyIcelandic(data.name); let id=selectedClassId+"-"+base; let n=2; while(students.some(s=>s.id===id)) id=selectedClassId+"-"+base+"-"+n++;
+  students.push({id, workspace:supabaseConfig.workspace||"vallaskoli", class_id:selectedClassId, name:data.name, display_name:data.display_name||data.name.split(" ")[0], group_name:data.group_name||"", student_code:data.student_code||makeStudentCode(data.name), is_active:true, created_at:new Date().toISOString(), updated_at:new Date().toISOString()});
+  saveClassesLocal(); renderStudents(); renderClasses(); maybeAutoSyncClasses();
+}
+function addStudentFromForm(){
+  if(!selectedClassId){ alert("Veldu bekk fyrst."); return; }
+  const name=document.getElementById("studentNameInput")?.value.trim(); if(!name){ alert("Settu inn nafn nemanda."); return; }
+  addStudent({name, display_name:document.getElementById("studentDisplayInput")?.value.trim(), group_name:document.getElementById("studentGroupInput")?.value.trim(), student_code:document.getElementById("studentCodeInput")?.value.trim()});
+  ["studentNameInput","studentDisplayInput","studentGroupInput","studentCodeInput"].forEach(id=>{const el=document.getElementById(id); if(el) el.value="";});
+}
+function bulkImportStudents(){
+  if(!selectedClassId){ alert("Veldu bekk fyrst."); return; }
+  const lines=(document.getElementById("bulkStudentsInput")?.value||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  if(!lines.length){ alert("Límdu inn nemendalista fyrst."); return; }
+  lines.forEach(line=>{ const p=line.split(",").map(x=>x.trim()); if(p[0]) addStudent({name:p[0], display_name:p[0].split(" ")[0], group_name:p[1]||"", student_code:makeStudentCode(p[0])}); });
+  document.getElementById("bulkStudentsInput").value="";
+}
+function deleteStudent(id){
+  const st=students.find(s=>s.id===id); if(!st) return;
+  if(!confirm(`Viltu eyða ${st.name} úr bekknum?`)) return;
+  students=students.filter(s=>s.id!==id); saveClassesLocal(); renderStudents(); renderClasses(); maybeAutoSyncClasses();
+}
+function copyClassRoster(){
+  const c=classes.find(x=>x.id===selectedClassId); if(!c){ alert("Veldu bekk fyrst."); return; }
+  navigator.clipboard.writeText(studentsInClass(c.id).map(s=>`${s.name}${s.group_name?", "+s.group_name:""}`).join("\n")); alert("Nemendalisti afritaður.");
+}
+function exportClassCsv(){
+  const c=classes.find(x=>x.id===selectedClassId); if(!c){ alert("Veldu bekk fyrst."); return; }
+  const csv="name,display_name,group_name,student_code,class_id\n"+studentsInClass(c.id).map(s=>[s.name,s.display_name,s.group_name,s.student_code,s.class_id].map(v=>`"${String(v||"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`${slugifyIcelandic(c.name)}-nemendur.csv`; a.click(); URL.revokeObjectURL(a.href);
+}
+async function pushClassesToSupabase(showAlert=true){
+  const client=getSupabaseClient(); if(!client){ alert("Supabase er ekki stillt."); return false; }
+  const ok=await requireTeacherForCloudWrite(); if(!ok) return false;
+  try{
+    const classPayload=classes.map(c=>({id:c.id,workspace:supabaseConfig.workspace||c.workspace||"vallaskoli",name:c.name,grade:c.grade||"",teacher:c.teacher||"",description:c.description||"",is_active:c.is_active!==false,created_at:c.created_at||new Date().toISOString(),updated_at:new Date().toISOString()}));
+    const studentPayload=students.map(st=>({id:st.id,workspace:supabaseConfig.workspace||st.workspace||"vallaskoli",class_id:st.class_id,name:st.name,display_name:st.display_name||"",group_name:st.group_name||"",student_code:st.student_code||"",is_active:st.is_active!==false,created_at:st.created_at||new Date().toISOString(),updated_at:new Date().toISOString()}));
+    if(classPayload.length){ const {error}=await client.from("namsmidjan_classes").upsert(classPayload,{onConflict:"id"}); if(error) throw error; }
+    if(studentPayload.length){ const {error}=await client.from("namsmidjan_students").upsert(studentPayload,{onConflict:"id"}); if(error) throw error; }
+    addSyncLog("Bekkir og nemendur vistaðir í Supabase."); if(showAlert) alert("Bekkir og nemendur vistaðir í Supabase."); return true;
+  }catch(e){ addSyncLog("Villa við vistun bekkja/nemenda: "+e.message); alert("Gat ekki vistað bekki/nemendur. Er búið að keyra v1.4 SQL? "+e.message); return false; }
+}
+async function loadClassesFromSupabase(showAlert=true){
+  const client=getSupabaseClient(); if(!client){ alert("Supabase er ekki stillt."); return false; }
+  try{
+    const workspace=supabaseConfig.workspace||"vallaskoli";
+    const {data:classData,error:classError}=await client.from("namsmidjan_classes").select("*").eq("workspace",workspace).order("name"); if(classError) throw classError;
+    const {data:studentData,error:studentError}=await client.from("namsmidjan_students").select("*").eq("workspace",workspace).order("name"); if(studentError) throw studentError;
+    classes=classData||[]; students=studentData||[]; if(selectedClassId&&!classes.some(c=>c.id===selectedClassId)) selectedClassId=classes[0]?.id||""; if(!selectedClassId&&classes[0]) selectedClassId=classes[0].id;
+    saveClassesLocal(); renderClasses(); addSyncLog("Bekkir og nemendur sótt úr Supabase."); if(showAlert) alert("Bekkir og nemendur sótt úr Supabase."); return true;
+  }catch(e){ addSyncLog("Villa við að sækja bekki/nemendur: "+e.message); alert("Gat ekki sótt bekki/nemendur. Er búið að keyra v1.4 SQL? "+e.message); return false; }
+}
+let classSyncTimer=null;
+function maybeAutoSyncClasses(){ if(supabaseConfig.autoSync!=="auto") return; clearTimeout(classSyncTimer); classSyncTimer=setTimeout(()=>pushClassesToSupabase(false),1200); }
+
+document.getElementById("newClassBtn")?.addEventListener("click",clearClassForm);
+document.getElementById("saveClassBtn")?.addEventListener("click",saveClassFromForm);
+document.getElementById("deleteClassBtn")?.addEventListener("click",deleteClass);
+document.getElementById("addStudentBtn")?.addEventListener("click",addStudentFromForm);
+document.getElementById("bulkImportStudentsBtn")?.addEventListener("click",bulkImportStudents);
+document.getElementById("copyClassRosterBtn")?.addEventListener("click",copyClassRoster);
+document.getElementById("exportClassCsvBtn")?.addEventListener("click",exportClassCsv);
+document.getElementById("syncClassesBtn")?.addEventListener("click",()=>pushClassesToSupabase(true));
+document.getElementById("loadClassesBtn")?.addEventListener("click",()=>loadClassesFromSupabase(true));
+renderClasses();
+
 render();
 ensureAllSubjectOptions();
 refreshAuthState();
