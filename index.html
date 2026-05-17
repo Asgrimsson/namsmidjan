@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Námsmiðjan v1.4.1.1</title>
+  <title>Námsmiðjan v1.5.1</title>
   <meta name="description" content="Móðurvefur fyrir náms- og kennsluvefi." />
   <style>
     :root{
@@ -208,6 +208,17 @@
     .student-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:6px 9px;background:rgba(255,255,255,.06);font-size:12px}
     @media(max-width:1000px){.class-manager-grid{grid-template-columns:1fr}}
 
+
+    .assignment-grid{display:grid;grid-template-columns:390px 1fr;gap:16px}
+    .assignment-list{display:grid;gap:10px}
+    .assignment-card{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.055);border-radius:18px;padding:14px}
+    .assignment-card h3{margin:0 0 6px;font-size:18px}.assignment-card p{margin:4px 0;color:var(--muted);line-height:1.45}
+    .assignment-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .assignment-meta span{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.06);border-radius:999px;padding:6px 9px;font-size:12px}
+    .assignment-active{border-color:rgba(134,239,172,.35);background:rgba(134,239,172,.07)}
+    .assignment-closed{opacity:.68}
+    @media(max-width:1000px){.assignment-grid{grid-template-columns:1fr}}
+
     @media(max-width:980px){
       .hero,.two-col{grid-template-columns:1fr}
       .grid{grid-template-columns:repeat(2,1fr)}
@@ -232,12 +243,13 @@
         <div class="logo">✦</div>
         <div>
           <h1>Námsmiðjan</h1>
-          <p>Bekkir og nemendaskrá · v1.4.1</p>
+          <p>Úthlutun verkefna · v1.5</p>
         </div>
       </div>
       <nav class="nav">
         <a class="btn ghost" href="#modules">Námsvefir</a>
         <a class="btn ghost" href="#vefjasafn">Vefjasafn</a>
+        <a class="btn ghost" href="#uthlutun">Úthlutun</a>
         <a class="btn ghost" href="#bekkir">Bekkir</a>
         <a class="btn ghost" href="#classroom-home">Stjórnborð</a>
         <a class="btn ghost" href="#ai-builder">AI verkefnasmiður</a>
@@ -296,7 +308,7 @@
           <div class="chiprow" id="dailyChips"></div>
         </div>
         <div class="notice">
-          <strong>v1.4.1 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
+          <strong>v1.5 markmið:</strong> Þessi útgáfa sameinar allt í skólastofuvænt flæði: kennari býr til verkefni, vistar í ský, nemendur opna með kóða og kennari fylgist með í bekkjayfirliti.
         </div>
       </aside>
     </section>
@@ -340,6 +352,80 @@
       </div>
     </section>
 
+
+
+    <section class="section" id="uthlutun">
+      <div class="section-head">
+        <div>
+          <h2>Úthlutun verkefna</h2>
+          <p>Veldu verkefni eða AI-pakka, tengdu við bekk/hóp og gerðu verkefnið virkt fyrir nemendur.</p>
+        </div>
+        <div class="builder-actions">
+          <button class="btn primary" id="saveAssignmentBtn">Úthluta verkefni</button>
+          <button class="btn" id="loadAssignmentsBtn">Sækja úthlutanir</button>
+          <button class="btn" id="syncAssignmentsBtn">Vista úthlutanir</button>
+        </div>
+      </div>
+
+      <div class="assignment-grid">
+        <div class="panel">
+          <h3>Ný úthlutun</h3>
+          <div class="form-grid" style="margin-top:12px">
+            <div class="full">
+              <label>Verkefni / pakki</label>
+              <select class="field" id="assignmentTaskSelect"><option value="">Veldu verkefni</option></select>
+            </div>
+            <div class="full">
+              <label>Bekkur / hópur</label>
+              <select class="field" id="assignmentClassSelect"><option value="">Veldu bekk</option></select>
+            </div>
+            <div>
+              <label>Hópur innan bekkjar</label>
+              <input class="field" id="assignmentGroupInput" placeholder="t.d. Hópur 1 eða Allir" />
+            </div>
+            <div>
+              <label>Skiladagur</label>
+              <input class="field" id="assignmentDueInput" type="date" />
+            </div>
+            <div class="full">
+              <label>Fyrirmæli til nemenda</label>
+              <textarea class="field" id="assignmentInstructionsInput" rows="4" placeholder="Opnið verkefnið, vinnið spurningarnar og merkið stöðu í lok tímans."></textarea>
+            </div>
+            <div>
+              <label>Staða</label>
+              <select class="field" id="assignmentStatusSelect">
+                <option value="active">Virkt</option>
+                <option value="draft">Drög</option>
+                <option value="closed">Lokað</option>
+              </select>
+            </div>
+            <div>
+              <label>Sýna nemendum</label>
+              <select class="field" id="assignmentVisibleSelect">
+                <option value="true">Já</option>
+                <option value="false">Nei</option>
+              </select>
+            </div>
+          </div>
+          <div class="sync-status-panel" style="margin-top:14px">
+            <strong>Vinnuflæði:</strong> Búðu til AI verkefni → Vista sem verkefnapakka → Úthluta á bekk → Vista úthlutanir í Supabase.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-head" style="padding:0;margin:0 0 12px">
+            <div>
+              <h3>Virk verkefni eftir bekkjum</h3>
+              <p style="color:var(--muted)">Hér sérðu hvaða verkefni eru úthlutuð á bekki/hópa.</p>
+            </div>
+            <div class="builder-actions">
+              <select class="field" id="assignmentFilterClass"><option value="">Allir bekkir</option></select>
+            </div>
+          </div>
+          <div class="assignment-list" id="assignmentListBox"></div>
+        </div>
+      </div>
+    </section>
 
     <section class="section" id="bekkir">
       <div class="section-head">
@@ -793,7 +879,7 @@
   </main>
 
   <footer>
-    Námsmiðjan v1.4.1 · innskráning, öruggari réttindi og Supabase samstilling.
+    Námsmiðjan v1.5 · innskráning, öruggari réttindi og Supabase samstilling.
   </footer>
 
   <section class="admin" id="adminModal" aria-hidden="true">
@@ -3752,6 +3838,233 @@ document.getElementById("studentNameSelect")?.addEventListener("change",()=>{
 });
 
 renderClasses();
+
+
+// v1.5 — Úthlutun verkefna á bekki og hópa
+let assignments = JSON.parse(localStorage.getItem("namsmidjan_assignments_v05") || "[]");
+
+function saveAssignmentsLocal(){
+  localStorage.setItem("namsmidjan_assignments_v05", JSON.stringify(assignments, null, 2));
+}
+
+function allAssignableTasks(){
+  const taskItems = (tasks || []).map(t => ({
+    id: t.id,
+    title: t.title || t.name || t.code || "Ónefnt verkefni",
+    code: t.code || "",
+    subject: t.subject || "",
+    source: "task"
+  }));
+  const packageItems = (typeof packages !== "undefined" && packages ? packages : []).map(p => ({
+    id: p.id,
+    title: p.title || p.name || p.code || "Ónefndur pakki",
+    code: p.code || "",
+    subject: p.subject || "",
+    source: "package"
+  }));
+  const map = new Map();
+  [...taskItems, ...packageItems].forEach(x => { if(x.id) map.set(x.id, x); });
+  return Array.from(map.values()).sort((a,b)=>a.title.localeCompare(b.title,"is"));
+}
+
+function getAssignableById(id){
+  return allAssignableTasks().find(x => x.id === id) || tasks.find(t=>t.id===id) || null;
+}
+
+function populateAssignmentSelects(){
+  const taskSel = document.getElementById("assignmentTaskSelect");
+  const classSel = document.getElementById("assignmentClassSelect");
+  const filterSel = document.getElementById("assignmentFilterClass");
+  if(taskSel){
+    const current = taskSel.value;
+    taskSel.innerHTML = `<option value="">Veldu verkefni</option>` + allAssignableTasks().map(t => 
+      `<option value="${escapeHtml(t.id)}">${escapeHtml(t.title)}${t.code ? " · "+escapeHtml(t.code) : ""}</option>`
+    ).join("");
+    if(current) taskSel.value = current;
+  }
+  const classOptions = activeClasses().map(c => `<option value="${escapeHtml(c.id)}">${escapeHtml(c.name)}</option>`).join("");
+  if(classSel){
+    const current = classSel.value;
+    classSel.innerHTML = `<option value="">Veldu bekk</option>` + classOptions;
+    if(current) classSel.value = current;
+  }
+  if(filterSel){
+    const current = filterSel.value;
+    filterSel.innerHTML = `<option value="">Allir bekkir</option>` + classOptions;
+    if(current) filterSel.value = current;
+  }
+}
+
+function createAssignment(){
+  const taskId = document.getElementById("assignmentTaskSelect")?.value;
+  const classId = document.getElementById("assignmentClassSelect")?.value;
+  const groupName = document.getElementById("assignmentGroupInput")?.value.trim() || "";
+  const dueDate = document.getElementById("assignmentDueInput")?.value || "";
+  const instructions = document.getElementById("assignmentInstructionsInput")?.value.trim() || "";
+  const status = document.getElementById("assignmentStatusSelect")?.value || "active";
+  const visible = document.getElementById("assignmentVisibleSelect")?.value !== "false";
+
+  if(!taskId){ alert("Veldu verkefni eða pakka."); return; }
+  if(!classId){ alert("Veldu bekk/hóp."); return; }
+
+  const task = getAssignableById(taskId);
+  const cls = classes.find(c=>c.id===classId);
+  const id = `assign-${classId}-${taskId}`.replace(/[^a-zA-Z0-9_-]/g,"-");
+
+  const existing = assignments.find(a=>a.id===id);
+  const assignment = {
+    id,
+    workspace: supabaseConfig.workspace || "vallaskoli",
+    task_id: taskId,
+    task_title: task?.title || task?.name || "Verkefni",
+    task_code: task?.code || "",
+    class_id: classId,
+    class_name: cls?.name || "",
+    group_name: groupName,
+    instructions,
+    due_date: dueDate,
+    status,
+    visible_to_students: visible,
+    created_at: existing?.created_at || new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+
+  assignments = assignments.filter(a=>a.id!==id);
+  assignments.unshift(assignment);
+  saveAssignmentsLocal();
+  renderAssignments();
+  maybeAutoSyncAssignments();
+  alert("Verkefni úthlutað.");
+}
+
+function renderAssignments(){
+  populateAssignmentSelects();
+  const box = document.getElementById("assignmentListBox");
+  if(!box) return;
+  const filter = document.getElementById("assignmentFilterClass")?.value || "";
+  const list = assignments
+    .filter(a => !filter || a.class_id === filter)
+    .sort((a,b)=>String(a.class_name||"").localeCompare(String(b.class_name||""),"is"));
+
+  box.innerHTML = list.map(a=>{
+    const cls = classes.find(c=>c.id===a.class_id);
+    const task = getAssignableById(a.task_id);
+    const title = a.task_title || task?.title || "Verkefni";
+    const className = a.class_name || cls?.name || a.class_id;
+    const stateClass = a.status === "closed" ? "assignment-closed" : a.status === "active" ? "assignment-active" : "";
+    return `<div class="assignment-card ${stateClass}">
+      <h3>${escapeHtml(title)}</h3>
+      <p><strong>Bekkur:</strong> ${escapeHtml(className)}${a.group_name ? " · "+escapeHtml(a.group_name) : ""}</p>
+      <p>${escapeHtml(a.instructions || "Engin sérstök fyrirmæli.")}</p>
+      <div class="assignment-meta">
+        <span>Kóði: ${escapeHtml(a.task_code || task?.code || "óskráður")}</span>
+        <span>Staða: ${escapeHtml(a.status || "active")}</span>
+        <span>Skil: ${escapeHtml(a.due_date || "engin")}</span>
+        <span>${a.visible_to_students === false ? "Falið nemendum" : "Sýnilegt nemendum"}</span>
+      </div>
+      <div class="builder-actions" style="margin-top:12px">
+        <button class="btn small" data-copy-assignment-code="${escapeHtml(a.task_code || task?.code || "")}">Afrita kóða</button>
+        <button class="btn small mini-danger" data-delete-assignment="${escapeHtml(a.id)}">Eyða úthlutun</button>
+      </div>
+    </div>`;
+  }).join("") || `<p style="color:var(--muted)">Engar úthlutanir fundust.</p>`;
+
+  document.querySelectorAll("[data-delete-assignment]").forEach(btn=>{
+    btn.addEventListener("click",()=>deleteAssignment(btn.dataset.deleteAssignment));
+  });
+  document.querySelectorAll("[data-copy-assignment-code]").forEach(btn=>{
+    btn.addEventListener("click", async()=>{
+      await navigator.clipboard.writeText(btn.dataset.copyAssignmentCode || "");
+      btn.textContent = "Afritað ✓";
+      setTimeout(()=>btn.textContent="Afrita kóða",1200);
+    });
+  });
+}
+
+function deleteAssignment(id){
+  const a = assignments.find(x=>x.id===id);
+  if(!a) return;
+  if(!confirm(`Viltu eyða úthlutuninni „${a.task_title}“?`)) return;
+  assignments = assignments.filter(x=>x.id!==id);
+  saveAssignmentsLocal();
+  renderAssignments();
+  maybeAutoSyncAssignments();
+}
+
+async function pushAssignmentsToSupabase(showAlert=true){
+  const client = getSupabaseClient();
+  if(!client){ alert("Supabase er ekki stillt."); return false; }
+  const ok = await requireTeacherForCloudWrite();
+  if(!ok) return false;
+  try{
+    const payload = assignments.map(a=>({
+      id:a.id,
+      workspace:supabaseConfig.workspace || a.workspace || "vallaskoli",
+      task_id:a.task_id,
+      task_title:a.task_title || "",
+      task_code:a.task_code || "",
+      class_id:a.class_id,
+      class_name:a.class_name || "",
+      group_name:a.group_name || "",
+      instructions:a.instructions || "",
+      due_date:a.due_date || null,
+      status:a.status || "active",
+      visible_to_students:a.visible_to_students !== false,
+      created_at:a.created_at || new Date().toISOString(),
+      updated_at:new Date().toISOString()
+    }));
+    if(payload.length){
+      const { error } = await client.from("namsmidjan_assignments").upsert(payload, {onConflict:"id"});
+      if(error) throw error;
+    }
+    addSyncLog("Úthlutanir vistaðar í Supabase.");
+    if(showAlert) alert("Úthlutanir vistaðar í Supabase.");
+    return true;
+  }catch(e){
+    addSyncLog("Villa við vistun úthlutana: " + e.message);
+    alert("Gat ekki vistað úthlutanir. Er búið að keyra v1.5 SQL? " + e.message);
+    return false;
+  }
+}
+
+async function loadAssignmentsFromSupabase(showAlert=true){
+  const client = getSupabaseClient();
+  if(!client){ alert("Supabase er ekki stillt."); return false; }
+  try{
+    const workspace = supabaseConfig.workspace || "vallaskoli";
+    const { data, error } = await client
+      .from("namsmidjan_assignments")
+      .select("*")
+      .eq("workspace", workspace)
+      .order("updated_at", { ascending:false });
+    if(error) throw error;
+    assignments = data || [];
+    saveAssignmentsLocal();
+    renderAssignments();
+    addSyncLog("Úthlutanir sóttar úr Supabase.");
+    if(showAlert) alert("Úthlutanir sóttar úr Supabase.");
+    return true;
+  }catch(e){
+    addSyncLog("Villa við að sækja úthlutanir: " + e.message);
+    alert("Gat ekki sótt úthlutanir. Er búið að keyra v1.5 SQL? " + e.message);
+    return false;
+  }
+}
+
+let assignmentSyncTimer = null;
+function maybeAutoSyncAssignments(){
+  if(supabaseConfig.autoSync !== "auto") return;
+  clearTimeout(assignmentSyncTimer);
+  assignmentSyncTimer = setTimeout(()=>pushAssignmentsToSupabase(false), 1200);
+}
+
+document.getElementById("saveAssignmentBtn")?.addEventListener("click", createAssignment);
+document.getElementById("syncAssignmentsBtn")?.addEventListener("click", ()=>pushAssignmentsToSupabase(true));
+document.getElementById("loadAssignmentsBtn")?.addEventListener("click", ()=>loadAssignmentsFromSupabase(true));
+document.getElementById("assignmentFilterClass")?.addEventListener("change", renderAssignments);
+
+// Re-render assignments after class/task data may have loaded
+setTimeout(()=>{ try{ renderAssignments(); }catch(e){} }, 300);
 
 render();
 ensureAllSubjectOptions();

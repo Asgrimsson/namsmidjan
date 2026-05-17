@@ -1,4 +1,4 @@
-# Námsmiðjan v1.4.1
+# Námsmiðjan v1.5
 
 Námsmiðjan er fyrsti grunnur að browser-based náms- og kennsluvefja-vistkerfi.
 
@@ -506,3 +506,23 @@ Lagar villuna:
 `populateStudentClassSelects is not defined`
 
 og tryggir að bekkir/nemendalisti birtist rétt þegar nemendagáttin styður bekkja-/nafnaval.
+
+---
+
+# v1.5 — Úthlutun verkefna á bekki og hópa
+
+## Nýtt
+
+- Nýr kafli: Úthlutun
+- Velja verkefni eða AI-pakka
+- Velja bekk/hóp
+- Setja skiladag
+- Setja fyrirmæli
+- Vista/sækja úthlutanir í Supabase
+- Sía úthlutanir eftir bekk
+
+## SQL
+
+Keyra þarf:
+
+`supabase_v1_5_assignments.sql`
